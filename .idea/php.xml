@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="W:/server/nginx/php" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings load_method="PHPUNIT_PHAR" custom_loader_path="W:/server/nginx/php/phpunit-7.0.2.phar" phpunit_phar_path="W:/server/nginx/php/phpunit-7.0.2.phar" />
+    </phpunit_settings>
+  </component>
+</project>

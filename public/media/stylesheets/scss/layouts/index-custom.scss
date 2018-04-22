@@ -1,0 +1,31 @@
+@import "../colors.scss";
+
+.server-status
+{
+  position: relative;
+  margin: 0 auto;
+  width: 80%;
+  vertical-align: middle;
+  padding:5px;
+}
+
+.server-status-info
+{
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  width: 80%;
+  vertical-align: middle;
+
+  p
+  {
+    line-height: 2em;
+    vertical-align: middle;
+  }
+}
+
+.brand-logo-small
+{
+  max-height: 50px;
+  max-width: 50px;
+}

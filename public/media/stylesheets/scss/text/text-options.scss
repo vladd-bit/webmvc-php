@@ -1,0 +1,55 @@
+@import "../colors.scss";
+
+// alignments
+
+.text-align-left
+{
+  text-align:left;
+}
+
+.text-align-right
+{
+  text-align:right;
+}
+
+.text-align-center
+{
+  text-align:center;
+}
+
+.text-align-justify
+{
+  text-align:justify;
+}
+
+.text-bold
+{
+  font-weight:bold;
+}
+
+.text-thin
+{
+  font-weight:lighter;
+}
+
+.text-normal
+{
+  font-weight:normal;
+}
+
+// colors
+
+.text-blue
+{
+  color:$color-blue;
+}
+
+.text-white
+{
+  color:$color-variant-50-blue-gray ;
+}
+
+.text-cyan
+{
+  color:$color-cyan;
+}

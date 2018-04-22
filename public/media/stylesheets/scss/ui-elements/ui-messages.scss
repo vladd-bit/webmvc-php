@@ -1,0 +1,26 @@
+@import "../colors.scss";
+
+.message-layout
+{
+  font-weight:bold;
+  margin: 0 auto;
+  width:100%;
+}
+
+.error-layout
+{
+ background-color: $color-error-bg;
+ color:$color-variant-300-red;
+}
+
+.info-layout
+{
+  background-color: $color-info-bg;
+  color:$color-variant-300-blue;
+}
+
+.confirmation-layout
+{
+  background-color: $color-confirmation-bg;
+  color:$color-variant-300-green;
+}

@@ -1,0 +1,16 @@
+@import "../colors.scss";
+
+.text-error, .text-confirmation
+{
+      font-size:1em;
+}
+
+.text-error
+{
+        color:$color-variant-300-red;
+}
+
+.text-confirmation
+{
+       color:$color-variant-400-green;
+}

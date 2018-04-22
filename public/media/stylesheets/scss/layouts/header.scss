@@ -1,0 +1,92 @@
+@import "../colors.scss";
+
+header
+{
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  height: 140px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: $color-variant-A200-blue;
+}
+
+.nav-top-wrapper
+{
+  position: fixed;
+  display: block;
+  line-height: 50px;
+  height: 50px;
+  width: 100%;
+  background-color: $color-variant-800-blue;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  font-family: OpenSansRegular;
+
+  *:not(.content)
+  {
+    float: left;
+  }
+}
+
+.sub-nav
+{
+  display: block;
+  margin: 50px 0 0 0;
+  padding: 0;
+  border: 0;
+  line-height: 140px;
+}
+
+nav
+{
+  position:relative;
+
+  ul
+  {
+    position: relative;
+    list-style: none;
+
+    li
+    {
+      position:relative;
+      padding: 0 20px 0 20px;
+      margin: 0;
+      border: 0;
+
+      a
+      {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        -webkit-transition: color 0.3s ease-in-out;
+        -moz-transition: color 0.3s ease-in-out;
+        transition: color 0.3s ease-in-out;
+      }
+
+      a,a:visited
+      {
+        color: $color-custom-white-opacity-70percent;
+      }
+
+      a:active
+      {
+        color: white;
+      }
+
+      a:hover
+      {
+        color:white;
+        -webkit-transition: color 0.3s ease-in-out;
+        -moz-transition: color 0.3s ease-in-out;
+        transition: color 0.3s ease-in-out;
+      }
+    }
+  }
+}

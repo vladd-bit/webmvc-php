@@ -1,0 +1,51 @@
+@import "../colors.scss";
+
+.button-default
+{
+  height: 40px;
+  margin: 5px 0 5px 0;
+  padding: 0 10px 0 10px;
+  line-height: 40px;
+  font-size:0.8em;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family:OpenSansSemiBold;
+}
+
+.button-white
+{
+  background-color: transparent;
+  color: $color-custom-white-opacity-70percent;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  transition-property: background-color, color;
+}
+
+.button-white:hover
+{
+  background-color: $color-custom-gray-opacity-20percent;
+  color: white;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  transition-property: background-color, color;
+}
+
+.button-indigo
+{
+  background-color: transparent;
+  color: $color-indigo;
+  -webkit-transition: background-color 0.3s ease-in-out;
+  -moz-transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
+  transition-property: background-color;
+}
+
+.button-indigo:hover
+{
+  background-color: $color-custom-gray-opacity-10percent;
+  -webkit-transition: background-color 0.3s ease-in-out;
+  -moz-transition: background-color 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
+}
