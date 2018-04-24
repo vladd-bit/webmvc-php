@@ -1,3 +1,6 @@
+{layout = 'layout'}
+{title = 'title_test'}
+
 <main>
   <div class="main-content">
     <div class="server-status"> </div>

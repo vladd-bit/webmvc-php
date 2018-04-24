@@ -17,7 +17,8 @@ abstract class Model
     {
         static $db = null;
 
-        if ($db === null) {
+        if ($db === null)
+        {
             $dsn = 'mysql:host=' . Config\WebConfig::DB_HOST . ';dbname=' . Config\WebConfig::DB_NAME . ';charset=utf8';
             $db = new PDO($dsn, Config\WebConfig::DB_USER, Config\WebConfig::DB_PASSWORD);
 

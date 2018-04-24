@@ -14,7 +14,12 @@ catch(Exception $exception)
    throw new \Exception($exception);
 }
 
+$router = new \Application\Core\Router();
 
-$test = new Application\Controllers\Home(['controller' => 'Home', ['action' =>'index']]);
+$router->add('home',['controller'=>'Home', 'action' => 'index', 'parameters' => ['id']]);
 
-$test->index();
+$router->add('search',['controller'=>'Search', 'action' => 'testMethod', 'parameters' => ['id','name']]);
+
+$router->dispatch('home/index');
+
+
