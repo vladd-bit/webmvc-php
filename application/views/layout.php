@@ -15,10 +15,9 @@
         ?>
     </title>
 
-    <link rel="stylesheet" type="text/css" href="./public/media/stylesheets/css/google_mdl/material.css">
-    <link rel="icon" href="./public/media/images/project_specific_images/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="./public/media/stylesheets/css/layouts/general-layout.css">
-    <link rel="stylesheet" type="text/css" href="./public/media/stylesheets/css/layouts/responsive-layout.css">
+    <link rel="stylesheet" type="text/css" href="media/stylesheets/css/google_mdl/material.css">
+    <link rel="icon" href="media/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="media/stylesheets/css/layouts/general-layout.css">
 </head>
 <body>
 

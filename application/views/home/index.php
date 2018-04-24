@@ -1,10 +1,14 @@
-<?
-   /** {layout = 'layout.php'}
-    *  {title = 'someRandomTitle'}
-    */
-
+<?php
     $layout = 'layout.php';
     $title = 'someRandomTitle';
+
+    for($i =0; $i< 400; $i++)
+    {
+        echo '<p>'. $i .'</p>';
+    }
+
+
+    echo '$test';
 ?>
 
 <main>

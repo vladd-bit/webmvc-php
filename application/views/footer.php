@@ -16,6 +16,6 @@
   </div>
 
   <div class="footer-section float-left footer-sigil text-align-center">
-        <img src="./public/media/images/project_specific_images/WebWayLogoSignature.png" alt="WebWaySignature">
+        <img src="media/images/WebWayLogoSignature.png" alt="WebWaySignature">
   </div>
 </footer>

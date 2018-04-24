@@ -4,15 +4,18 @@ namespace Application\Core;
 
 class View
 {
-    public static function render($viewFileName, $arguments = array ())
+    protected $viewFile;
+    protected $viewData;
+
+    public function render($viewFileName, $arguments = array ())
     {
         extract($arguments);
 
-        $viewFile = dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY . $viewFileName;
+        $this->viewFile = dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY . $viewFileName;
 
-        if (is_readable($viewFile))
+        if (is_readable($this->viewFile))
         {
-            $viewHtml = file_get_contents($viewFile);
+            $viewHtml = file_get_contents($this->viewFile);
 
             $templateDirectives = ['layout','title', 'partial'];
 
@@ -41,29 +44,30 @@ class View
                 $templateComponents[$separatedDirectives[0]] = preg_replace('/\'/', '', $separatedDirectives[1]);
             }
 
-
-            echo print_r($templateComponents, true);
-
             if(array_key_exists('layout', $templateComponents))
             {
-                $layoutPath = dirname(__DIR__). \Application\Config\WebConfig::VIEWS_DIRECTORY.$templateComponents['layout'];
+                $layoutFile = dirname(__DIR__). \Application\Config\WebConfig::VIEWS_DIRECTORY.$templateComponents['layout'];
 
-                if(is_readable($layoutPath))
+                if(is_readable($layoutFile))
                 {
-                    //require
+                    ob_start();
+                    require($layoutFile);
+                    $ob = ob_get_clean();
+                    echo str_replace('{renderBody}', include($this->viewFile), $ob);
                 }
                 else
                 {
                     throw new \Exception($templateComponents['layout'].' file not found.');
                 }
             }
-
-
-            // require_once $viewFile;
+            else
+            {
+                require($this->viewFile);
+            }
         }
         else
         {
-            throw new \Exception($viewFile . ' not found');
+            throw new \Exception($this->viewFile . ' not found');
         }
     }
 
