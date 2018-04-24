@@ -12,35 +12,54 @@ class View
 
         if (is_readable($viewFile))
         {
-            $templateHtml = file_get_contents($viewFile);
+            $viewHtml = file_get_contents($viewFile);
 
             $templateDirectives = ['layout','title', 'partial'];
 
-            $searchPattern = '/{('.implode('|', $templateDirectives).').*?}/';
+            $searchPattern = '/\s.*\$(' .implode('|', $templateDirectives).').*;/';
 
-            preg_match_all($searchPattern, $templateHtml, $directiveMatches);
+            preg_match_all($searchPattern, $viewHtml, $directiveMatches);
 
             /**
-             * delete all occurrences from the file before returning it clean
+             * store template components such as layout name, page title etc
              */
-            $templateHtml = preg_replace($searchPattern, '', $templateHtml);
-
-            $finalDirectives = [];
+            $templateComponents = [];
 
             foreach($directiveMatches[0] as $directive)
             {
-                $tempDirective = preg_replace('/{|}|\'|\\"/', '', $directive);
+                // $tempDirective = preg_replace('/{|}|\s/', '', $directive);
+                $tempDirective = preg_replace('/{|}|\s|\$|;/', '', $directive);
 
                 /**
                  *  key value pattern after explosion
                  */
                 $separatedDirectives =  explode('=', $tempDirective);
-                $finalDirectives[$separatedDirectives[0]] = $separatedDirectives[1];
+
+                /**
+                 * remove single quotes from the directive value if present
+                 */
+                $templateComponents[$separatedDirectives[0]] = preg_replace('/\'/', '', $separatedDirectives[1]);
             }
 
 
+            echo print_r($templateComponents, true);
 
-            //require $viewFile;
+            if(array_key_exists('layout', $templateComponents))
+            {
+                $layoutPath = dirname(__DIR__). \Application\Config\WebConfig::VIEWS_DIRECTORY.$templateComponents['layout'];
+
+                if(is_readable($layoutPath))
+                {
+                    //require
+                }
+                else
+                {
+                    throw new \Exception($templateComponents['layout'].' file not found.');
+                }
+            }
+
+
+            // require_once $viewFile;
         }
         else
         {
@@ -48,13 +67,13 @@ class View
         }
     }
 
-    public static function renderTemplate($template, $args = [])
-    {
-        static $twig = null;
-        if ($twig === null) {
-            $loader = new \Twig_Loader_Filesystem(dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY );
-            $twig = new \Twig_Environment($loader);
-        }
-        echo $twig->render($template, $args);
-    }
+    //public static function renderTemplate($template, $args = [])
+    //{
+    //    static $twig = null;
+    //    if ($twig === null) {
+    //        $loader = new \Twig_Loader_Filesystem(dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY );
+    //        $twig = new \Twig_Environment($loader);
+    //    }
+    //    echo $twig->render($template, $args);
+    //}
 }

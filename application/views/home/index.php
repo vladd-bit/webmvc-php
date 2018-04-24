@@ -1,5 +1,11 @@
-{layout = 'layout'}
-{title = 'title_test'}
+<?
+   /** {layout = 'layout.php'}
+    *  {title = 'someRandomTitle'}
+    */
+
+    $layout = 'layout.php';
+    $title = 'someRandomTitle';
+?>
 
 <main>
   <div class="main-content">
