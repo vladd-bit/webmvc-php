@@ -14,17 +14,18 @@
         ?>
     </title>
 
-    <link rel="stylesheet" type="text/css" href="media/stylesheets/css/google_mdl/material.css">
+    <link rel="stylesheet" type="text/css" href="media/stylesheets/css/google-fonts.css">
+    <link rel="stylesheet" type="text/css" href="media/stylesheets/css/material-components-web/material-components-web.min.css">
     <link rel="icon" href="media/images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="media/stylesheets/css/layouts/general-layout.css">
 </head>
-<body class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<body class="mdc-typography">
 
 <?php
     include_once('header.php');
 ?>
 
-<main class="mdl-layout__content">
+<main class="">
     {renderBody}
 </main>
 
@@ -32,5 +33,10 @@
     include_once('footer.php');
 ?>
 
+<script type="text/javascript" src="js/libraries/material-components-web/material-components-web.min.js"></script>
+<script type="text/javascript" src="js/libraries/material-components-web/mdc.autoInit.min.js"></script>
+<script type="text/javascript" async defer>
+    window.mdc.autoInit();
+</script>
 </body>
 </html>

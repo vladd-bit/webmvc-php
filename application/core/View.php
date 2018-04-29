@@ -2,17 +2,24 @@
 
 namespace Application\Core;
 
-use function Composer\Autoload\includeFile;
-
 class View
 {
     protected $viewFile;
     protected $viewData = array();
-    protected $layoutFile;
 
-    public function render($viewFileName, $arguments = array ())
+    /**
+     * @param $viewFileName    // the name of the view file (php, html etc)
+     * @param array $arguments  // OPTIONAL : the data of the view list, variable etc
+     * @throws \Exception
+     */
+    public function render($viewFileName, $arguments = array())
     {
-        extract($arguments);
+        if(!empty($arguments))
+        {
+            $this->viewData = $arguments;
+        }
+
+        extract($this->viewData);
 
         $this->viewFile = dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY . $viewFileName;
 
@@ -61,8 +68,6 @@ class View
 
                 if(is_readable($layoutFile))
                 {
-                    extract($arguments);
-
                     ob_start();
                     include($layoutFile);
                     $layoutContents = ob_get_contents();
@@ -79,7 +84,9 @@ class View
                     }
 
                     $pageContent = str_replace('{renderBody}', $viewContents, $layoutContents);
+
                     echo $pageContent;
+
                 }
                 else
                 {
@@ -100,7 +107,6 @@ class View
     public function set($key, $value)
     {
         $this->viewData[$key] = $value;
-        return $this;
     }
 
     //public static function renderTemplate($template, $args = [])

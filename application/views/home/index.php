@@ -1,13 +1,22 @@
 <?php
     $layout = 'layout.php';
-    $title = 'someRandomTitle';
+    $title = 'Home';
 ?>
 
-<div class="content">
-  <button class="" id="" onclick=""> Inject / test JS</button>
-    <form action="/home/submit" method="post">
-        <p>Your name: <label>Name:</label><input type="text" name="name"/></p>
-        <p>Your age: <label>Age:</label><input type="text" name="age" value="" /></p>
-        <input type="submit" name="test_input" />
-    </form>
-</div>
+<form id="ww-user-login-form" class="mdc-layout-grid__inner" action="home/submit">
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+    </div>
+    <div class="mdc-text-field mdc-text-field--upgraded">
+        <input class="" type="text" name="username" value="">
+        <label class="" for="username">Username</label>
+        <input class="" type="password" name="password" value="">
+        <label class="" for="password">Password</label>
+        <div class="mdc-line-ripple" style="transform-origin: 42.7667px center 0px;"></div>
+        <button type="submit" class="">
+            Login
+        </button>
+    </div>
+    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+    </div>
+</form>
+

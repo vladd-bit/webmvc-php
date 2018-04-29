@@ -13,11 +13,11 @@ class Home extends \Application\Core\Controller
     public function index()
     {
         $view = new View();
-        $view->set('title', 'HomePage');
+        $view->set('modifyMe', 'HomePage');
         $view->render('home/index.php');
     }
 
-    public function submit()
+    public function submit($params)
     {
         $view = new View();
         $view->render('home/submit.php');
