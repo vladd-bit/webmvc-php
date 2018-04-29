@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAEA,gBAAgB;AAMhB,uBAAuB;AAMvB,aAAa;AAMb,aAAa;AAMb,cAAc",
-"sources": ["responsive-layout.scss"],
-"names": [],
-"file": "responsive-layout.css"
-}

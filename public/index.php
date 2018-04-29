@@ -17,8 +17,8 @@ catch(Exception $exception)
 $router = new \Application\Core\Router();
 
 $router->add('home',['controller'=>'Home', 'action' => 'index', 'parameters' => ['id']]);
-
-$router->add('search',['controller'=>'Search', 'action' => 'testMethod', 'parameters' => ['id','name']]);
+$router->add('{controller}/{action}');
+$router->add('submit',['controller'=>'Home', 'action' => 'submit']);
 
 $router->dispatch('home/index');
 

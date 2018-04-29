@@ -2,10 +2,13 @@
 
 namespace Application\Core;
 
+use function Composer\Autoload\includeFile;
+
 class View
 {
     protected $viewFile;
-    protected $viewData;
+    protected $viewData = array();
+    protected $layoutFile;
 
     public function render($viewFileName, $arguments = array ())
     {
@@ -44,16 +47,39 @@ class View
                 $templateComponents[$separatedDirectives[0]] = preg_replace('/\'/', '', $separatedDirectives[1]);
             }
 
+            /**
+             * set the layout and title according to configuration
+             */
+            if(array_key_exists('title', $templateComponents))
+            {
+                $title = $templateComponents['title'];
+            }
+
             if(array_key_exists('layout', $templateComponents))
             {
                 $layoutFile = dirname(__DIR__). \Application\Config\WebConfig::VIEWS_DIRECTORY.$templateComponents['layout'];
 
                 if(is_readable($layoutFile))
                 {
+                    extract($arguments);
+
                     ob_start();
-                    require($layoutFile);
-                    $ob = ob_get_clean();
-                    echo str_replace('{renderBody}', include($this->viewFile), $ob);
+                    include($layoutFile);
+                    $layoutContents = ob_get_contents();
+                    ob_clean();
+
+                    ob_start();
+                    include($this->viewFile);
+                    $viewContents = ob_get_contents();
+                    ob_clean();
+
+                    if(array_key_exists('title', $templateComponents))
+                    {
+                        $title = $templateComponents['title'];
+                    }
+
+                    $pageContent = str_replace('{renderBody}', $viewContents, $layoutContents);
+                    echo $pageContent;
                 }
                 else
                 {
@@ -69,6 +95,12 @@ class View
         {
             throw new \Exception($this->viewFile . ' not found');
         }
+    }
+
+    public function set($key, $value)
+    {
+        $this->viewData[$key] = $value;
+        return $this;
     }
 
     //public static function renderTemplate($template, $args = [])
