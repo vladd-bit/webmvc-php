@@ -22,4 +22,10 @@ class Home extends \Application\Core\Controller
         $view = new View();
         $view->render('home/submit.php');
     }
+
+    public function testMethod()
+    {
+        $view = new View();
+        $view->render('home/testMethod.php');
+    }
 }

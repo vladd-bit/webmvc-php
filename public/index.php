@@ -16,9 +16,10 @@ catch(Exception $exception)
 
 $router = new \Application\Core\Router();
 
-$router->add('home',['controller'=>'Home', 'action' => 'index']);
-$router->add('submit',['controller'=>'Home', 'action' => 'submit', 'parameters' => ['username', 'password'] ]);
 
-$router->dispatch('home/index');
+$router->add('/',['controller'=>'Home', 'action' => 'index']);
+$router->add('/home/testMethod', ['controller' => 'Home', 'action' => 'testMethod']);
+$router->add('/home/submit',['controller'=>'Home', 'action' => 'submit', 'parameters' => ['username', 'password'] ]);
 
+$router->dispatch($_SERVER['QUERY_STRING']);
 

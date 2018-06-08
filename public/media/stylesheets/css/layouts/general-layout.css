@@ -3,7 +3,26 @@ main{
 }
 
 .brand-small-logo{
-    height:40px;
-    max-height:45px;
-    width:50px;
+    height:45px;
+    max-height:50px;
+    width:55px;
+}
+
+/*
+.mdc-theme--primary 	,
+.mdc-theme--secondary 	,
+.mdc-theme--background 	,
+.mdc-theme--surface ,
+.mdc-theme--on-primary 	,
+.mdc-theme--on-secondary 	,
+.mdc-theme--on-surface 	,
+.mdc-theme--primary-bg ,
+.mdc-theme--secondary-bg 	{
+    color: #9eff94;
+    background-color: #5085ff;
+}
+*/
+
+.mdc-theme--background {
+    background-color: #448aff;
 }

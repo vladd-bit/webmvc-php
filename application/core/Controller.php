@@ -18,7 +18,7 @@ abstract class Controller
         {
             if ($this->before() !== false)
             {
-                call_user_func_array($methodToCall, $arguments);
+                call_user_func_array([$this, $methodToCall], $arguments);
                 $this->after();
             }
         }

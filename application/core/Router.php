@@ -12,30 +12,26 @@ class Router
 
     public function add($route, $routeParameters = array ())
     {
-        $route = preg_replace('/\//', '\\/', $route);
-
-        $route = '/' . $route . '/i';
+        //$route = preg_replace('/\//', '\\/', $route);
+        //$route = preg_replace('/\{([a-z]+)\}/', '(?P<\1>[a-z-]+)', $route);
+        //$route = preg_replace('/\{([a-z]+):([^\}]+)\}/', '(?P<\1>\2)', $route);
+        //$route = '/^' . $route . '/i';
         $this->routes[$route] = $routeParameters;
     }
 
     /**
      * matches url to a route in the routing array
+     * @param $url
+     * @return bool
      */
-    public function match($url)
-    {
-        foreach ($this->routes as $route => $routeParameters)
-        {
-            if (preg_match($route, $url, $matches))
-            {
-                foreach ($matches as $key => $match)
-                {
-                    if (is_string($key))
-                    {
-                        $routeParameters[$key] = $match;
-                    }
-                }
 
-                $this->routeParameters = $routeParameters;
+    private function match($url)
+    {
+        foreach ($this->routes as $route => $parameters)
+        {
+            if(strpos($route, $url) !== false)
+            {
+                $this->routeParameters = $parameters;
                 return true;
             }
         }
@@ -49,10 +45,11 @@ class Router
      */
     public function dispatch($url)
     {
-        // remove variables from the url using strtok
-        $url = strtok($url, '?');
+        // remove query variables from the url using strtok
+        $formattedUrl = strtok($url, '?');
 
-        if ($this->match($url))
+        $isUrlMatching = $this->match($formattedUrl);
+        if ($isUrlMatching)
         {
             $controller = $this->getControllerNamespace() . $this->routeParameters['controller'];
             if (class_exists($controller))
@@ -61,7 +58,7 @@ class Router
 
                 $action = $this->routeParameters['action'];
 
-                if (method_exists($controllerObject, $action))
+                if (method_exists($controllerObject, $action) && is_callable(array($controllerObject, $action)))
                 {
                     $controllerObject->$action();
                 }
@@ -101,3 +98,4 @@ class Router
         return $this->routes;
     }
 }
+
