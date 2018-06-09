@@ -46,7 +46,7 @@ class Router
     public function dispatch($url)
     {
         // remove query variables from the url using strtok
-        $formattedUrl = strtok($url, '?');
+        $formattedUrl = $url != '' ? strtok($url, '?') : '/';
 
         $isUrlMatching = $this->match($formattedUrl);
         if ($isUrlMatching)

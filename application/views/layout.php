@@ -14,10 +14,10 @@
         ?>
     </title>
 
-    <link rel="stylesheet" type="text/css" href="/public/media/stylesheets/css/google-fonts.css">
-    <link rel="stylesheet" type="text/css" href="/public/media/stylesheets/css/material-components-web/material-components-web.min.css">
-    <link rel="icon" href="/public/media/images/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="/public/media/stylesheets/css/layouts/general-layout.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/google-fonts.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/material-components-web/material-components-web.min.css">
+    <link rel="icon" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/layouts/general-layout.css">
 </head>
 <body class="mdc-typography">
 
@@ -33,8 +33,8 @@
     include_once('footer.php');
 ?>
 
-<script type="text/javascript" src="/public/js/libraries/material-components-web/material-components-web.min.js"></script>
-<script type="text/javascript" src="/public/js/libraries/material-components-web/mdc.autoInit.min.js"></script>
+<script type="text/javascript" src="<?php echo PUBLIC_FOLDER_URL; ?>/media/js/libraries/material-components-web/material-components-web.min.js"></script>
+<script type="text/javascript" src="<?php echo PUBLIC_FOLDER_URL; ?>/media/js/libraries/material-components-web/mdc.autoInit.min.js"></script>
 <script type="text/javascript" async defer>
     window.mdc.autoInit();
 </script>

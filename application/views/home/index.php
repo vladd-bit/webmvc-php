@@ -19,4 +19,3 @@
     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
     </div>
 </form>
-

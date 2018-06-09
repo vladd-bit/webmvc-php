@@ -19,4 +19,6 @@ class WebConfig
     const VIEW_NAMESPACE = 'Application\Views\\';
 
     const VIEWS_DIRECTORY = '/views/';
+
+    const PROJECT_NAME = "website";
 }
