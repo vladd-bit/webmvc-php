@@ -10,32 +10,32 @@
 
     <title>
         <?php
-           echo htmlspecialchars($title);
+            echo htmlspecialchars($title);
         ?>
     </title>
 
-    <link rel="icon" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/google-fonts.css">
     <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/material-components-web/material-components-web.min.css">
+    <link rel="icon" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/layouts/general-layout.css">
 </head>
 <body class="mdc-typography">
 
 <?php
-    include_once('header.php');
+    include_once('header_secure.php');
 ?>
 
 <main class="mdc-layout-grid">
-        {renderBody}
+    {renderBody}
 </main>
 
 <?php
-    include_once('footer.php');
+    include_once(VIEWS_FOLDER.'/footer.php');
 ?>
 
 <script type="text/javascript" src="<?php echo PUBLIC_FOLDER_URL; ?>/js/libraries/material-components-web/material-components-web.min.js"></script>
 <script type="text/javascript">
-    mdc.autoInit();
+    window.mdc.autoInit();
 </script>
 </body>
 </html>

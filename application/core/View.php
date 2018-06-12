@@ -9,17 +9,15 @@ class View
 
     /**
      * @param $viewFileName    // the name of the view file (php, html etc)
-     * @param array $arguments  // OPTIONAL : the data of the view list, variable etc
+     * @param array $args  // OPTIONAL : the data of the view , a model, a list, variable etc, the VIEW DATA.
      * @throws \Exception
      */
-    public function render($viewFileName, $arguments = array())
+    public function render($viewFileName, $args = array())
     {
-        if(!empty($arguments))
+        if(!empty($args))
         {
-            $this->viewData = $arguments;
+            $this->viewData = $args;
         }
-
-        extract($this->viewData);
 
         $this->viewFile = dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY . $viewFileName;
 
@@ -27,10 +25,13 @@ class View
         {
             $viewHtml = file_get_contents($this->viewFile);
 
-            $templateDirectives = ['layout','title', 'partial'];
+            $templateDirectives = ['layout.=','title.=', 'partial.=','viewData.='];
 
             $searchPattern = '/\s.*\$(' .implode('|', $templateDirectives).').*;/';
 
+            /**
+             * matches directives in the file and returns an array
+             */
             preg_match_all($searchPattern, $viewHtml, $directiveMatches);
 
             /**
@@ -49,9 +50,14 @@ class View
                 $separatedDirectives =  explode('=', $tempDirective);
 
                 /**
-                 * remove single quotes from the directive value if present
+                 * remove single quotes from the directive value if present e.g $title = 'cool title' , $separatedDirectives[0] will be 'title'
+                 * the if statement checks if the line is commented (contains '/'), in that case it ignores it completely.
                  */
-                $templateComponents[$separatedDirectives[0]] = preg_replace('/\'/', '', $separatedDirectives[1]);
+
+                if(strstr($separatedDirectives[0],'/') == false)
+                {
+                    $templateComponents[$separatedDirectives[0]] = preg_replace('/\'/', '', $separatedDirectives[1]);
+                }
             }
 
             /**
@@ -77,11 +83,6 @@ class View
                     include($this->viewFile);
                     $viewContents = ob_get_contents();
                     ob_clean();
-
-                    if(array_key_exists('title', $templateComponents))
-                    {
-                        $title = $templateComponents['title'];
-                    }
 
                     $pageContent = str_replace('{renderBody}', $viewContents, $layoutContents);
 

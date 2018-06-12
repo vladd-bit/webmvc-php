@@ -46,7 +46,7 @@ class Router
     public function dispatch($url)
     {
         // remove query variables from the url using strtok
-        $formattedUrl = $url != '' ? strtok($url, '?') : '/';
+        $formattedUrl = $url != '' ? $this->removeQueryStringVariables($url) : '/';
 
         $isUrlMatching = $this->match($formattedUrl);
         if ($isUrlMatching)
@@ -60,7 +60,16 @@ class Router
 
                 if (method_exists($controllerObject, $action) && is_callable(array($controllerObject, $action)))
                 {
-                    $controllerObject->$action();
+                    $parameters = array_key_exists('parameters', $this->routeParameters) ? $this->routeParameters['parameters'] : null ;
+
+                    if($parameters === null)
+                    {
+                        $controllerObject->$action();
+                    }
+                    else
+                    {
+                        $controllerObject->$action($parameters);
+                    }
                 }
                 else
                 {
@@ -76,6 +85,19 @@ class Router
         {
             throw new \Exception('No route matched.', 404);
         }
+    }
+
+    protected function removeQueryStringVariables($url)
+    {
+        if ($url != '') {
+            $parts = explode('&', $url, 2);
+            if (strpos($parts[0], '=') === false) {
+                $url = $parts[0];
+            } else {
+                $url = '';
+            }
+        }
+        return $url;
     }
 
     private function getControllerNamespace()

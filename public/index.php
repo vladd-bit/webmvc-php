@@ -25,7 +25,7 @@ $router->add('',['controller'=>'Home', 'action' => 'index']);
 $router->add('/',['controller'=>'Home', 'action' => 'index']);
 $router->add('/home/index',['controller'=>'Home', 'action' => 'index']);
 $router->add('/home/testMethod', ['controller' => 'Home', 'action' => 'testMethod']);
-$router->add('/home/submit',['controller'=>'Home', 'action' => 'submit', 'parameters' => ['username', 'password'] ]);
+$router->add('/home/login',['controller'=>'Home', 'action' => 'login', 'parameters' => ['username', 'password'] ]);
 
 $router->dispatch($_SERVER['QUERY_STRING']);
 
