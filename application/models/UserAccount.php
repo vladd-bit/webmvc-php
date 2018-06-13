@@ -208,6 +208,4 @@ class UserAccount
     {
         $this->dateUpdated = $dateUpdated;
     }
-
-
 }

@@ -2,8 +2,10 @@
 
 namespace Application\Controllers;
 
+use Application\Core\Router;
 use Application\Core\View;
 use Application\Models;
+use Application\Models\UserAccount;
 use Application\Utils\HashGenerator;
 
 class Home extends \Application\Core\Controller
@@ -32,17 +34,37 @@ class Home extends \Application\Core\Controller
             }
             else
             {
-                //invalid model state, return;
-                $this->index();
+                //invalid model state, redirect;
+                Router::redirect('home/index');
+                die();
             }
         }
 
-        $user = Models\UserAccountModel::getUser($viewData['username']);
+        $user = Models\UserAccountModel::getUserByName($viewData['username']);
 
-        $test1 = HashGenerator::hashString($viewData['password']);
+        if($user === null)
+        {
+            echo 'no user found';
+            $newUserAccount = new UserAccount();
 
-        print_r($test1, 0);
-        return 0;
+            $passwordSaltAndHash = HashGenerator::hashString($viewData['password']);
+            $sessionKey = HashGenerator::randomizedShaByteHash();
+
+            $newUserAccount->setUsername($viewData['username']);
+            $newUserAccount->setPasswordHash($passwordSaltAndHash['hash']);
+            $newUserAccount->setPasswordSalt($passwordSaltAndHash['salt']);
+            $newUserAccount->setSessionKey($sessionKey);
+
+            //Models\UserAccountModel::addUser($user);
+        }
+
+
+
+
+
+
+       //print_r($test1, 0);
+        //return 0;
 
         //$isPasswordValid = HashGenerator::
 

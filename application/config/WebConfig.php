@@ -20,5 +20,18 @@ class WebConfig
 
     const VIEWS_DIRECTORY = '/views/';
 
-    const PROJECT_NAME = "website";
+    const PROJECT_FOLDER = 'website/';
+
+    const PROJECT_NAME = 'WebWay';
+
+    const HTTPS_ENABLED = false;
+
+    static $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
+
+    /**
+     * Website folder paths
+     */
+
+    const LOGS_FOLDER = __DIR__.'/logs';
+
 }

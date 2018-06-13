@@ -47,6 +47,7 @@ class Router
     {
         // remove query variables from the url using strtok
         $formattedUrl = $url != '' ? $this->removeQueryStringVariables($url) : '/';
+        $formattedUrl = self::cleanUrlPath($formattedUrl);
 
         $isUrlMatching = $this->match($formattedUrl);
         if ($isUrlMatching)
@@ -87,7 +88,24 @@ class Router
         }
     }
 
-    protected function removeQueryStringVariables($url)
+    public static function redirect($route)
+    {
+        $newUrl = "{$_SERVER['HTTP_HOST']}".'/'.WebConfig::PROJECT_FOLDER.$route;
+        $newUrl = self::cleanUrlPath($newUrl);
+        $newUrl = WebConfig::$HTTP_URL_STRING.$newUrl;
+
+        //redirect to new route
+        header("HTTP/1.1 302 Found");
+        header('location: '.$newUrl);
+    }
+
+    protected static function cleanUrlPath($url)
+    {
+        $newUrl = preg_replace('#/+#','/',$url);
+        return $newUrl;
+    }
+
+    protected static function removeQueryStringVariables($url)
     {
         if ($url != '') {
             $parts = explode('&', $url, 2);

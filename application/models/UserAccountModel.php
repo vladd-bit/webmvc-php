@@ -7,7 +7,7 @@ use PDO;
 class UserAccountModel extends \Application\Core\Model
 {
 
-    public static function getUser($username)
+    public static function getUserByName($username)
     {
         $db = static::getDB();
 
@@ -18,11 +18,19 @@ class UserAccountModel extends \Application\Core\Model
         $query->execute(array(':username' => $username));
 
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        return $result;
+        return  $result;
     }
 
     public static function addUser(UserAccount $userAccount)
     {
-        $sql = 'INSERT INTO UserAccount ';
+        $userDetails = $userAccount->getUsername().','.$userAccount->getPasswordSalt().','.$userAccount->getPasswordHash().','
+                       .$userAccount->getSessionKey().','.$userAccount->getEmail().'.'.$userAccount->getLastLogin().','
+                       .$userAccount->getAccessLevel().','.$userAccount->getDateCreated().','.$userAccount->getDateUpdated();
+        $sql = "INSERT INTO UserAccount (username, passwordSalt, passwordHash, sessionKey, email,lastLogin, accessLevel, dateCreated, dateUpdated) VALUES($userDetails)";
+
+        $db = static::getDB();
+
+        $statement = $db->execute($sql);
+        echo 'success';
     }
 }
