@@ -10,6 +10,8 @@ class WebConfig
      */
     const SHOW_ERRORS = true;
 
+    const DB_ERROR_LOG_FILENAME = 'dblog.txt';
+
     /**
      * Store namespace paths for easier use in the application.
      */
@@ -20,13 +22,20 @@ class WebConfig
 
     const VIEWS_DIRECTORY = '/views/';
 
-    const PROJECT_FOLDER = 'website/';
-
     const PROJECT_NAME = 'WebWay';
 
     const HTTPS_ENABLED = false;
 
+    /**
+     * used for URL redirection ONLY
+     * leave empty if the website is not located in a subfolder , for example on linux var/www/ or on windows C:/nginx/www/
+     * if the website IS located in a subfolder for example on linux var/www/website_one/ or on windows C:/nginx/www/website_one/ then modify the value to /website_one
+     * please note that you will need properly configured nginx REWRITE RULES for subfolders
+     */
+    const WEBSITE_PATH = '/website';
+
     static $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
+
 
     /**
      * Website folder paths

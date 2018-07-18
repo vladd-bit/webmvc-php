@@ -14,7 +14,6 @@ class UserAccountModel extends \Application\Core\Model
         $sql  = 'SELECT * FROM UserAccount WHERE username = :username';
 
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-
         $query->execute(array(':username' => $username));
 
         $result = $query->fetch(PDO::FETCH_ASSOC);
@@ -31,6 +30,5 @@ class UserAccountModel extends \Application\Core\Model
         $db = static::getDB();
 
         $statement = $db->execute($sql);
-        echo 'success';
     }
 }

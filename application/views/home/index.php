@@ -4,7 +4,7 @@
 ?>
 
 <div class="login-form mdc-elevation--z2">
-    <form id="ww-user-login-form" method="POST" class="" action="home/login">
+    <form id="ww-user-login-form" method="POST" class="" action="<?php echo WEBSITE_PATH; ?>/home/login">
         <div class="mdc-layout-grid">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell--span-12">

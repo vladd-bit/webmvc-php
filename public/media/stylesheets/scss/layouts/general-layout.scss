@@ -28,7 +28,6 @@ footer {
   width:55px;
 }
 
-
 .mdc-theme--primary 	,
 .mdc-theme--secondary 	,
 .mdc-theme--background 	,
@@ -42,10 +41,14 @@ footer {
   background-color: #5085ff;
 }
 
-.mdc-button,.mdc-button--unelevated, .mdc-button--raised:not(:disabled), .mdc-button--unelevated:not(:disabled), .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label
-  ,.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label
+.mdc-button,.mdc-button--unelevated , .mdc-button--raised:not(:disabled), .mdc-button--unelevated:not(:disabled)
 {
   background-color: #448aff;
+}
+
+ .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label
+{
+  color:#448aff;
 }
 
 .full-width {

@@ -2,6 +2,8 @@
 
 namespace Application\Controllers;
 
+use Application\Config\WebConfig;
+use Application\Core\Model;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models;
@@ -17,8 +19,16 @@ class Home extends \Application\Core\Controller
     public function index()
     {
         $view = new View();
-        $view->set('modifyMe', 'HomePage');
+        // $view->set('modifyMe', 'HomePage');
         $view->render('home/index.php');
+    }
+
+    public function testMethod()
+    {
+        $view = new View();
+
+        //$testHash = sha1(HashGenerator::randomizedShaByteHash());
+        $view->render('home/testMethod.php');
     }
 
     public function login($parameters)
@@ -30,60 +40,39 @@ class Home extends \Application\Core\Controller
         {
             if(isset($_POST[$parameter]))
             {
-                $viewData[$parameter] = $_POST[$parameter];
+                $viewData[$parameter] = $_POST['username'];
             }
             else
             {
-                //invalid model state, redirect;
-                Router::redirect('home/index');
+                Router::redirect('/home/index');
                 die();
             }
         }
 
-        $user = Models\UserAccountModel::getUserByName($viewData['username']);
+        //$user = Models\UserAccountModel::getUserByName($viewData['username']);
 
-        if($user === null)
-        {
-            echo 'no user found';
-            $newUserAccount = new UserAccount();
+        $user = null;
+        Router::redirect('/home/index');
+        die();
 
-            $passwordSaltAndHash = HashGenerator::hashString($viewData['password']);
-            $sessionKey = HashGenerator::randomizedShaByteHash();
+        // if($user === null)
+          // {
+        //     echo 'no user found';
+        //     $newUserAccount = new UserAccount();
 
-            $newUserAccount->setUsername($viewData['username']);
-            $newUserAccount->setPasswordHash($passwordSaltAndHash['hash']);
-            $newUserAccount->setPasswordSalt($passwordSaltAndHash['salt']);
-            $newUserAccount->setSessionKey($sessionKey);
+        //     $passwordSaltAndHash = HashGenerator::hashString($viewData['password']);
+        //     $sessionKey = HashGenerator::randomizedShaByteHash();
 
-            //Models\UserAccountModel::addUser($user);
-        }
+        //     $newUserAccount->setUsername($viewData['username']);
+        //     $newUserAccount->setPasswordHash($passwordSaltAndHash['hash']);
+        //     $newUserAccount->setPasswordSalt($passwordSaltAndHash['salt']);
+        //     $newUserAccount->setSessionKey($sessionKey);
 
-
-
-
-
-
-       //print_r($test1, 0);
-        //return 0;
-
-        //$isPasswordValid = HashGenerator::
-
-
-        //echo print_r($test,0);
+        //     //Models\UserAccountModel::addUser($user);
+        // }
 
         //$view->render('home/submit.php', $viewData);
+
     }
-
-    public function testMethod()
-    {
-        $view = new View();
-
-        $testHash = sha1(HashGenerator::randomizedShaByteHash());
-
-        echo $testHash;
-        //$view->render('home/testMethod.php');
-    }
-
-
 
 }

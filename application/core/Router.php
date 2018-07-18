@@ -16,6 +16,7 @@ class Router
         //$route = preg_replace('/\{([a-z]+)\}/', '(?P<\1>[a-z-]+)', $route);
         //$route = preg_replace('/\{([a-z]+):([^\}]+)\}/', '(?P<\1>\2)', $route);
         //$route = '/^' . $route . '/i';
+
         $this->routes[$route] = $routeParameters;
     }
 
@@ -45,7 +46,6 @@ class Router
      */
     public function dispatch($url)
     {
-        // remove query variables from the url using strtok
         $formattedUrl = $url != '' ? $this->removeQueryStringVariables($url) : '/';
         $formattedUrl = self::cleanUrlPath($formattedUrl);
 
@@ -84,13 +84,13 @@ class Router
         }
         else
         {
-            throw new \Exception('No route matched.', 404);
+            throw new \Exception('No route :'.$formattedUrl. ' matched.', 404);
         }
     }
 
     public static function redirect($route)
     {
-        $newUrl = "{$_SERVER['HTTP_HOST']}".'/'.WebConfig::PROJECT_FOLDER.$route;
+        $newUrl = "{$_SERVER['HTTP_HOST']}".WebConfig::WEBSITE_PATH.$route;
         $newUrl = self::cleanUrlPath($newUrl);
         $newUrl = WebConfig::$HTTP_URL_STRING.$newUrl;
 
@@ -107,11 +107,16 @@ class Router
 
     protected static function removeQueryStringVariables($url)
     {
-        if ($url != '') {
-            $parts = explode('&', $url, 2);
-            if (strpos($parts[0], '=') === false) {
+        $url = strtok($url, "?");
+        if ($url != '')
+        {
+            $parts = explode('&', $url);
+            if (strpos($parts[0], '=') === false)
+            {
                 $url = $parts[0];
-            } else {
+            }
+            else
+            {
                 $url = '';
             }
         }
