@@ -36,6 +36,8 @@ class WebConfig
 
     static $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
 
+    const DEFAULT_SESSION_LIFETIME = 36000; // lifetime in seconds for user login sessions.
+
 
     /**
      * Website folder paths

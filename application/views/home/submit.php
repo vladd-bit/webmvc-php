@@ -1,7 +1,6 @@
 <?php
     $title = 'Account';
     $layout = '/shared/layout_secure.php';
-    $viewData = null;
 ?>
 
 <p>This has been submitted</p>

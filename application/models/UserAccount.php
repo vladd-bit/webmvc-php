@@ -17,6 +17,14 @@ class UserAccount
     private $dateCreated;
     private $dateUpdated;
 
+    public function __construct(Array $properties = array())
+    {
+        foreach($properties as $key => $value)
+        {
+            $this->{$key} = $value;
+        }
+    }
+
     /**
      * @return mixed
      */
@@ -207,5 +215,69 @@ class UserAccount
     public function setDateUpdated($dateUpdated): void
     {
         $this->dateUpdated = $dateUpdated;
+    }
+
+    public function isValid()
+    {
+        if($this->id === null || $this->id == 0)
+        {
+            return false;
+        }
+
+        if($this->username != null && strlen($this->username) > 40 )
+        {
+            return false;
+        }
+
+        if($this->passwordSalt === null)
+        {
+            return false;
+        }
+
+        if($this->passwordHash === null)
+        {
+            return false;
+        }
+
+        if($this->sessionKey === null)
+        {
+            return false;
+        }
+
+        if($this->email=== null || strlen($this->email) > 255)
+        {
+            return false;
+        }
+
+        if($this->failedAttempt === null)
+        {
+            return false;
+        }
+
+        if($this->locked === null)
+        {
+            return false;
+        }
+
+        if($this->lastLogin === null)
+        {
+            return false;
+        }
+
+        if($this->accessLevel === null)
+        {
+            return false;
+        }
+
+        if($this->dateCreated === null)
+        {
+            return false;
+        }
+
+        if($this->dateUpdated === null)
+        {
+            return false;
+        }
+        return true;
     }
 }

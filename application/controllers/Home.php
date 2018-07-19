@@ -40,7 +40,7 @@ class Home extends \Application\Core\Controller
         {
             if(isset($_POST[$parameter]))
             {
-                $viewData[$parameter] = $_POST['username'];
+                $viewData[$parameter] = $_POST[$parameter];
             }
             else
             {
@@ -49,11 +49,42 @@ class Home extends \Application\Core\Controller
             }
         }
 
-        //$user = Models\UserAccountModel::getUserByName($viewData['username']);
+        $userAccount = Models\UserAccountModel::getUserByName($viewData['username']);
 
-        $user = null;
-        Router::redirect('/home/index');
-        die();
+        if($userAccount != null)
+        {
+            $userAccount = new UserAccount($userAccount);
+
+            $saltAndHash = HashGenerator::hashString($viewData['password']);
+
+            $sessionKey = HashGenerator::randomizedShaByteHash();
+            print_r($saltAndHash, 0);
+
+            $userAccount->setPasswordHash($saltAndHash['hash']);
+            $userAccount->setPasswordSalt($saltAndHash['salt']);
+            $userAccount->setSessionKey($sessionKey);
+            $userAccount->setLastLogin(date("Y-m-d H:i:s"));
+
+            $updateAccount = Models\UserAccountModel::updateUserSession($userAccount);
+
+            if($updateAccount == false)
+            {
+                http_response_code(404);
+                die();
+            }
+
+            $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
+            setcookie('instance', $sessionKey,$expiryTime);
+
+            $_SESSION['userSessionId'] = $sessionKey;
+            $_SESSION['userSessionExpiry'] = $expiryTime;
+        }
+        else
+        {
+            Router::redirect('/home/index');
+            die();
+        }
+
 
         // if($user === null)
           // {

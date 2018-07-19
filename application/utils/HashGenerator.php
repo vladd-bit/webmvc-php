@@ -42,11 +42,18 @@ class HashGenerator
     private const PBKDF2_HASH_LENGTH = 64;
     private const PBKDF2_SALT_BYTES_LENGTH = 64;
 
+    /**
+     * @param $initialString (string that needs to be hashed)
+     * @return array containing the BASE64 encoded hash and salt result['salt'], result['password']
+     * @throws \Exception
+     */
     public static function hashString($initialString)
     {
         $salt = random_bytes(self::PBKDF2_SALT_BYTES_LENGTH);
         $hash = hash_pbkdf2(self::PBKDF2_HASH_ALGORITHM, $initialString, $salt, self::PBKDF2_ITERATIONS, self::PBKDF2_HASH_LENGTH);
 
+        $salt = base64_encode($salt);
+        $hash = base64_encode($hash);
 
         return compact('salt', 'hash');
     }
