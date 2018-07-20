@@ -21,15 +21,27 @@ class UserAccountModel extends \Application\Core\Model
         return $result;
     }
 
+    public static function getUserBySessionKey($sessionKey)
+    {
+        $db = static::getDB();
+
+        $sql  = 'SELECT * FROM UserAccount WHERE username = :username';
+
+        $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $query->execute(array(':sessionKey' => $sessionKey));
+
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
     public static function updateUserSession(UserAccount $userAccount)
     {
         $db = static::getDB();
 
-        $sql = 'UPDATE UserAccount SET passwordSalt = :passwordSalt, passwordHash = :passwordHash, sessionKey = :sessionKey, lastLogin = :lastLogin';
+        $sql = 'UPDATE UserAccount SET  sessionKey = :sessionKey, lastLogin = :lastLogin';
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $query->execute(array(
-            ':passwordSalt' => $userAccount->getPasswordSalt(),
-            ':passwordHash' => $userAccount->getPasswordHash(),
             ':sessionKey' => $userAccount->getSessionKey(),
             ':lastLogin' => $userAccount->getLastLogin()
         ));

@@ -2,11 +2,15 @@
 
 namespace Application\Utils;
 
-
-class ModelValidator
+abstract class ModelValidator
 {
-    public function __construct($viewData = array())
-    {
+    public $variableValidationAttributes = array();
 
+    /**
+     * @return mixed contains validation logic for the model's fields.
+     */
+    protected function isValid()
+    {
+        return 0;
     }
 }

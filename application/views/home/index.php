@@ -12,7 +12,7 @@
                     <br>
 
                     <div class="mdc-text-field mdc-text-field--upgraded full-width" data-mdc-auto-init="MDCTextField">
-                        <input class="mdc-text-field__input" id="" type="text" name="username" value="" required>
+                        <input class="mdc-text-field__input" type="text" name="username" value="" required>
                         <label for="username" class="mdc-floating-label">Username</label>
                     </div>
 
@@ -20,7 +20,7 @@
                     <br>
 
                     <div class="mdc-text-field mdc-text-field--upgraded full-width" data-mdc-auto-init="MDCTextField">
-                        <input class="mdc-text-field__input" id="" type="password" name="password" value=""  aria-label="Password" required>
+                        <input class="mdc-text-field__input"  type="password" name="password" value=""  aria-label="Password" required>
                         <label for="password" class="mdc-floating-label">Password</label>
                     </div>
 

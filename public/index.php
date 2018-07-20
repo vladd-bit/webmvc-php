@@ -20,9 +20,8 @@ catch(Exception $exception)
 $router = new \Application\Core\Router();
 
 $router->add('/home/index',['controller'=>'Home', 'action' => 'index']);
-$router->add('/home/testMethod', ['controller' => 'Home', 'action' => 'testMethod']);
-$router->add('/home/test', ['controller' => 'Home', 'action' => 'testMethod']);
 $router->add('/home/login',['controller'=>'Home', 'action' => 'login', 'parameters' => ['username', 'password'] ]);
+$router->add('/home/dashboard',['controller'=>'Home', 'action' => 'dashboard', 'parameters' => ['username'] ]);
 
 $router->dispatch($_SERVER['QUERY_STRING']);
 
