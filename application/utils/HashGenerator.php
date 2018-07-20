@@ -58,9 +58,9 @@ class HashGenerator
         return compact('salt', 'hash');
     }
 
-    public static function validateHash($salt, $initialString, $originalHash)
+    public static function validateHash($originalSalt, $initialString, $originalHash)
     {
-        $hash = hash_pbkdf2(self::PBKDF2_HASH_ALGORITHM, $initialString, $salt, self::PBKDF2_ITERATIONS, self::PBKDF2_HASH_LENGTH);
+        $hash = hash_pbkdf2(self::PBKDF2_HASH_ALGORITHM, $initialString, $originalSalt, self::PBKDF2_ITERATIONS, self::PBKDF2_HASH_LENGTH);
 
         if(hash_equals($hash,$originalHash))
             return true;

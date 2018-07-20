@@ -25,7 +25,7 @@ class UserAccountModel extends \Application\Core\Model
     {
         $db = static::getDB();
 
-        $sql  = 'SELECT * FROM UserAccount WHERE username = :username';
+        $sql  = 'SELECT * FROM UserAccount WHERE sessionKey = :sessionKey';
 
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $query->execute(array(':sessionKey' => $sessionKey));

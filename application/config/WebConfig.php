@@ -45,4 +45,12 @@ class WebConfig
 
     const LOGS_FOLDER = __DIR__.'/logs';
 
+    /**
+     * PHP SESSION SETTINGS, DO NOT MODIFY UNLESS YOU INTEND TO MODIFY THE SESSION STORAGE PATH OR THE DEFAULT PHP SESSION NAME.
+     * the session storage path will always be within the project's current folder.
+     */
+
+    const MODIFY_SESSION_STORAGE_PATH = false;
+    const SESSION_STORAGE_PATH = '/sessions';
+    const SESSION_NAME = 'instance';
 }

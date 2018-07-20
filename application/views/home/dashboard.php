@@ -3,4 +3,11 @@
     $layout = '/shared/layout_secure.php';
 ?>
 
-<p>Welcome <? echo $this->viewData['username']; ?></p>
+<p>Welcome !</p>
+<?php
+
+echo $this->viewData['username'];
+echo '<br>';
+print_r($_SESSION, 0 );
+
+?>

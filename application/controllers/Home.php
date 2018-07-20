@@ -13,6 +13,10 @@ class Home extends \Application\Core\Controller
 {
     public function index()
     {
+        if(Authentication::isAuthorized())
+        {
+            Router::redirect('/home/dashboard');
+        }
         $view = new View();
         $view->render('home/index.php');
     }
@@ -36,7 +40,6 @@ class Home extends \Application\Core\Controller
             else
             {
                 Router::redirect('/home/index');
-                die();
             }
         }
 
@@ -48,32 +51,32 @@ class Home extends \Application\Core\Controller
 
             $sessionKey = HashGenerator::randomizedShaByteHash();
 
-            $userAccount->setSessionKey($sessionKey);
-            $userAccount->setLastLogin(date("Y-m-d H:i:s"));
+            $validPassword = HashGenerator::validateHash(base64_decode($userAccount->getPasswordSalt()),
+                                                         $viewData['password'],
+                                                         base64_decode($userAccount->getPasswordHash()));
 
-            $updateAccount = UserAccountModel::updateUserSession($userAccount);
-
-            if($updateAccount == false)
+            if($validPassword)
             {
-                http_response_code(404);
-                die();
+                $userAccount->setSessionKey($sessionKey);
+                $userAccount->setLastLogin(date("Y-m-d H:i:s"));
+
+                $updateAccount = UserAccountModel::updateUserSession($userAccount);
+
+                if($updateAccount == false)
+                {
+                    http_response_code(404);
+                }
+
+                $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
+                $_SESSION['userIdentityUsername'] = $userAccount->getUsername();
+                $_SESSION['userSessionId'] = $sessionKey;
+                $_SESSION['userSessionExpiryTime'] = $expiryTime;
+
+                Router::redirect('/home/dashboard');
             }
-
-            session_name('instance');
-            session_start();
-            $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
-            //setcookie('instance', $sessionKey,$expiryTime);
-            $_SESSION['userIdentityUsername'] = $userAccount->getUsername();
-            $_SESSION['userSessionId'] = $sessionKey;
-            $_SESSION['userSessionExpiryTime'] = $expiryTime;
-
-            Router::redirect('/home/dashboard');
-            die();
         }
 
         Router::redirect('/home/index');
-        die();
-
     }
 
     public function dashboard()
@@ -81,10 +84,13 @@ class Home extends \Application\Core\Controller
         if(Authentication::isAuthorized())
         {
             $view = new View();
-            $view->render('home/dashboard.php');
-        }
 
-        Router::redirect('/home/index');
-        die();
+            $viewData['username'] = 'lel';
+            $view->render('home/dashboard.php', $viewData);
+        }
+        else
+        {
+            echo ' auth failed';
+        }
     }
 }
