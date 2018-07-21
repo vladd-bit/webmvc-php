@@ -68,7 +68,8 @@ class Home extends \Application\Core\Controller
                 }
 
                 $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
-                $_SESSION['userIdentityUsername'] = $userAccount->getUsername();
+                $_SESSION['identityUsername'] = $userAccount->getUsername();
+                $_SESSION['identityEmail'] = $userAccount->getEmail();
                 $_SESSION['userSessionId'] = $sessionKey;
                 $_SESSION['userSessionExpiryTime'] = $expiryTime;
 
@@ -90,7 +91,7 @@ class Home extends \Application\Core\Controller
         }
         else
         {
-            echo ' auth failed';
+            echo 'auth failed';
         }
     }
 }

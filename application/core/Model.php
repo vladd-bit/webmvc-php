@@ -30,7 +30,7 @@ abstract class Model
             }
             catch(PDOException $exception)
             {
-                $dbLogFilePath = LOGS_FOLDER.'/'.WebConfig::DB_ERROR_LOG_FILENAME;
+                $dbLogFilePath = LOGS_FOLDER.'\\'.WebConfig::DB_ERROR_LOG_FILENAME;
                 if(file_exists($dbLogFilePath))
                 {
                     $file = fopen($dbLogFilePath, 'a');
@@ -42,6 +42,7 @@ abstract class Model
                     fwrite($file, "\n".$exception);
                 }
 
+                http_response_code(404);
                 die();
             }
         }

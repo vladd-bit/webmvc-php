@@ -2,7 +2,9 @@
 
 namespace Application\Models;
 
-class UserAccount
+use Application\Utils\ModelValidator;
+
+class UserAccount extends ModelValidator
 {
     private $id;
     private $username;
@@ -23,6 +25,8 @@ class UserAccount
         {
             $this->{$key} = $value;
         }
+
+
     }
 
     /**
@@ -217,7 +221,7 @@ class UserAccount
         $this->dateUpdated = $dateUpdated;
     }
 
-    public function isValid()
+    public function isValidTest()
     {
         if($this->id === null || $this->id == 0)
         {
