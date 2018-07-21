@@ -2,9 +2,7 @@
 
 namespace Application\Models;
 
-use Application\Utils\ModelValidator;
-
-class UserAccount extends ModelValidator
+class UserAccount
 {
     private $id;
     private $username;
@@ -23,10 +21,11 @@ class UserAccount extends ModelValidator
     {
         foreach($properties as $key => $value)
         {
-            $this->{$key} = $value;
+            if(property_exists($this, $key))
+            {
+                $this->{$key} = $value;
+            }
         }
-
-
     }
 
     /**
@@ -219,69 +218,5 @@ class UserAccount extends ModelValidator
     public function setDateUpdated($dateUpdated): void
     {
         $this->dateUpdated = $dateUpdated;
-    }
-
-    public function isValidTest()
-    {
-        if($this->id === null || $this->id == 0)
-        {
-            return false;
-        }
-
-        if($this->username != null && strlen($this->username) > 40 )
-        {
-            return false;
-        }
-
-        if($this->passwordSalt === null)
-        {
-            return false;
-        }
-
-        if($this->passwordHash === null)
-        {
-            return false;
-        }
-
-        if($this->sessionKey === null)
-        {
-            return false;
-        }
-
-        if($this->email=== null || strlen($this->email) > 255)
-        {
-            return false;
-        }
-
-        if($this->failedAttempt === null)
-        {
-            return false;
-        }
-
-        if($this->locked === null)
-        {
-            return false;
-        }
-
-        if($this->lastLogin === null)
-        {
-            return false;
-        }
-
-        if($this->accessLevel === null)
-        {
-            return false;
-        }
-
-        if($this->dateCreated === null)
-        {
-            return false;
-        }
-
-        if($this->dateUpdated === null)
-        {
-            return false;
-        }
-        return true;
     }
 }

@@ -4,68 +4,67 @@ namespace Application\Utils;
 
 class ModelValidator
 {
-    private $validationAttributes = ['max','min','required','optional'];
-    private $validationType = array('date' => 'date', 'email' => 'email', 'password' => 'password', 'lowerCharacters' => 'lowerCharacters','upperCharacters' => 'upperCharacters');
+    private $validationAttributes = ['maxLength','minLength','required','optional','lowerCharacters' => 'lowerCharacters','upperCharacters' => 'upperCharacters'];
+    private $validationType = array('date' => 'date', 'email' => 'email', 'password' => 'password');
     private $validationMessage = array('error' => 'error', 'success' => 'success');
 
+    private $fieldsToBeValidated = array();
     private $fieldValidationMapping = array();
-
-
-    /**
-     *
-     *    $this->validate($request, [
-            'name' => 'required|max:10',
-            'price' => 'required',
-            ]);
-
-     */
+    private $fieldValidationMessage = array();
 
     /**
      * @return array
      */
-    public function getValidationAttributes(): array
+    public function getFieldsToBeValidated(): array
     {
-        return $this->validationAttributes;
+        return $this->fieldsToBeValidated;
     }
 
     /**
-     * @param array $validationAttributes
+     * @param array $fieldsToBeValidated
      */
-    public function setValidationAttributes(array $validationAttributes): void
+    public function setFieldsToBeValidated(array $fieldsToBeValidated): void
     {
-        $this->validationAttributes = $validationAttributes;
+        $this->fieldsToBeValidated = $fieldsToBeValidated;
     }
 
     /**
      * @return array
      */
-    public function getValidationType(): array
+    public function getFieldValidationMapping(): array
     {
-        return $this->validationType;
+        return $this->fieldValidationMapping;
     }
 
     /**
-     * @param array $validationType
+     * @param array $fieldValidationMapping
      */
-    public function setValidationType(array $validationType): void
+    public function setFieldValidationMapping(array $fieldValidationMapping): void
     {
-        $this->validationType = $validationType;
+        $this->fieldValidationMapping = $fieldValidationMapping;
     }
 
     /**
      * @return array
      */
-    public function getValidationMessage(): array
+    public function getFieldValidationMessage(): array
     {
-        return $this->validationMessage;
+        return $this->fieldValidationMessage;
     }
 
     /**
-     * @param array $validationMessage
+     * @param array $fieldValidationMessage
      */
-    public function setValidationMessage(array $validationMessage): void
+    public function setFieldValidationMessage(array $fieldValidationMessage): void
     {
-        $this->validationMessage = $validationMessage;
+        $this->fieldValidationMessage = $fieldValidationMessage;
+    }
+
+    private function extractValidationConditions($conditions)
+    {
+        $formattedConditions = explode('|', $conditions);
+
+        return $formattedConditions;
     }
 
     /**
@@ -73,10 +72,19 @@ class ModelValidator
      */
     public function isValid()
     {
-        foreach ($this as $key => $value)
+        foreach($this->fieldsToBeValidated as $fieldName => $fieldValue)
         {
-            print "$key => $value\n";
+            foreach($this->fieldValidationMapping as $validationFieldName => $conditions)
+            {
+                if($fieldName == $validationFieldName)
+                {
+                    $this->extractValidationConditions($conditions);
+                }
+
+                break;
+            }
         }
-        return 0;
+
+        return false;
     }
 }

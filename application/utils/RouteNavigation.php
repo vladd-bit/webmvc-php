@@ -11,5 +11,6 @@ class RouteNavigation
         $router->add('/home/index',['controller'=>'Home', 'action' => 'index']);
         $router->add('/home/login',['controller'=>'Home', 'action' => 'login', 'parameters' => ['username', 'password'] ]);
         $router->add('/home/dashboard',['controller'=>'Home', 'action' => 'dashboard', 'parameters' => ['username'] ]);
+        $router->add('/account/register', ['controller'=>'Account', 'action' => 'register', 'parameters' => ['userAccountViewModel']]);
     }
 }

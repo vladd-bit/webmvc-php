@@ -21,12 +21,6 @@ class Home extends \Application\Core\Controller
         $view->render('home/index.php');
     }
 
-    public function testMethod()
-    {
-        $view = new View();
-        $view->render('home/testMethod.php');
-    }
-
     public function login($parameters)
     {
         $viewData = array();
@@ -68,6 +62,7 @@ class Home extends \Application\Core\Controller
                 }
 
                 $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
+
                 $_SESSION['identityUsername'] = $userAccount->getUsername();
                 $_SESSION['identityEmail'] = $userAccount->getEmail();
                 $_SESSION['userSessionId'] = $sessionKey;
@@ -77,7 +72,7 @@ class Home extends \Application\Core\Controller
             }
         }
 
-        Router::redirect('/home/index');
+        #Router::redirect('/home/index');
     }
 
     public function dashboard()
@@ -85,7 +80,6 @@ class Home extends \Application\Core\Controller
         if(Authentication::isAuthorized())
         {
             $view = new View();
-
             $viewData['username'] = 'lel';
             $view->render('home/dashboard.php', $viewData);
         }
