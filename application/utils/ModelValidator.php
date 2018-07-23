@@ -80,16 +80,18 @@ class ModelValidator
         return $validationAttributesList;
     }
 
-    private function buildErrorMessageForField($inputAttribute, $validationResult)
+    private function buildErrorMessageForFields($variableFieldName, $inputAttribute, $validationResult)
     {
-        if(reset($inputAttribute) == 0)
-        {
-            $validationResult[key($inputAttribute)] = [reset($inputAttribute), 'error' => 'some error'];
-        }
-        else if(reset($inputAttribute) == 1)
-        {
-            $validationResult[key($inputAttribute)] = [reset($inputAttribute), 'success' => 'success'];
-        }
+       if($validationResult[key($inputAttribute)] == 0)
+       {
+            $validationResult = [$validationResult[key($inputAttribute)] , 'error' => 'some error'];
+       }
+       else if($validationResult[key($inputAttribute)] == 1)
+       {
+            $validationResult[key($inputAttribute)] = [$validationResult[key($inputAttribute)] , 'success' => 'success'];
+       }
+
+        return $validationResult;
     }
 
     private function checkInputValidity($variableFieldName, $variableFieldValue, $inputAttributes)
@@ -98,14 +100,14 @@ class ModelValidator
 
         foreach($inputAttributes as $inputAttribute)
         {
-            foreach(ValidationDataAnnotation::validationAttributes as $validationAttribute)
+            foreach (ValidationDataAnnotation::validationAttributes as $validationAttribute)
             {
-                if(key($inputAttribute) == $validationAttribute)
+                if (key($inputAttribute) == $validationAttribute)
                 {
-                    switch(key($inputAttribute))
+                    switch (key($inputAttribute))
                     {
                         case ValidationDataAnnotation::maxLength:
-                            if(strlen($variableFieldValue) < reset($inputAttribute))
+                            if (strlen($variableFieldValue) < reset($inputAttribute))
                             {
                                 array_push($validationResults, [key($inputAttribute) => 1]);
                             }
@@ -114,8 +116,9 @@ class ModelValidator
                                 array_push($validationResults, [key($inputAttribute) => 0]);
                             }
                             break;
+
                         case ValidationDataAnnotation::minLength:
-                            if(strlen($variableFieldValue) > reset($inputAttribute))
+                            if (strlen($variableFieldValue) > reset($inputAttribute))
                             {
                                 array_push($validationResults, [key($inputAttribute) => 1]);
                             }
@@ -124,10 +127,12 @@ class ModelValidator
                                 array_push($validationResults, [key($inputAttribute) => 0]);
                             }
                             break;
+
                         case ValidationDataAnnotation::optional:
                             break;
+
                         case ValidationDataAnnotation::required:
-                            if(isset($variableFieldValue) && trim($variableFieldValue) !== '')
+                            if (isset($variableFieldValue) && trim($variableFieldValue) !== '')
                             {
                                 array_push($validationResults, [key($inputAttribute) => 1]);
                             }
@@ -136,13 +141,16 @@ class ModelValidator
                                 array_push($validationResults, [key($inputAttribute) => 0]);
                             }
                             break;
+
                         case ValidationDataAnnotation::upperCharacters:
                             break;
+
                         case ValidationDataAnnotation::lowerCharacters:
                             break;
+
                         case ValidationDataAnnotation::dataType:
                             {
-                                switch(reset($inputAttribute))
+                                switch (reset($inputAttribute))
                                 {
                                     case ValidationDataType::datetime:
                                         if (DateTime::createFromFormat('Y-m-d G:i:s', $variableFieldValue) !== false)
@@ -153,7 +161,9 @@ class ModelValidator
                                         {
                                             array_push($validationResults, [key($inputAttribute) => 0]);
                                         }
+
                                         break;
+
                                     case ValidationDataType::email:
                                         if (filter_var($variableFieldValue, FILTER_VALIDATE_EMAIL))
                                         {
@@ -163,7 +173,9 @@ class ModelValidator
                                         {
                                             array_push($validationResults, [key($inputAttribute) => 0]);
                                         }
+
                                         break;
+
                                     case ValidationDataType::password:
                                         break;
                                 }
@@ -171,13 +183,17 @@ class ModelValidator
                             break;
                     }
 
-                    $this->buildErrorMessageForField($inputAttribute, $validationResults);
+                    $validationResults[count($validationResults) - 1] = $this->buildErrorMessageForFields($variableFieldName, $inputAttribute, $validationResults[count($validationResults) - 1]);
                 }
             }
+
+
         }
 
-        echo '</br> RESULT </br>';
-        print_r($validationResults, 0);
+        $validationResults = [$variableFieldName => $validationResults];
+
+        //echo '</br> RESULT </br>';
+        //print_r($validationResults, 0);
 
         //echo '</br>';
         //echo $variableFieldName;
@@ -186,6 +202,8 @@ class ModelValidator
         //echo '  ';
         //print_r($inputAttributes);
         //echo '</br>';
+
+        return $validationResults;
     }
 
     /**
@@ -200,7 +218,9 @@ class ModelValidator
                 if($fieldName == $validationFieldName)
                 {
                     $extractedConditionsList = $this->extractValidationConditions($conditions);
-                    $this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList);
+                    echo '</br>============</br>';
+                    print_r($this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList),0);
+                    //$this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList);
                 }
             }
         }

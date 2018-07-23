@@ -12,7 +12,7 @@ abstract class ValidationDataAnnotation
     const lowerCharacters = 'lowerCharacters';
     const upperCharacters = 'upperCharacters';
     const dataType = 'dataType';
-    const validationAttributes = ['maxLength','minLength','required','optional','lowerCharacters','upperCharacters','dataType','displayFormat'];
+    const validationAttributes = ['maxLength','minLength','required','optional','lowerCharacters','upperCharacters','dataType'];
     const validationDataTypes = ['datetime', 'email', 'password'];
     const validationMessage = ['error', 'success'];
 
