@@ -7,6 +7,7 @@ use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
+use Application\Models\ViewModels\Home\UserAccountViewModel;
 use Application\Utils\HashGenerator;
 
 class Home extends \Application\Core\Controller
@@ -79,9 +80,18 @@ class Home extends \Application\Core\Controller
     {
         if(Authentication::isAuthorized())
         {
-            $view = new View();
-            $viewData['username'] = 'lel';
-            $view->render('home/dashboard.php', $viewData);
+            $userAccount = UserAccountModel::getUserByName($_SESSION['identityUsername']);
+
+            if($userAccount)
+            {
+                $userAccountViewModel = new UserAccountViewModel();
+                $userAccountViewModel->setPassword('aa');
+                $userAccountViewModel->setUsername('b');
+                $userAccountViewModel->isValid();
+            }
+            //$view = new View();
+            //$viewData['username'] = 'lel';
+            //$view->render('home/dashboard.php', $viewData);
         }
         else
         {

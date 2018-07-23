@@ -1,7 +1,6 @@
 <?php
 
-namespace Application\Models\Viewmodels;
-
+namespace Application\Models\ViewModels\Home;
 
 use Application\Utils\ModelValidator;
 
@@ -9,10 +8,10 @@ class UserAccountViewModel
 {
     private $username;
     private $password;
-    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4', 'password' => 'required|maxLength:30|minLength:10');
-    private $validationMessages = array('username' => ['error' =>'the username must be at least 4 characters', 'success' => ''],
-                                        'password' => ['error' =>'the username must be at least 4 characters', 'success' => '']
-                                        );
+    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|dataType:email|displayFormat:{dd-MM-yyyy}', 'password' => 'required|maxLength:30|minLength:10');
+    private $validationMessages   = array('username' => ['maxLength' =>'the username must be at least 4 characters', 'success' => ''],
+                                          'password' => ['maxLength' =>'the username must be at least 4 characters', 'success' => '']
+                                          );
 
     /**
      * @return mixed
