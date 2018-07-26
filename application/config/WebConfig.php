@@ -12,6 +12,8 @@ class WebConfig
 
     const DB_ERROR_LOG_FILENAME = 'dblog.txt';
 
+    const WEB_ERROR_LOG_FILENAME = 'weblog.txt';
+
     /**
      * Store namespace paths for easier use in the application.
      */

@@ -3,7 +3,8 @@
 namespace Application\Core;
 
 use Application\Config\DatabaseConfig;
-use Application\Config\WebConfig;
+use Application\Utils\ErrorLog;
+use Application\Utils\ErrorLogTypes;
 use PDO;
 use PDOException;
 
@@ -30,20 +31,7 @@ abstract class Model
             }
             catch(PDOException $exception)
             {
-                $dbLogFilePath = LOGS_FOLDER.'\\'.WebConfig::DB_ERROR_LOG_FILENAME;
-                if(file_exists($dbLogFilePath))
-                {
-                    $file = fopen($dbLogFilePath, 'a');
-                    fwrite($file, "\n".$exception);
-                }
-                else
-                {
-                    $file = fopen($dbLogFilePath, 'w');
-                    fwrite($file, "\n".$exception);
-                }
-
-                http_response_code(404);
-                die();
+                ErrorLog::logError(ErrorLogTypes::dbError, $exception);
             }
         }
 

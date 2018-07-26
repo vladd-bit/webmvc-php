@@ -192,17 +192,6 @@ class ModelValidator
 
         $validationResults = [$variableFieldName => $validationResults];
 
-        //echo '</br> RESULT </br>';
-        //print_r($validationResults, 0);
-
-        //echo '</br>';
-        //echo $variableFieldName;
-        //echo '  ';
-        //echo $variableFieldValue;
-        //echo '  ';
-        //print_r($inputAttributes);
-        //echo '</br>';
-
         return $validationResults;
     }
 
