@@ -3,8 +3,6 @@
 namespace Application\Core;
 
 use Application\Config\WebConfig;
-use Application\Utils\ErrorLog;
-use Application\Utils\ErrorLogTypes;
 
 class Router
 {
@@ -71,17 +69,17 @@ class Router
                 }
                 else
                 {
-                    ErrorLog::logError(ErrorLogTypes::webError, new \Exception('Method' . $action . ' in controller ' . $controller . ' cannot be called directly'));
+                    Error::log(ErrorLogTypes::webError, new \Exception('Method' . $action . ' in controller ' . $controller . ' cannot be called directly'));
                 }
             }
             else
             {
-                ErrorLog::logError(ErrorLogTypes::webError, new \Exception('Controller class  ' . $controller . '  not found'));
+                Error::log(ErrorLogTypes::webError, new \Exception('Controller class  ' . $controller . '  not found'));
             }
         }
         else
         {
-            ErrorLog::logError(ErrorLogTypes::webError, new \Exception('No route :'.$formattedUrl. ' matched.'));
+            Error::log(ErrorLogTypes::webError, new \Exception('No route :'.$formattedUrl. ' matched.'));
         }
     }
 

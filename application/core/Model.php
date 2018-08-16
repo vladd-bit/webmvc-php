@@ -3,8 +3,6 @@
 namespace Application\Core;
 
 use Application\Config\DatabaseConfig;
-use Application\Utils\ErrorLog;
-use Application\Utils\ErrorLogTypes;
 use PDO;
 use PDOException;
 
@@ -31,7 +29,7 @@ abstract class Model
             }
             catch(PDOException $exception)
             {
-                ErrorLog::logError(ErrorLogTypes::dbError, $exception);
+                Error::log(ErrorLogTypes::dbError, $exception);
             }
         }
 
