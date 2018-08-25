@@ -29,7 +29,7 @@ abstract class Model
             }
             catch(PDOException $exception)
             {
-                Error::log(ErrorLogTypes::dbError, $exception);
+                Error::log(ErrorLogType::dbError, 0, $exception);
             }
         }
 

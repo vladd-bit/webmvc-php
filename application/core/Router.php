@@ -69,17 +69,17 @@ class Router
                 }
                 else
                 {
-                    Error::log(ErrorLogTypes::webError, new \Exception('Method' . $action . ' in controller ' . $controller . ' cannot be called directly'));
+                    Error::log(ErrorLogType::webError, new \Exception('Method' . $action . ' in controller ' . $controller . ' cannot be called directly'));
                 }
             }
             else
             {
-                Error::log(ErrorLogTypes::webError, new \Exception('Controller class  ' . $controller . '  not found'));
+                Error::log(ErrorLogType::webError, new \Exception('Controller class  ' . $controller . '  not found'));
             }
         }
         else
         {
-            Error::log(ErrorLogTypes::webError, new \Exception('No route :'.$formattedUrl. ' matched.'));
+            Error::log(ErrorLogType::webError, new \Exception('No route :'.$formattedUrl. ' matched.'));
         }
     }
 

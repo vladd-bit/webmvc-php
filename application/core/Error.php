@@ -6,15 +6,15 @@ use Application\Config\WebConfig;
 
 class Error
 {
-    public static function log($errorType, $errorLogLocation = 0, \Exception $exception)
+    public static function log($errorType, $errorLogLocationType = 0, \Exception $exception)
     {
         $dbLogFilePath = LOGS_FOLDER.'\\';
         switch ($errorType)
         {
-            case ErrorLogTypes::dbError:
+            case ErrorLogType::dbError:
                 $dbLogFilePath = $dbLogFilePath.WebConfig::DB_ERROR_LOG_FILENAME;
                 break;
-            case ErrorLogTypes::webError:
+            case ErrorLogType::webError:
                 $dbLogFilePath = $dbLogFilePath.WebConfig::WEB_ERROR_LOG_FILENAME;
                 break;
         }

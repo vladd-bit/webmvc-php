@@ -8,9 +8,11 @@ class UserAccountViewModel
 {
     private $username;
     private $password;
-    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|dataType:email|displayFormat:{dd-MM-yyyy}', 'password' => 'required|maxLength:30|minLength:10');
-    private $validationMessages   = array('username' => ['maxLength' =>'the username must be at least 4 characters', 'success' => ''],
-                                          'password' => ['maxLength' =>'the username must be at least 4 characters', 'success' => '']
+    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|dataType:email|upperCase|displayFormat:{dd-MM-yyyy}',
+                                          'password' => 'required|maxLength:30|minLength:10|upperCase:2');
+
+    private $validationMessages   = array('username' => ['success' => 'great success','error' =>'this is a custom error message'],
+                                          'password' => ['maxLength' =>'the username must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message']
                                           );
 
     /**
@@ -50,8 +52,7 @@ class UserAccountViewModel
         $modelValidator = new ModelValidator();
         $modelValidator->setFieldValidationMapping($this->validationProperties);
         $modelValidator->setFieldValidationMessage($this->validationMessages);
-        $modelValidator->setFieldsToBeValidated(get_object_vars($this));
-
+        $modelValidator->setFieldsToValidate(get_object_vars($this));
         return $modelValidator->isValid();
     }
 }

@@ -4,6 +4,7 @@
 ?>
 
 <p>Welcome !</p>
+
 <?php
 
 echo $this->viewData['username'];

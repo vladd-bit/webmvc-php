@@ -72,8 +72,10 @@ class Home extends \Application\Core\Controller
                 Router::redirect('/home/dashboard');
             }
         }
-
-        #Router::redirect('/home/index');
+        else
+        {
+            Router::redirect('/home/index');
+        }
     }
 
     public function dashboard()

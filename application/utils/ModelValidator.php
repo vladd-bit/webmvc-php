@@ -2,11 +2,13 @@
 
 namespace Application\Utils;
 
+use Application\Core\ValidationDataAnnotation;
+use Application\Core\ValidationDataType;
 use DateTime;
 
 class ModelValidator
 {
-    private $fieldsToBeValidated = array();
+    private $fieldsToValidate = array();
     private $fieldValidationMapping = array();
     private $fieldValidationMessage = array();
 
@@ -15,15 +17,15 @@ class ModelValidator
      */
     public function getFieldsToBeValidated(): array
     {
-        return $this->fieldsToBeValidated;
+        return $this->fieldsToValidate;
     }
 
     /**
-     * @param array $fieldsToBeValidated
+     * @param array $fieldsToValidate
      */
-    public function setFieldsToBeValidated(array $fieldsToBeValidated): void
+    public function setFieldsToValidate(array $fieldsToValidate): void
     {
-        $this->fieldsToBeValidated = $fieldsToBeValidated;
+        $this->fieldsToValidate = $fieldsToValidate;
     }
 
     /**
@@ -80,16 +82,165 @@ class ModelValidator
         return $validationAttributesList;
     }
 
-    private function buildErrorMessageForFields($variableFieldName, $inputAttribute, $validationResult)
+    private function buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResult)
     {
-       if($validationResult[key($inputAttribute)] == 0)
-       {
-            $validationResult = [$validationResult[key($inputAttribute)] , 'error' => 'some error'];
-       }
-       else if($validationResult[key($inputAttribute)] == 1)
-       {
-            $validationResult[key($inputAttribute)] = [$validationResult[key($inputAttribute)] , 'success' => 'success'];
-       }
+        echo '</br>///</br>';
+        print_r($inputAttribute,0);
+
+        echo '</br>///</br>';
+
+        //if ($validationResult[key($inputAttribute)] == 0)
+        //{
+        //    //$validationResult = [$validationResult[key($inputAttribute)] , 'error' => isset($this->fieldValidationMessage[$variableFieldName])  ? $this->fieldValidationMessage[$variableFieldName] : 'no'];
+        //    $validationResult = [$validationResult[key($inputAttribute)], 'error' => isset($this->fieldValidationMessage[$variableFieldName]) ? $this->fieldValidationMessage[$variableFieldName] : 'no'];
+        //}
+        //else if ($validationResult[key($inputAttribute)] == 1)
+        //{
+        //    $validationResult[key($inputAttribute)] = [$validationResult[key($inputAttribute)], 'success' => isset($this->fieldValidationMessage[$variableFieldName]) ? '' : ''];
+        //}
+
+        $currentMessage = null;
+        foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
+        {
+            //echo '======';
+            //echo key($inputAttribute).' {}  ' . $validationMessageAttribute;
+            //echo '======';
+            foreach(ValidationDataAnnotation::validationAttributes as $validationDataAnnotationAttribute)
+            {
+                switch ($validationDataAnnotationAttribute)
+                {
+                    case ValidationDataAnnotation::maxLength:
+                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::maxLength]))
+                        {
+                            $currentMessage = $validationMessageContent;
+                        }
+                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                        {
+                            //$fieldValidationMapping$fieldValidationMapping
+                            $currentMessage = $variableFieldName . ' can be maximum ' . current($inputAttribute).  ' characters';
+                        }
+                        break;
+
+                    case ValidationDataAnnotation::minLength:
+                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::minLength]))
+                        {
+                            $currentMessage = $validationMessageContent;
+                        }
+                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                        {
+                            $currentMessage = $variableFieldName . ' must be minimum ' . current($inputAttribute). ' characters';
+                        }
+                        break;
+
+                    case ValidationDataAnnotation::required:
+                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::required]))
+                        {
+                            $currentMessage = $validationMessageContent;
+                        }
+                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                        {
+                            $currentMessage = $variableFieldName . ' is required';
+                        }
+                        break;
+
+                    case ValidationDataAnnotation::upperCharacters:
+                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::upperCharacters]))
+                        {
+                            $currentMessage = $validationMessageContent;
+                        }
+                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                        {
+                            if(isset($inputAttribute[key($inputAttribute)]))
+                            {
+                                $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper characters';
+                            }
+                            else
+                            {
+                                $currentMessage = $variableFieldName . ' must contain upper characters';
+                            }
+                        }
+                        break;
+
+                    case ValidationDataAnnotation::lowerCharacters:
+                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::lowerCharacters]))
+                        {
+                            $currentMessage = $validationMessageContent;
+                        }
+                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                        {
+                            if(isset($inputAttribute[key($inputAttribute)]))
+                            {
+                                $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower characters';
+                            }
+                            else
+                            {
+                                $currentMessage = $variableFieldName . ' must contain lower characters';
+                            }
+                        }
+                        break;
+
+                    case ValidationDataAnnotation::dataType:
+                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::dataType]))
+                        {
+                            $currentMessage = $validationMessageContent;
+                        }
+                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                        {
+
+                        }
+                        break;
+                }
+
+
+
+            }
+
+
+
+            /*
+             *
+             *   case ValidationDataAnnotation::validationMessage['success']:
+                    if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['success']]))
+                    {
+                        $currentMessage = $validationMessageContent;
+                    }
+                    else if(key($inputAttribute) == $validationMessageAttribute)
+                    {
+
+                    }
+                    break;
+
+
+             *   if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['error']]))
+                    {
+                        $currentMessage = $validationMessageContent;
+                    }
+                    else if(key($inputAttribute) == $validationMessageAttribute)
+                    {
+//
+                    }
+             */
+        }
+
+
+        if(!isset($currentMessage))
+        {
+            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['error']]))
+            {
+                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['error']];
+            }
+        }
+
+        if ($validationResult[key($inputAttribute)] == 0)
+        {
+            //$validationResult = [$validationResult[key($inputAttribute)] , 'error' => isset($this->fieldValidationMessage[$variableFieldName])  ? $this->fieldValidationMessage[$variableFieldName] : 'no'];
+            $validationResult = [$validationResult[key($inputAttribute)], 'error' => $currentMessage ];
+        }
+        else if ($validationResult[key($inputAttribute)] == 1)
+        {
+            $validationResult[key($inputAttribute)] = [$validationResult[key($inputAttribute)], 'success' => ''];
+        }
+
 
         return $validationResult;
     }
@@ -143,9 +294,25 @@ class ModelValidator
                             break;
 
                         case ValidationDataAnnotation::upperCharacters:
+                            if (isset($variableFieldValue) && trim($variableFieldValue) !== '' )
+                            {
+                                array_push($validationResults, [key($inputAttribute) => 1]);
+                            }
+                            else
+                            {
+                                array_push($validationResults, [key($inputAttribute) => 0]);
+                            }
                             break;
 
                         case ValidationDataAnnotation::lowerCharacters:
+                            if (isset($variableFieldValue) && trim($variableFieldValue) !== '')
+                            {
+                                array_push($validationResults, [key($inputAttribute) => 1]);
+                            }
+                            else
+                            {
+                                array_push($validationResults, [key($inputAttribute) => 0]);
+                            }
                             break;
 
                         case ValidationDataAnnotation::dataType:
@@ -182,8 +349,7 @@ class ModelValidator
                             }
                             break;
                     }
-
-                    $validationResults[count($validationResults) - 1] = $this->buildErrorMessageForFields($variableFieldName, $inputAttribute, $validationResults[count($validationResults) - 1]);
+                    $validationResults[count($validationResults) - 1] = $this->buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResults[count($validationResults) - 1]);
                 }
             }
 
@@ -200,7 +366,7 @@ class ModelValidator
      */
     public function isValid()
     {
-        foreach($this->fieldsToBeValidated as $fieldName => $fieldValue)
+        foreach($this->fieldsToValidate as $fieldName => $fieldValue)
         {
             foreach($this->fieldValidationMapping as $validationFieldName => $conditions)
             {
@@ -208,8 +374,12 @@ class ModelValidator
                 {
                     $extractedConditionsList = $this->extractValidationConditions($conditions);
                     echo '</br>============</br>';
+                    echo '</br>============</br>';
+                    echo '</br>============</br>';
+                    //print_r($extractedConditionsList, 0);
                     print_r($this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList),0);
-                    //$this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList);
+                    // $this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList);
+                    break;
                 }
             }
         }
