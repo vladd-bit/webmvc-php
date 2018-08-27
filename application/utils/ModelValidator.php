@@ -2,6 +2,7 @@
 
 namespace Application\Utils;
 
+use Application\Config\WebConfig;
 use Application\Core\ValidationDataAnnotation;
 use Application\Core\ValidationDataType;
 use DateTime;
@@ -86,25 +87,11 @@ class ModelValidator
     {
         echo '</br>///</br>';
         print_r($inputAttribute,0);
-
         echo '</br>///</br>';
-
-        //if ($validationResult[key($inputAttribute)] == 0)
-        //{
-        //    //$validationResult = [$validationResult[key($inputAttribute)] , 'error' => isset($this->fieldValidationMessage[$variableFieldName])  ? $this->fieldValidationMessage[$variableFieldName] : 'no'];
-        //    $validationResult = [$validationResult[key($inputAttribute)], 'error' => isset($this->fieldValidationMessage[$variableFieldName]) ? $this->fieldValidationMessage[$variableFieldName] : 'no'];
-        //}
-        //else if ($validationResult[key($inputAttribute)] == 1)
-        //{
-        //    $validationResult[key($inputAttribute)] = [$validationResult[key($inputAttribute)], 'success' => isset($this->fieldValidationMessage[$variableFieldName]) ? '' : ''];
-        //}
 
         $currentMessage = null;
         foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
         {
-            //echo '======';
-            //echo key($inputAttribute).' {}  ' . $validationMessageAttribute;
-            //echo '======';
             foreach(ValidationDataAnnotation::validationAttributes as $validationDataAnnotationAttribute)
             {
                 switch ($validationDataAnnotationAttribute)
@@ -116,7 +103,6 @@ class ModelValidator
                         }
                         else if(key($inputAttribute) == $validationDataAnnotationAttribute)
                         {
-                            //$fieldValidationMapping$fieldValidationMapping
                             $currentMessage = $variableFieldName . ' can be maximum ' . current($inputAttribute).  ' characters';
                         }
                         break;
@@ -190,9 +176,6 @@ class ModelValidator
                         }
                         break;
                 }
-
-
-
             }
 
 
@@ -221,7 +204,6 @@ class ModelValidator
                     }
              */
         }
-
 
         if(!isset($currentMessage))
         {
@@ -294,9 +276,18 @@ class ModelValidator
                             break;
 
                         case ValidationDataAnnotation::upperCharacters:
-                            if (isset($variableFieldValue) && trim($variableFieldValue) !== '' )
+                            if (isset($variableFieldValue))
                             {
-                                array_push($validationResults, [key($inputAttribute) => 1]);
+                                $inputVar = trim($variableFieldValue);
+                                preg_match_all("/[A-Z]/", $inputVar, $upperCaseCount);
+                                $capsCount = count($upperCaseCount [0]);
+                                if($capsCount >= $inputAttribute[ValidationDataAnnotation::upperCharacters])
+                                {
+                                    array_push($validationResults, [key($inputAttribute) => 1]);
+                                }
+                                {
+                                    array_push($validationResults, [key($inputAttribute) => 0]);
+                                }
                             }
                             else
                             {
@@ -305,9 +296,18 @@ class ModelValidator
                             break;
 
                         case ValidationDataAnnotation::lowerCharacters:
-                            if (isset($variableFieldValue) && trim($variableFieldValue) !== '')
+                            if (isset($variableFieldValue))
                             {
-                                array_push($validationResults, [key($inputAttribute) => 1]);
+                                $inputVar = trim($variableFieldValue);
+                                preg_match_all("/[a-z]/", $inputVar, $lowerCaseCount);
+                                $lowCaseCount = count($lowerCaseCount [0]);
+                                if($lowCaseCount >= $inputAttribute[ValidationDataAnnotation::lowerCharacters])
+                                {
+                                    array_push($validationResults, [key($inputAttribute) => 1]);
+                                }
+                                {
+                                    array_push($validationResults, [key($inputAttribute) => 0]);
+                                }
                             }
                             else
                             {
@@ -320,7 +320,7 @@ class ModelValidator
                                 switch (reset($inputAttribute))
                                 {
                                     case ValidationDataType::datetime:
-                                        if (DateTime::createFromFormat('Y-m-d G:i:s', $variableFieldValue) !== false)
+                                        if (DateTime::createFromFormat(WebConfig::DEFAULT_DATETIME_FORMAT, $variableFieldValue) !== false)
                                         {
                                             array_push($validationResults, [key($inputAttribute) => 1]);
                                         }

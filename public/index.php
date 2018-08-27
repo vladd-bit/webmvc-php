@@ -13,6 +13,9 @@ try
 
     session_start();
 
+    date_default_timezone_set(\Application\Config\WebConfig::DEFAULT_TIMEZONE);
+    setlocale(LC_ALL, \Application\Config\WebConfig::DEFAULT_LOCALE_CONFIGURATION);
+
     define('WEBSITE_PATH', \Application\Config\WebConfig::WEBSITE_PATH);
     define('LOGS_FOLDER', dirname(__DIR__).'/logs');
     define('APPLICATION_FOLDER', dirname(__DIR__).'/application');
@@ -21,12 +24,11 @@ try
     define('VENDOR_FOLDER',dirname(__DIR__). '/vendor');
     define('PUBLIC_FOLDER_URL', \Application\Config\WebConfig::$HTTP_URL_STRING.$_SERVER['HTTP_HOST'].\Application\Config\WebConfig::WEBSITE_PATH.'/'.'public');
 
-
     $router = new \Application\Core\Router();
     \Application\Utils\RouteNavigation::initializeRoutes($router);
     $router->dispatch($_SERVER['QUERY_STRING']);
 }
 catch(Exception $exception)
 {
-   throw new \Exception(404);
+   \Application\Core\Error::log(0,$exception);
 }

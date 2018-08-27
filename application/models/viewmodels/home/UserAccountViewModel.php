@@ -8,8 +8,8 @@ class UserAccountViewModel
 {
     private $username;
     private $password;
-    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|dataType:email|upperCase|displayFormat:{dd-MM-yyyy}',
-                                          'password' => 'required|maxLength:30|minLength:10|upperCase:2');
+    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|dataType:email|upperCharacters|displayFormat:{dd-MM-yyyy}',
+                                          'password' => 'required|maxLength:30|minLength:10|upperCharacters:2|lowerCharacters:5');
 
     private $validationMessages   = array('username' => ['success' => 'great success','error' =>'this is a custom error message'],
                                           'password' => ['maxLength' =>'the username must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message']
