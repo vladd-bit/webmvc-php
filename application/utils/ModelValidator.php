@@ -13,6 +13,9 @@ class ModelValidator
     private $fieldValidationMapping = array();
     private $fieldValidationMessage = array();
 
+    private $results = array();
+    private $fieldValidationStatus= array();
+
     /**
      * @return array
      */
@@ -54,6 +57,19 @@ class ModelValidator
     }
 
     /**
+     * @return array
+     */
+    public function getValidationResults(): array
+    {
+        return $this->results;
+    }
+
+    public function getFieldValidationStatus() : array
+    {
+        return $this->fieldValidationStatus;
+    }
+
+    /**
      * @param array $fieldValidationMessage
      */
     public function setFieldValidationMessage(array $fieldValidationMessage): void
@@ -85,10 +101,6 @@ class ModelValidator
 
     private function buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResult)
     {
-        echo '</br>///</br>';
-        print_r($inputAttribute,0);
-        echo '</br>///</br>';
-
         $currentMessage = null;
         foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
         {
@@ -177,32 +189,6 @@ class ModelValidator
                         break;
                 }
             }
-
-
-
-            /*
-             *
-             *   case ValidationDataAnnotation::validationMessage['success']:
-                    if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['success']]))
-                    {
-                        $currentMessage = $validationMessageContent;
-                    }
-                    else if(key($inputAttribute) == $validationMessageAttribute)
-                    {
-
-                    }
-                    break;
-
-
-             *   if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['error']]))
-                    {
-                        $currentMessage = $validationMessageContent;
-                    }
-                    else if(key($inputAttribute) == $validationMessageAttribute)
-                    {
-//
-                    }
-             */
         }
 
         if(!isset($currentMessage))
@@ -215,14 +201,12 @@ class ModelValidator
 
         if ($validationResult[key($inputAttribute)] == 0)
         {
-            //$validationResult = [$validationResult[key($inputAttribute)] , 'error' => isset($this->fieldValidationMessage[$variableFieldName])  ? $this->fieldValidationMessage[$variableFieldName] : 'no'];
-            $validationResult = [$validationResult[key($inputAttribute)], 'error' => $currentMessage ];
+            $validationResult[key($inputAttribute)] = ['error' => $currentMessage ];
         }
         else if ($validationResult[key($inputAttribute)] == 1)
         {
-            $validationResult[key($inputAttribute)] = [$validationResult[key($inputAttribute)], 'success' => ''];
+            $validationResult[key($inputAttribute)] = ['success' => 'looking good'];
         }
-
 
         return $validationResult;
     }
@@ -366,6 +350,8 @@ class ModelValidator
      */
     public function isValid()
     {
+        $validationStatus = true;
+
         foreach($this->fieldsToValidate as $fieldName => $fieldValue)
         {
             foreach($this->fieldValidationMapping as $validationFieldName => $conditions)
@@ -373,17 +359,36 @@ class ModelValidator
                 if($fieldName == $validationFieldName)
                 {
                     $extractedConditionsList = $this->extractValidationConditions($conditions);
-                    echo '</br>============</br>';
-                    echo '</br>============</br>';
-                    echo '</br>============</br>';
-                    //print_r($extractedConditionsList, 0);
-                    print_r($this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList),0);
-                    // $this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList);
+                    $this->results[$validationFieldName] = $this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList);
                     break;
                 }
             }
         }
 
-        return false;
+        foreach($this->results as $key => $value)
+        {
+            foreach($value as $variableName => $attribute)
+            {
+                foreach($attribute as $index => $attributeValue)
+                {
+                    echo $variableName;
+                    foreach($attributeValue as $v => $k)
+                    {
+                        foreach($k as $validityStatus => $validityMessage)
+                        {
+                            if($validityStatus == ValidationDataAnnotation::error)
+                            {
+                                $validationStatus = false;
+                            }
+                            $this->fieldValidationStatus[$variableName] = $validityMessage;
+                        }
+                    }
+                }
+            }
+        }
+
+        print_r($this->fieldValidationStatus, 0);
+
+        return $validationStatus;
     }
 }

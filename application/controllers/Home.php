@@ -12,6 +12,7 @@ use Application\Utils\HashGenerator;
 
 class Home extends \Application\Core\Controller
 {
+
     public function index()
     {
         if(Authentication::isAuthorized())

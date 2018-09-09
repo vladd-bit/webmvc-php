@@ -9,6 +9,7 @@ abstract class ValidationDataAnnotation
     const required = 'required';
     const optional = 'optional';
     const error = 'error';
+    const success = 'success';
     const displayFormat = 'displayFormat';
     const lowerCharacters = 'lowerCharacters';
     const upperCharacters = 'upperCharacters';
