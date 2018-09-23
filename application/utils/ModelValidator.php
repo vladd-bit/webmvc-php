@@ -150,7 +150,14 @@ class ModelValidator
                         {
                             if(isset($inputAttribute[key($inputAttribute)]))
                             {
-                                $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper characters';
+                                if(current($inputAttribute) == 1)
+                                {
+                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper character';
+                                }
+                                else
+                                {
+                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper characters';
+                                }
                             }
                             else
                             {
@@ -168,7 +175,14 @@ class ModelValidator
                         {
                             if(isset($inputAttribute[key($inputAttribute)]))
                             {
-                                $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower characters';
+                                if(current($inputAttribute) == 1)
+                                {
+                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower character';
+                                }
+                                else
+                                {
+                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower characters';
+                                }
                             }
                             else
                             {
@@ -371,7 +385,6 @@ class ModelValidator
             {
                 foreach($attribute as $index => $attributeValue)
                 {
-                    echo $variableName;
                     foreach($attributeValue as $v => $k)
                     {
                         foreach($k as $validityStatus => $validityMessage)
@@ -386,8 +399,6 @@ class ModelValidator
                 }
             }
         }
-
-        print_r($this->fieldValidationStatus, 0);
 
         return $validationStatus;
     }

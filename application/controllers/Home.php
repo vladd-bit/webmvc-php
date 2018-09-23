@@ -79,19 +79,39 @@ class Home extends \Application\Core\Controller
         }
     }
 
+    public function logout()
+    {
+        $_SESSION['identityUsername'] = null;
+        $_SESSION['identityEmail'] = null;
+        $_SESSION['userSessionId'] = null;
+        $_SESSION['userSessionExpiryTime'] = null;
+
+        Router::redirect('/home/index');
+    }
+
     public function dashboard()
     {
         if(Authentication::isAuthorized())
         {
             $userAccount = UserAccountModel::getUserByName($_SESSION['identityUsername']);
 
-            if($userAccount)
+            if(isset($userAccount))
             {
                 $userAccountViewModel = new UserAccountViewModel();
                 $userAccountViewModel->setPassword('aa');
                 $userAccountViewModel->setUsername('b');
-                $userAccountViewModel->isValid();
+
+                if(!$userAccountViewModel->isValid())
+                {
+                    $view = new View();
+                    $view->render('home/dashboard.php', $userAccountViewModel);
+                }
+                else
+                {
+                    echo 'model is valid';
+                }
             }
+
             //$view = new View();
             //$viewData['username'] = 'lel';
             //$view->render('home/dashboard.php', $viewData);

@@ -2,9 +2,9 @@
 
 namespace Application\Models\ViewModels\Home;
 
-use Application\Utils\ModelValidator;
+use Application\Core\BaseViewModel;
 
-class UserAccountViewModel
+class UserAccountViewModel extends BaseViewModel
 {
     private $username;
     private $password;
@@ -14,6 +14,13 @@ class UserAccountViewModel
     private $validationMessages   = array('username' => ['success' => 'great success','error' =>'this is a custom error message'],
                                           'password' => ['maxLength' =>'the username must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message']
                                           );
+
+    function __construct()
+    {
+        $this->validatorProperties = $this->validationProperties;
+        $this->validatorMessages = $this->validationMessages;
+        $this->fieldsToValidate = get_object_vars($this);
+    }
 
     /**
      * @return mixed
@@ -45,14 +52,5 @@ class UserAccountViewModel
     public function setPassword($password): void
     {
         $this->password = $password;
-    }
-
-    public function isValid()
-    {
-        $modelValidator = new ModelValidator();
-        $modelValidator->setFieldValidationMapping($this->validationProperties);
-        $modelValidator->setFieldValidationMessage($this->validationMessages);
-        $modelValidator->setFieldsToValidate(get_object_vars($this));
-        return $modelValidator->isValid();
     }
 }

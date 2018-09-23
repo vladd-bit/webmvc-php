@@ -7,7 +7,7 @@
 
 <?php
 
-echo $this->viewData['username'];
+echo $this->viewData->getValidationMessage('username');
 echo '<br>';
 print_r($_SESSION, 0 );
 
