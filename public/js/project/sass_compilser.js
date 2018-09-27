@@ -1,1 +1,0 @@
-import "sass_path/layouts/general-layout.scss";

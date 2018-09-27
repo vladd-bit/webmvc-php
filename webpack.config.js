@@ -1,26 +1,19 @@
-const path = require('path')
-const CWD = process.cwd()
+const path = require('path');
+
+const contextPath = path.resolve(__dirname, './public/');
+const entryPath = path.resolve(__dirname, './public/', 'js/main.js');
+const distPath = path.resolve(__dirname, './public/', 'dist');
 
 module.exports = {
-    devtool: "source-map",
-    module: {
-    rules: [{
-        test: /\.scss$/,
-        use: [{
-            loader: "style-loader"
-        }, {
-            loader: "css-loader", options: {
-                sourceMap: true
-            }
-        }, {
-            loader: "sass-loader",
-            options: {
-                sourceMap: true,
-                "includePaths": [
-                    path.resolve(__dirname, 'node_modules'),
-                    path.resolve(__dirname, 'public/media/scss')
-                ]
-            }
-        }]
-    }]
-}};
+    entry: {
+        path: entryPath
+    },
+    output: {
+        path: distPath
+    },
+    context: contextPath,
+    resolve: {
+        alias: {
+        }
+    }
+};

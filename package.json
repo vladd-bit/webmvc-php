@@ -10,6 +10,11 @@
     }
   ],
   "private": true,
+  "scripts": {
+    "development": "webpack --config webpack.config.development.js",
+    "production": "webpack --config webpack.config..production.js",
+    "webpack-defaults": "webpack-defaults"
+  },
   "dependencies": {
     "@angular/cli": "^6.2.3",
     "@angular/core": "^6.1.8",
@@ -18,9 +23,12 @@
   },
   "devDependencies": {
     "css-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
-    "webpack": "^4.19.1"
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.1",
+    "webpack-merge": "^4.1.4"
   }
 }

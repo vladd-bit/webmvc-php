@@ -60,7 +60,7 @@ footer {
 //
 
 
-@import "../colors";
+@import "../colors/colors";
 @import "~material-components-web/material-components-web";
 
 p {
@@ -70,3 +70,5 @@ p {
 $mdc-theme-primary: #00b0ad;
 $mdc-theme-secondary: #00b0ad;
 $mdc-theme-background: #fff;
+
+
