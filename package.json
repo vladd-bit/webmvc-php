@@ -13,7 +13,8 @@
   "scripts": {
     "development": "webpack --config webpack.config.development.js",
     "production": "webpack --config webpack.config..production.js",
-    "webpack-defaults": "webpack-defaults"
+    "webpack-defaults": "webpack-defaults",
+    "defaults": "webpack-defaults"
   },
   "dependencies": {
     "@angular/cli": "^6.2.3",
@@ -22,13 +23,18 @@
     "typescript": "^3.0.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "babel-loader": "^8.0.0",
+    "babel-preset-es2015": "^6.24.1",
     "css-loader": "^1.0.0",
-    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.3",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
     "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1",
+    "webpack-cli": "^3.1.2",
     "webpack-merge": "^4.1.4"
   }
 }

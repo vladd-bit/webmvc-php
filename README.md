@@ -12,4 +12,4 @@ To enable the nodeJS webpack file watcher run the following command: webpack --c
 
 # Project members
 
-Azrs 2016-*.
+Azrs 2016-20**

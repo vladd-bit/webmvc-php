@@ -61,10 +61,10 @@ footer {
 
 
 @import "../colors/colors";
-@import "~material-components-web/material-components-web";
+@import "~material-components-web/material-components-web.scss";
 
 p {
-
+  color : black;
 }
 
 $mdc-theme-primary: #00b0ad;
