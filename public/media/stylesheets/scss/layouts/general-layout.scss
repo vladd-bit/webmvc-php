@@ -1,3 +1,5 @@
+@import "../colors/colors";
+
 html, body {
   height: 100%;
   margin: 0;
@@ -59,16 +61,10 @@ footer {
 //}
 //
 
-
-@import "../colors/colors";
-@import "~material-components-web/material-components-web.scss";
-
-p {
-  color : black;
-}
-
-$mdc-theme-primary: #00b0ad;
-$mdc-theme-secondary: #00b0ad;
+$mdc-theme-primary: #4887ff;
+$mdc-theme-secondary: #4887ff;
 $mdc-theme-background: #fff;
+
+@import "~material-components-web/material-components-web.scss";
 
 
