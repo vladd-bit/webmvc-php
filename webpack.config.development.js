@@ -5,6 +5,7 @@ const miniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const sassPath = [
                     path.resolve(__dirname, './public/', 'media/stylesheets/scss/layouts/general-layout.scss')
+                    ,path.resolve(__dirname, './public/', 'media/stylesheets/scss/error.scss')
                  ];
 
 module.exports = webpack_merge(require('./webpack.config.js'), {

@@ -10,9 +10,9 @@ class WebConfig
      */
     const SHOW_ERRORS = true;
 
-    const DB_ERROR_LOG_FILENAME = 'dblog.txt';
+    const DB_ERROR_LOG_FILENAME = 'dblog.log';
 
-    const WEB_ERROR_LOG_FILENAME = 'weblog.txt';
+    const WEB_ERROR_LOG_FILENAME = 'weblog.log';
 
     /**
      * Store namespace paths for easier use in the application.
@@ -22,7 +22,7 @@ class WebConfig
     const MODEL_NAMESPACE = 'Application\Models\\';
     const VIEW_NAMESPACE = 'Application\Views\\';
 
-    const VIEWS_DIRECTORY = '/views/';
+    const VIEWS_DIRECTORY = DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR;
 
     const PROJECT_NAME = 'WebWay';
 
@@ -34,7 +34,6 @@ class WebConfig
      * if the website IS located in a subfolder for example on linux var/www/website_one/ or on windows C:/nginx/www/website_one/ then modify the value to /website_one
      * please note that you will need properly configured nginx REWRITE RULES for subfolders
      */
-    const WEBSITE_PATH = '/website';
 
     static $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
 
@@ -55,8 +54,15 @@ class WebConfig
     /**
      * Website folder paths
      */
+    const WEBSITE_PATH = DIRECTORY_SEPARATOR.'website';
 
-    const LOGS_FOLDER = __DIR__.'/logs';
+    const LOGS_FOLDER_NAME = DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR;
+
+    /**
+     * FOLDER/FILE creation permissions
+     */
+
+    const DEFAULT_FOLDER_CREATION_PERMISSIONS = 0755;
 
     /**
      * PHP SESSION SETTINGS, DO NOT MODIFY UNLESS YOU INTEND TO MODIFY THE SESSION STORAGE PATH OR THE DEFAULT PHP SESSION NAME.
@@ -64,6 +70,6 @@ class WebConfig
      */
 
     const MODIFY_SESSION_STORAGE_PATH = false;
-    const SESSION_STORAGE_PATH = '/sessions';
+    const SESSION_STORAGE_PATH = DIRECTORY_SEPARATOR.'sessions'.DIRECTORY_SEPARATOR;
     const SESSION_NAME = 'instance';
 }
