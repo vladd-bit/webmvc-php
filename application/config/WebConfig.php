@@ -22,8 +22,6 @@ class WebConfig
     const MODEL_NAMESPACE = 'Application\Models\\';
     const VIEW_NAMESPACE = 'Application\Views\\';
 
-    const VIEWS_DIRECTORY = DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR;
-
     const PROJECT_NAME = 'WebWay';
 
     const HTTPS_ENABLED = false;
@@ -54,6 +52,8 @@ class WebConfig
     /**
      * Website folder paths
      */
+    const VIEWS_DIRECTORY = DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR;
+
     const WEBSITE_PATH = DIRECTORY_SEPARATOR.'website';
 
     const LOGS_FOLDER_NAME = DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR;

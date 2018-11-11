@@ -9,6 +9,7 @@ try
     define('APPLICATION_FOLDER', dirname(__DIR__).'/application');
     define('CONFIG_FOLDER', APPLICATION_FOLDER. '/config');
     define('VENDOR_FOLDER',dirname(__DIR__). '/vendor');
+    define('VIEWS_FOLDER', APPLICATION_FOLDER. \Application\Config\WebConfig::VIEWS_DIRECTORY);
     define('SESSION_FOLDER',dirname(__DIR__). \Application\Config\WebConfig::SESSION_STORAGE_PATH);
     define('PUBLIC_FOLDER_URL', \Application\Config\WebConfig::$HTTP_URL_STRING.$_SERVER['HTTP_HOST'].\Application\Config\WebConfig::WEBSITE_PATH.'/'.'public');
 
