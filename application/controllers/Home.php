@@ -10,9 +10,8 @@ use Application\Models\UserAccountModel;
 use Application\Models\ViewModels\Home\UserAccountViewModel;
 use Application\Utils\HashGenerator;
 
-class Home extends \Application\Core\Controller
+class HomeController extends \Application\Core\Controller
 {
-
     public function index()
     {
         if(Authentication::isAuthorized())
@@ -93,15 +92,14 @@ class Home extends \Application\Core\Controller
     {
         if(Authentication::isAuthorized())
         {
-            $userAccount = UserAccountModel::getUserByName($_SESSION['identityUsername']);
+            $userAccount = new UserAccount(UserAccountModel::getUserByName($_SESSION['identityUsername']));
 
             if(isset($userAccount))
             {
                 $userAccountViewModel = new UserAccountViewModel();
-                $userAccountViewModel->setPassword('aa');
-                $userAccountViewModel->setUsername('b');
+                $userAccountViewModel->setUsername($userAccount->getUsername());
 
-                if($userAccountViewModel->isValid())
+                if(!$userAccountViewModel->isValid())
                 {
                     $view = new View();
                     $view->render('home/dashboard.php', $userAccountViewModel);
@@ -114,7 +112,7 @@ class Home extends \Application\Core\Controller
         }
         else
         {
-            echo 'auth failed';
+            Router::redirect('/home/index');
         }
     }
 }

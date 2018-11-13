@@ -10,15 +10,21 @@
                 <div class="mdc-layout-grid__cell--span-12">
                     <div class="mdc-typography--headline4">Sign in</div>
                     <br>
-                    <div class="mdc-text-field mdc-text-field--upgraded full-width" data-mdc-auto-init="MDCTextField">
-                        <input class="mdc-text-field__input" type="text" name="username" value="" required>
-                        <label for="username" class="mdc-floating-label">Username</label>
+                    <div class="text-field-container">
+                        <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input" type="text" name="username" value="" required>
+                            <label for="username" class="mdc-floating-label">Username</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
                     </div>
                     <br>
                     <br>
-                    <div class="mdc-text-field mdc-text-field--upgraded full-width" data-mdc-auto-init="MDCTextField">
-                        <input class="mdc-text-field__input"  type="password" name="password" value=""  aria-label="Password" required>
-                        <label for="password" class="mdc-floating-label">Password</label>
+                    <div class="text-field-container">
+                        <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
+                            <input class="mdc-text-field__input"  type="password" name="password" value=""  aria-label="Password" required>
+                            <label for="password" class="mdc-floating-label">Password</label>
+                            <div class="mdc-line-ripple"></div>
+                        </div>
                     </div>
                     <br>
                     <br>
@@ -30,8 +36,8 @@
             </div>
         </form>
         <br>
-        <button class="mdc-button mdc-typography--body1">
-            <span>Don't have an account ? register !</span>
-        </button>
+        <a href="<?php echo WEBSITE_PATH; ?>/account/register" class="mdc-button mdc-typography--body1">
+            <span>Don't have an account ? Sign up !</span>
+        </a>
     </div>
 </div>

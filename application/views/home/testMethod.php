@@ -1,2 +1,0 @@
-
-<p>THIS IS THE TEST METHOD PAGE</p>

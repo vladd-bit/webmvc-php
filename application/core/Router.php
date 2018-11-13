@@ -47,7 +47,7 @@ class Router
         $isUrlMatching = $this->match($formattedUrl);
         if ($isUrlMatching)
         {
-            $controller = $this->getControllerNamespace() . $this->routeParameters['controller'];
+            $controller = $this->getControllerNamespace() . $this->routeParameters['controller'].'Controller';
             if (class_exists($controller))
             {
                 $controllerObject = new $controller($this->routeParameters);
