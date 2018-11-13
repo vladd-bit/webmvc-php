@@ -101,20 +101,16 @@ class Home extends \Application\Core\Controller
                 $userAccountViewModel->setPassword('aa');
                 $userAccountViewModel->setUsername('b');
 
-                if(!$userAccountViewModel->isValid())
+                if($userAccountViewModel->isValid())
                 {
                     $view = new View();
                     $view->render('home/dashboard.php', $userAccountViewModel);
                 }
                 else
                 {
-                    echo 'model is valid';
+                    print_r($userAccountViewModel->validationStatus, 0);
                 }
             }
-
-            //$view = new View();
-            //$viewData['username'] = 'lel';
-            //$view->render('home/dashboard.php', $viewData);
         }
         else
         {

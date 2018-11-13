@@ -2,8 +2,6 @@
 
 namespace Application\Core;
 
-use Application\Utils\ModelValidator;
-
 class BaseViewModel
 {
     protected $validatorProperties = array();
