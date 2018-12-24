@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Models\ViewModels\Home;
+namespace Application\Models\ViewModels\Account;
 
 use Application\Core\BaseViewModel;
 
@@ -8,18 +8,65 @@ class UserAccountViewModel extends BaseViewModel
 {
     private $username;
     private $password;
-    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|dataType:email|upperCharacters|displayFormat:{dd-MM-yyyy}',
-                                          'password' => 'required|maxLength:30|minLength:10|upperCharacters:2|lowerCharacters:5');
+    private $email;
+    private $confirmPassword;
 
-    private $validationMessages   = array('username' => ['success' => 'great success','error' =>'this is a custom error message'],
-                                          'password' => ['maxLength' =>'the username must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message']
+    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|upperCharacters|displayFormat:{dd-MM-yyyy}',
+                                          'password' => 'required|maxLength:30|minLength:10|upperCharacters:2|lowerCharacters:5',
+                                          'email' => 'required|dataType:email');
+
+    private $validationMessages   = array('username' => ['maxLength' =>'the password must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message'],
+                                          'password' => ['maxLength' =>'the password must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message']
                                           );
 
-    function __construct()
+    /**
+     * UserAccountViewModel constructor.
+     * @param array $properties
+     */
+    function __construct($properties = array())
     {
+        foreach($properties as $key => $value)
+        {
+            if(property_exists($this, $key))
+            {
+                $this->{$key} = $value;
+            }
+        }
+        $this->fieldsToValidate = get_object_vars($this);
         $this->validatorProperties = $this->validationProperties;
         $this->validatorMessages = $this->validationMessages;
-        $this->fieldsToValidate = get_object_vars($this);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     */
+    public function setEmail($email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConfirmPassword()
+    {
+        return $this->confirmPassword;
+    }
+
+    /**
+     * @param mixed $confirmPassword
+     */
+    public function setConfirmPassword($confirmPassword): void
+    {
+        $this->confirmPassword = $confirmPassword;
     }
 
     /**

@@ -9,11 +9,17 @@ class BaseViewModel
     protected $fieldsToValidate = array();
     public $validationStatus = array();
 
+
+    function __construct()
+    {
+
+    }
+
     /**
      * @param string $fieldName
      * @return mixed|string
      */
-    public function getValidationMessage(string $fieldName)
+    public function getValidationMessage($fieldName)
     {
         if(isset($this->validationStatus[$fieldName]))
         {
@@ -35,5 +41,10 @@ class BaseViewModel
         $isValid = $modelValidator->isValid();
         $this->validationStatus = $modelValidator->getFieldValidationStatus();
         return $isValid;
+    }
+
+    public function getModelFields()
+    {
+        return array_keys($this->fieldsToValidate);
     }
 }

@@ -10,7 +10,7 @@
 
     <title>
         <?php
-           echo htmlspecialchars($title);
+           echo $title;
         ?>
     </title>
 
@@ -20,21 +20,21 @@
 </head>
 <body class="mdc-typography">
 
-<?php
-    include_once('header.php');
-?>
+    <?php
+        include_once('header.php');
+    ?>
 
-<main class="mdc-layout-grid">
-        {renderBody}
-</main>
+    <main class="mdc-layout-grid">
+            {renderBody}
+    </main>
 
-<?php
-    include_once('footer.php');
-?>
+    <?php
+        include_once('footer.php');
+    ?>
 
-<script type="text/javascript" src="<?php echo PUBLIC_FOLDER_URL; ?>/js/libraries/material-components-web/material-components-web.min.js"></script>
-<script type="text/javascript">
-    mdc.autoInit();
-</script>
+    <script type="text/javascript" src="<?php echo PUBLIC_FOLDER_URL; ?>/js/libraries/material-components-web/material-components-web.min.js"></script>
+    <script type="text/javascript">
+        mdc.autoInit();
+    </script>
 </body>
 </html>

@@ -15,11 +15,11 @@ class ModelValidator
     private $fieldValidationStatus= array();
 
     /**
-     * @return array
+     * @return array of the fields that are to be validated
      */
     public function getFieldsToBeValidated(): array
     {
-        return $this->fieldsToValidate;
+        return array(array_keys($this->fieldsToValidate));
     }
 
     /**
@@ -100,105 +100,108 @@ class ModelValidator
     private function buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResult)
     {
         $currentMessage = null;
-        foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
+        if(array_key_exists($variableFieldName, $this->fieldValidationMessage))
         {
-            foreach(ValidationDataAnnotation::validationAttributes as $validationDataAnnotationAttribute)
+            foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
             {
-                switch ($validationDataAnnotationAttribute)
+                foreach(ValidationDataAnnotation::validationAttributes as $validationDataAnnotationAttribute)
                 {
-                    case ValidationDataAnnotation::maxLength:
-                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::maxLength]))
-                        {
-                            $currentMessage = $validationMessageContent;
-                        }
-                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                        {
-                            $currentMessage = $variableFieldName . ' can be maximum ' . current($inputAttribute).  ' characters';
-                        }
-                        break;
-
-                    case ValidationDataAnnotation::minLength:
-                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::minLength]))
-                        {
-                            $currentMessage = $validationMessageContent;
-                        }
-                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                        {
-                            $currentMessage = $variableFieldName . ' must be minimum ' . current($inputAttribute). ' characters';
-                        }
-                        break;
-
-                    case ValidationDataAnnotation::required:
-                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::required]))
-                        {
-                            $currentMessage = $validationMessageContent;
-                        }
-                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                        {
-                            $currentMessage = $variableFieldName . ' is required';
-                        }
-                        break;
-
-                    case ValidationDataAnnotation::upperCharacters:
-                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::upperCharacters]))
-                        {
-                            $currentMessage = $validationMessageContent;
-                        }
-                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                        {
-                            if(isset($inputAttribute[key($inputAttribute)]))
+                    switch ($validationDataAnnotationAttribute)
+                    {
+                        case ValidationDataAnnotation::maxLength:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::maxLength]))
                             {
-                                if(current($inputAttribute) == 1)
+                                $currentMessage = $validationMessageContent;
+                            }
+                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                            {
+                                $currentMessage = $variableFieldName . ' can be maximum ' . current($inputAttribute).  ' characters';
+                            }
+                            break;
+
+                        case ValidationDataAnnotation::minLength:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::minLength]))
+                            {
+                                $currentMessage = $validationMessageContent;
+                            }
+                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                            {
+                                $currentMessage = $variableFieldName . ' must be minimum ' . current($inputAttribute). ' characters';
+                            }
+                            break;
+
+                        case ValidationDataAnnotation::required:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::required]))
+                            {
+                                $currentMessage = $validationMessageContent;
+                            }
+                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                            {
+                                $currentMessage = $variableFieldName . ' is required';
+                            }
+                            break;
+
+                        case ValidationDataAnnotation::upperCharacters:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::upperCharacters]))
+                            {
+                                $currentMessage = $validationMessageContent;
+                            }
+                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                            {
+                                if(isset($inputAttribute[key($inputAttribute)]))
                                 {
-                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper character';
+                                    if(current($inputAttribute) == 1)
+                                    {
+                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper character';
+                                    }
+                                    else
+                                    {
+                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper characters';
+                                    }
                                 }
                                 else
                                 {
-                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper characters';
+                                    $currentMessage = $variableFieldName . ' must contain upper characters';
                                 }
                             }
-                            else
-                            {
-                                $currentMessage = $variableFieldName . ' must contain upper characters';
-                            }
-                        }
-                        break;
+                            break;
 
-                    case ValidationDataAnnotation::lowerCharacters:
-                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::lowerCharacters]))
-                        {
-                            $currentMessage = $validationMessageContent;
-                        }
-                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                        {
-                            if(isset($inputAttribute[key($inputAttribute)]))
+                        case ValidationDataAnnotation::lowerCharacters:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::lowerCharacters]))
                             {
-                                if(current($inputAttribute) == 1)
+                                $currentMessage = $validationMessageContent;
+                            }
+                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                            {
+                                if(isset($inputAttribute[key($inputAttribute)]))
                                 {
-                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower character';
+                                    if(current($inputAttribute) == 1)
+                                    {
+                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower character';
+                                    }
+                                    else
+                                    {
+                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower characters';
+                                    }
                                 }
                                 else
                                 {
-                                    $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower characters';
+                                    $currentMessage = $variableFieldName . ' must contain lower characters';
                                 }
                             }
-                            else
+                            break;
+
+                        case ValidationDataAnnotation::dataType:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::dataType]))
                             {
-                                $currentMessage = $variableFieldName . ' must contain lower characters';
+                                $currentMessage = $validationMessageContent;
                             }
-                        }
-                        break;
+                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
+                            {
 
-                    case ValidationDataAnnotation::dataType:
-                        if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::dataType]))
-                        {
-                            $currentMessage = $validationMessageContent;
-                        }
-                        else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                        {
-
-                        }
-                        break;
+                            }
+                            break;
+                    }
                 }
             }
         }

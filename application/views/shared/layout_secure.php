@@ -10,7 +10,7 @@
 
     <title>
         <?php
-            echo htmlspecialchars($title);
+            echo $title;
         ?>
     </title>
 
