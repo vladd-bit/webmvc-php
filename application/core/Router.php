@@ -6,9 +6,8 @@ use Application\Config\WebConfig;
 
 class Router
 {
-    protected $routes = [];
-
-    protected $routeParameters = [];
+    private $routes = [];
+    private $routeParameters = [];
 
     public function add($route, $routeParameters = array ())
     {

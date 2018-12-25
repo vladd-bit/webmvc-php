@@ -9,11 +9,8 @@ class BaseViewModel
     protected $fieldsToValidate = array();
     public $validationStatus = array();
 
-
     function __construct()
-    {
-
-    }
+    {}
 
     /**
      * @param string $fieldName

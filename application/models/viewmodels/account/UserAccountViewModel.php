@@ -32,6 +32,7 @@ class UserAccountViewModel extends BaseViewModel
                 $this->{$key} = $value;
             }
         }
+
         $this->fieldsToValidate = get_object_vars($this);
         $this->validatorProperties = $this->validationProperties;
         $this->validatorMessages = $this->validationMessages;

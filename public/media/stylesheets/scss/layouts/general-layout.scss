@@ -16,16 +16,15 @@ footer {
 }
 
 .login-form {
-  width:380px;
+  width:400px;
   margin: 40px auto 40px auto;
 }
 
 .account-creation-form {
-  width:600px;
-  min-width:300px;
+  width:400px;
+  min-width:280px;
   margin: 40px auto 40px auto;
 }
-
 
 .text-light-grey {
   color: #cfd8dc;
@@ -72,6 +71,6 @@ $mdc-theme-primary: #4887ff;
 $mdc-theme-secondary: #4887ff;
 $mdc-theme-background: #fff;
 
-// @import "~material-components-web/material-components-web.scss";
+@import "~material-components-web/material-components-web.scss";
 
 
