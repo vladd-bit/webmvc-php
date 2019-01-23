@@ -41,6 +41,7 @@ class UserAccountModel extends \Application\Core\Model
 
         $sql = 'UPDATE UserAccount SET  sessionKey = :sessionKey, lastLogin = :lastLogin';
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+
         $query->execute(array(
             ':sessionKey' => $userAccount->getSessionKey(),
             ':lastLogin' => $userAccount->getLastLogin()
@@ -49,15 +50,17 @@ class UserAccountModel extends \Application\Core\Model
         return $query;
     }
 
-    public static function addUser(UserAccount $userAccount)
+    public static function create(UserAccount $userAccount)
     {
-        $userDetails = $userAccount->getUsername().','.$userAccount->getPasswordSalt().','.$userAccount->getPasswordHash().','
-                       .$userAccount->getSessionKey().','.$userAccount->getEmail().'.'.$userAccount->getLastLogin().','
-                       .$userAccount->getAccessLevel().','.$userAccount->getDateCreated().','.$userAccount->getDateUpdated();
-        $sql = "INSERT INTO UserAccount (username, passwordSalt, passwordHash, sessionKey, email,lastLogin, accessLevel, dateCreated, dateUpdated) VALUES($userDetails)";
-
         $db = static::getDB();
 
-        $statement = $db->execute($sql);
+        $userDetails = $userAccount->getUsername().','.$userAccount->getPasswordSalt().','.$userAccount->getPasswordHash().','
+                       .$userAccount->getEmail().','
+                       .$userAccount->getAccessLevel().','.$userAccount->getDateCreated().','.$userAccount->getDateUpdated();
+        $sql = "INSERT INTO UserAccount (username, passwordSalt, passwordHash, email, accessLevel, dateCreated, dateUpdated) VALUES($userDetails)";
+
+        $result = $db->execute($sql);
+
+        return $result;
     }
 }

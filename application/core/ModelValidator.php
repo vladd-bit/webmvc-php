@@ -403,7 +403,8 @@ class ModelValidator
                         {
                             if($validityStatus == ValidationDataAnnotation::error)
                             {
-                                $validationStatus = false;
+                                if($validationStatus == true)
+                                    $validationStatus = false;
                             }
                             if(isset($validityMessage))
                             {

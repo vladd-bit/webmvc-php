@@ -18,6 +18,7 @@ class HomeController extends \Application\Core\Controller
         {
             Router::redirect('/home/dashboard');
         }
+
         $view = new View();
         $view->render('home/index.php');
     }
@@ -55,9 +56,9 @@ class HomeController extends \Application\Core\Controller
                 $userAccount->setSessionKey($sessionKey);
                 $userAccount->setLastLogin(date("Y-m-d H:i:s"));
 
-                $updateAccount = UserAccountModel::updateUserSessionLastLogin($userAccount);
+                $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
 
-                if($updateAccount == false)
+                if($updateAccountSession == false)
                 {
                     http_response_code(404);
                 }
