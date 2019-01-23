@@ -11,8 +11,8 @@ class UserAccountViewModel extends BaseViewModel
     private $email;
     private $confirmPassword;
 
-    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4|upperCharacters|displayFormat:{dd-MM-yyyy}',
-                                          'password' => 'required|maxLength:30|minLength:10|upperCharacters:2|lowerCharacters:5',
+    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4',
+                                          'password' => 'required|maxLength:30|minLength:10|upperCharacters:2|lowerCharacters:4',
                                           'email' => 'required|dataType:email');
 
     private $validationMessages   = array('username' => ['maxLength' =>'the password must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message'],

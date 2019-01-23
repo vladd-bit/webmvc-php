@@ -278,12 +278,14 @@ class ModelValidator
                             if (isset($variableFieldValue))
                             {
                                 $inputVar = trim($variableFieldValue);
-                                preg_match_all("/[A-Z]/", $inputVar, $upperCaseCount);
-                                $capsCount = count($upperCaseCount [0]);
+                                preg_match_all("/[A-Z]/", $inputVar, $capitalCaseCount);
+                                $capsCount = count($capitalCaseCount [0]);
+
                                 if($capsCount >= $inputAttribute[ValidationDataAnnotation::upperCharacters])
                                 {
                                     array_push($validationResults, [key($inputAttribute) => 1]);
                                 }
+                                else
                                 {
                                     array_push($validationResults, [key($inputAttribute) => 0]);
                                 }
@@ -299,11 +301,12 @@ class ModelValidator
                             {
                                 $inputVar = trim($variableFieldValue);
                                 preg_match_all("/[a-z]/", $inputVar, $lowerCaseCount);
-                                $lowCaseCount = count($lowerCaseCount [0]);
+                                $lowCaseCount = count($lowerCaseCount[0]);
                                 if($lowCaseCount >= $inputAttribute[ValidationDataAnnotation::lowerCharacters])
                                 {
                                     array_push($validationResults, [key($inputAttribute) => 1]);
                                 }
+                                else
                                 {
                                     array_push($validationResults, [key($inputAttribute) => 0]);
                                 }
