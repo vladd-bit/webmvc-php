@@ -35,7 +35,7 @@ class UserAccountModel extends \Application\Core\Model
         return $result;
     }
 
-    public static function updateUserSession(UserAccount $userAccount)
+    public static function updateUserSessionLastLogin(UserAccount $userAccount)
     {
         $db = static::getDB();
 

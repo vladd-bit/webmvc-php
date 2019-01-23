@@ -55,3 +55,6 @@ fabric.properties
 .node_modules/
 /node_modules/*
 
+# dist folder
+./public/dist/*
+./public/dist

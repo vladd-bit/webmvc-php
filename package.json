@@ -18,8 +18,15 @@
   },
   "dependencies": {
     "@angular/animations": "^6.0.0",
+    "@angular/common": "^6.0.0",
+    "@angular/compiler": "^6.0.0",
     "@angular/cli": "^6.0.0",
-    "@angular/common": "^6.1.10",
+    "@angular/core": "^6.0.0",
+    "@angular/forms": "^6.0.0",
+    "@angular/http": "^6.0.0",
+    "@angular/platform-browser": "^6.0.0",
+    "@angular/platform-browser-dynamic": "^6.0.0",
+    "@angular/router": "^6.0.0",
     "material-components-web": "^0.39.3",
     "typescript": "^3.0.3"
   },

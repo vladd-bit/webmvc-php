@@ -382,19 +382,30 @@ class ModelValidator
 
         foreach($this->results as $key => $value)
         {
+            $value  = is_array($value) ? $value  : array($value);
+
             foreach($value as $variableName => $attribute)
             {
+                $attribute  = is_array($attribute) ? $attribute  : array($attribute);
+
                 foreach($attribute as $index => $attributeValue)
                 {
+                    $attributeValue  = is_array($attributeValue) ? $attributeValue  : array($attributeValue);
+
                     foreach($attributeValue as $v => $k)
                     {
+                        $k  = is_array($k) ? $k  : array($k);
+
                         foreach($k as $validityStatus => $validityMessage)
                         {
                             if($validityStatus == ValidationDataAnnotation::error)
                             {
                                 $validationStatus = false;
                             }
-                            $this->fieldValidationStatus[$variableName] = $validityMessage;
+                            if(isset($validityMessage))
+                            {
+                                $this->fieldValidationStatus[$variableName] = $validityMessage;
+                            }
                         }
                     }
                 }

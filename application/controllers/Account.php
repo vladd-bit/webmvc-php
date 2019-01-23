@@ -37,4 +37,10 @@ class AccountController extends \Application\Core\Controller
         $view->set('userAccountViewModel', $userAccountViewModel);
         $view->render('account/register.php');
     }
+
+
+    public function test($name)
+    {
+
+    }
 }

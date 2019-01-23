@@ -55,7 +55,7 @@ class HomeController extends \Application\Core\Controller
                 $userAccount->setSessionKey($sessionKey);
                 $userAccount->setLastLogin(date("Y-m-d H:i:s"));
 
-                $updateAccount = UserAccountModel::updateUserSession($userAccount);
+                $updateAccount = UserAccountModel::updateUserSessionLastLogin($userAccount);
 
                 if($updateAccount == false)
                 {
