@@ -91,17 +91,23 @@ class View
                 }
                 else
                 {
-                    throw new \Exception($templateComponents['layout'].' file not found.');
+                    Error::log(ErrorLogType::webError, new \Exception($templateComponents['layout'].' file not found.'));
                 }
             }
             else
             {
-                require($this->viewFile);
+                if (!empty($this->viewFile))
+                {
+                    if (is_readable($this->viewFile))
+                    {
+                        require($this->viewFile);
+                    }
+                }
             }
         }
         else
         {
-            throw new \Exception($this->viewFile . ' not found');
+            Error::log(ErrorLogType::webError, new \Exception($this->viewFile . ' not found'));
         }
     }
 

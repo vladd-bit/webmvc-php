@@ -16,23 +16,23 @@ abstract class Controller
         $methodToCall = $name;
         if (method_exists($this, $methodToCall))
         {
-            if ($this->before() !== false)
+            if ($this->precall() !== false)
             {
                 call_user_func_array([$this, $methodToCall], $arguments);
-                $this->after();
+                $this->aftercall();
             }
         }
         else
         {
-            throw new \Exception("Method $methodToCall not found in controller " . get_class($this));
+            Error::log(ErrorLogType::webError, new \Exception("Method $methodToCall not found in controller " . get_class($this)));
         }
     }
 
-    public function before()
+    public function precall()
     {
     }
 
-    public function after()
+    public function aftercall()
     {
     }
 }
