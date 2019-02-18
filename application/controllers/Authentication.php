@@ -3,6 +3,7 @@
 namespace Application\Controllers;
 
 use Application\Models\UserAccountModel;
+use Application\Models\UserAccount;
 
 class Authentication
 {
@@ -10,12 +11,13 @@ class Authentication
     {
         if(isset($_SESSION['userSessionId']) && isset($_SESSION['userSessionExpiryTime']))
         {
-            $user = UserAccountModel::getUserBySessionKey($_SESSION['userSessionId']);
+            $user = new UserAccount(UserAccountModel::getUserBySessionKey($_SESSION['userSessionId']));
             if($user)
             {
+                $isLocked = $user->getLocked();
                 $sessionExpired = time() > $_SESSION['userSessionExpiryTime'];
 
-                if($sessionExpired == false)
+                if($sessionExpired == false && $isLocked == 0)
                 {
                     return true;
                 }

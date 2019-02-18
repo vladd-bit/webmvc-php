@@ -54,13 +54,18 @@ class UserAccountModel extends \Application\Core\Model
     {
         $db = static::getDB();
 
-        $userDetails = $userAccount->getUsername().','.$userAccount->getPasswordSalt().','.$userAccount->getPasswordHash().','
-                       .$userAccount->getEmail().','
-                       .$userAccount->getAccessLevel().','.$userAccount->getDateCreated().','.$userAccount->getDateUpdated();
-        $sql = "INSERT INTO UserAccount (username, passwordSalt, passwordHash, email, accessLevel, dateCreated, dateUpdated) VALUES($userDetails)";
+        $sql = 'INSERT INTO UserAccount (username, passwordSalt, passwordHash, email, dateCreated) VALUES(:username, :passwordSalt, :passwordHash, :email, :dateCreated)';
 
-        $result = $db->execute($sql);
+        $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
-        return $result;
+        $query->execute(array(
+            ':username'     => $userAccount->getUsername(),
+            ':passwordSalt' => $userAccount->getPasswordSalt(),
+            ':passwordHash' => $userAccount->getPasswordHash(),
+            ':email'        => $userAccount->getEmail(),
+            ':dateCreated'  => $userAccount->getDateCreated(),
+        ));
+
+        return $query;
     }
 }

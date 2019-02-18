@@ -8,6 +8,7 @@ use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
 use Application\Models\ViewModels\Account\UserAccountViewModel;
 use Application\Utils\HashGenerator;
+use DateTime;
 
 class AccountController extends \Application\Core\Controller
 {
@@ -35,13 +36,12 @@ class AccountController extends \Application\Core\Controller
         if($userAccountViewModel->isValid())
         {
 
-            $currentTime = time();
+            $currentTime = date('Y-m-d H:i:s', time());
 
             $passwordSaltAndHash = HashGenerator::hashString($userAccountViewModel->getPassword());
 
             $userAccount = new UserAccount();
             $userAccount->setDateCreated($currentTime);
-            $userAccount->setDateUpdated($currentTime);
             $userAccount->setUsername($userAccountViewModel->getUsername());
             $userAccount->setEmail($userAccountViewModel->getEmail());
             $userAccount->setPasswordSalt($passwordSaltAndHash['salt']);
@@ -55,14 +55,17 @@ class AccountController extends \Application\Core\Controller
             }
             else
             {
-
+                echo 'THIS HAS FAILED';
             }
+
+            echo 'xxxxxxxxxxxx';
 
             echo $createAccount;
         }
 
             echo 'AAAAA';
-            print_r( $userAccountViewModel->isValid(), 0);
+            echo $userAccountViewModel->isValid();
+            print_r( $userAccountViewModel->validationStatus, 0);
             echo '<br>';
             #$view = new View();
             #$view->set('userAccountViewModel', $userAccountViewModel);
@@ -70,7 +73,7 @@ class AccountController extends \Application\Core\Controller
 
         echo '<br>';
         echo '<br>';
-              print_r($userAccountViewModel,0);
+            print_r($userAccountViewModel,0);
         echo '<br>';
 
 

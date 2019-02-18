@@ -401,6 +401,7 @@ class ModelValidator
 
                         foreach($k as $validityStatus => $validityMessage)
                         {
+
                             if($validityStatus == ValidationDataAnnotation::error)
                             {
                                 if($validationStatus == true)
