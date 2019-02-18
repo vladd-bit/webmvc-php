@@ -101,15 +101,6 @@ class HomeController extends \Application\Core\Controller
 
                 $view = new View();
                 $view->render('home/dashboard.php', $userAccountViewModel);
-                #if($userAccountViewModel->isValid())
-                #{
-                #    $view = new View();
-                #    $view->render('home/dashboard.php', $userAccountViewModel);
-                #}
-                #else
-                #{
-                #    print_r($userAccountViewModel->validationStatus, 0);
-                #}
             }
         }
         else

@@ -66,7 +66,3 @@
         <br>
     </div>
 </div>
-
-<?php
-    print_r($userAccountViewModel,0);
-?>

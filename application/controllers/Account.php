@@ -53,30 +53,13 @@ class AccountController extends \Application\Core\Controller
             {
                Router::redirect('/home/index');
             }
-            else
-            {
-                echo 'THIS HAS FAILED';
-            }
-
-            echo 'xxxxxxxxxxxx';
-
-            echo $createAccount;
         }
-
-            echo 'AAAAA';
-            echo $userAccountViewModel->isValid();
-            print_r( $userAccountViewModel->validationStatus, 0);
-            echo '<br>';
-            #$view = new View();
-            #$view->set('userAccountViewModel', $userAccountViewModel);
-            #$view->render('account/register.php');
-
-        echo '<br>';
-        echo '<br>';
-            print_r($userAccountViewModel,0);
-        echo '<br>';
-
-
+        else
+        {
+            $view = new View();
+            $view->set('userAccountViewModel', $userAccountViewModel);
+            $view->render('account/register.php');
+        }
 
     }
 
