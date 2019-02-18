@@ -35,14 +35,14 @@ class WebConfig
 
     static $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
 
-    const DEFAULT_SESSION_LIFETIME = 36000; // lifetime in seconds for user login sessions.
+    const DEFAULT_SESSION_LIFETIME = 36000; // lifetime in seconds for user login sessions (12 h).
 
     /**
      * GLOBAL DATETIME FORMAT
      * used for date conversion as a standard.
      * default Y-m-d G:i:s  (year-month-day hours:seconds:milliseconds)
      */
-    const DEFAULT_DATETIME_FORMAT = 'Y-m-d G:i:s';
+    const DEFAULT_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     const DEFAULT_LOCALE_CONFIGURATION = array('en_GB.UTF8','en_GB@euro','en_GB','english');
 

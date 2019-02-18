@@ -54,7 +54,7 @@ class HomeController extends \Application\Core\Controller
             if($validPassword)
             {
                 $userAccount->setSessionKey($sessionKey);
-                $userAccount->setLastLogin(date("Y-m-d H:i:s"));
+                $userAccount->setLastLogin(date(WebConfig::DEFAULT_DATETIME_FORMAT));
 
                 $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
 

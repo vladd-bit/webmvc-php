@@ -2,7 +2,7 @@
     $layout = 'layout.php';
     $title = 'Sign &nbsp; Up';
 
-    $userAccountViewModel = $this->viewData['userAccountViewModel'];
+    $userAccountViewModel = (object) $this->viewData['userAccountViewModel'];
 ?>
 
 <div class="account-creation-form mdc-elevation--z2">

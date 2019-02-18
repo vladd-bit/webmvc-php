@@ -2,13 +2,13 @@
 
 namespace Application\Controllers;
 
+use Application\Config\WebConfig;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
 use Application\Models\ViewModels\Account\UserAccountViewModel;
 use Application\Utils\HashGenerator;
-use DateTime;
 
 class AccountController extends \Application\Core\Controller
 {
@@ -36,7 +36,7 @@ class AccountController extends \Application\Core\Controller
         if($userAccountViewModel->isValid())
         {
 
-            $currentTime = date('Y-m-d H:i:s', time());
+            $currentTime = date(WebConfig::DEFAULT_DATETIME_FORMAT);
 
             $passwordSaltAndHash = HashGenerator::hashString($userAccountViewModel->getPassword());
 
