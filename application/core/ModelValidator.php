@@ -99,7 +99,7 @@ class ModelValidator
 
     private function buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResult)
     {
-        $currentMessage = null;
+        $currentMessage = '';
         if(array_key_exists($variableFieldName, $this->fieldValidationMessage))
         {
             foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
@@ -194,7 +194,7 @@ class ModelValidator
                         case ValidationDataAnnotation::dataType:
                             if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::dataType]))
                             {
-                                $currentMessage = $validationMessageContent;
+                               # $currentMessage = $validationMessageContent;
                             }
                             else if(key($inputAttribute) == $validationDataAnnotationAttribute)
                             {
@@ -206,21 +206,23 @@ class ModelValidator
             }
         }
 
-        if(!isset($currentMessage))
-        {
-            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['error']]))
-            {
-                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessage['error']];
-            }
-        }
-
         if ($validationResult[key($inputAttribute)] == 0)
         {
-            $validationResult[key($inputAttribute)] = ['error' => $currentMessage ];
+            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::error]]))
+            {
+                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::error]];
+            }
+
+            $validationResult[key($inputAttribute)] = [ValidationDataAnnotation::error => $currentMessage];
         }
         else if ($validationResult[key($inputAttribute)] == 1)
         {
-            $validationResult[key($inputAttribute)] = ['success' => 'looking good'];
+            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::success]]))
+            {
+                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::success]];
+            }
+
+            $validationResult[key($inputAttribute)] = [ValidationDataAnnotation::success => $currentMessage];
         }
 
         return $validationResult;
@@ -401,15 +403,15 @@ class ModelValidator
 
                         foreach($k as $validityStatus => $validityMessage)
                         {
-
                             if($validityStatus == ValidationDataAnnotation::error)
                             {
                                 if($validationStatus == true)
                                     $validationStatus = false;
                             }
+
                             if(isset($validityMessage))
                             {
-                                $this->fieldValidationStatus[$variableName] = $validityMessage;
+                                $this->fieldValidationStatus[$variableName] = [ValidationDataAnnotation::validationMessageType => $validityStatus, ValidationDataAnnotation::validationMessageContent => $validityMessage];
                             }
                         }
                     }

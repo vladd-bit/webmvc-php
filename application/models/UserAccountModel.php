@@ -2,6 +2,7 @@
 
 namespace Application\Models;
 
+use Application\Core\DbError;
 use PDO;
 
 class UserAccountModel extends \Application\Core\Model
@@ -58,13 +59,23 @@ class UserAccountModel extends \Application\Core\Model
 
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
-        $query->execute(array(
-            ':username'     => $userAccount->getUsername(),
-            ':passwordSalt' => $userAccount->getPasswordSalt(),
-            ':passwordHash' => $userAccount->getPasswordHash(),
-            ':email'        => $userAccount->getEmail(),
-            ':dateCreated'  => $userAccount->getDateCreated(),
-        ));
+        try
+        {
+            $query->execute(array(
+                ':username' => $userAccount->getUsername(),
+                ':passwordSalt' => $userAccount->getPasswordSalt(),
+                ':passwordHash' => $userAccount->getPasswordHash(),
+                ':email' => $userAccount->getEmail(),
+                ':dateCreated' => $userAccount->getDateCreated(),
+            ));
+        }
+        catch(\PDOException $exception)
+        {
+            if($exception->getCode() == 23000)
+            {
+                $query = DbError::DuplicateEntry;
+            }
+        }
 
         return $query;
     }

@@ -13,10 +13,11 @@ class UserAccountViewModel extends BaseViewModel
 
     private $validationProperties = array('username' => 'required|maxLength:20|minLength:4',
                                           'password' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
+                                          'confirmPassword' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
                                           'email' => 'required|dataType:email');
 
-    private $validationMessages   = array('username' => ['maxLength' =>'the password must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message'],
-                                          'password' => ['maxLength' =>'the password must be at least 4 characters', 'success' => 'great success','error' =>'this is a custom error message']
+    private $validationMessages   = array('username' => [],
+                                          'password' => []
                                           );
 
     /**

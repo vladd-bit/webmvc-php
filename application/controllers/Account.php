@@ -3,6 +3,7 @@
 namespace Application\Controllers;
 
 use Application\Config\WebConfig;
+use Application\Core\DbError;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
@@ -33,9 +34,16 @@ class AccountController extends \Application\Core\Controller
 
         $userAccountViewModel = new UserAccountViewModel($viewData);
 
+        if($userAccountViewModel->getPassword() == $userAccountViewModel->getConfirmPassword())
+        {
+           # $view = new View();
+            #$view->set('userAccountViewModel', $userAccountViewModel);
+           # $view->set('confirmPasswordError', DbError::DuplicateEntry);
+           # $view->render('account/register.php');
+        }
+
         if($userAccountViewModel->isValid())
         {
-
             $currentTime = date(WebConfig::DEFAULT_DATETIME_FORMAT);
 
             $passwordSaltAndHash = HashGenerator::hashString($userAccountViewModel->getPassword());
@@ -49,9 +57,16 @@ class AccountController extends \Application\Core\Controller
 
             $createAccount = UserAccountModel::create($userAccount);
 
-            if($createAccount)
+            if($createAccount == DbError::SuccessfulExecution)
             {
-               Router::redirect('/home/index');
+                Router::redirect('/home/index');
+            }
+            else if($createAccount == DbError::DuplicateEntry)
+            {
+                $view = new View();
+                $view->set('userAccountViewModel', $userAccountViewModel);
+                $view->set('accountExistsError', DbError::DuplicateEntry);
+                $view->render('account/register.php');
             }
         }
         else

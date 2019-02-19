@@ -16,16 +16,28 @@ class BaseViewModel
      * @param string $fieldName
      * @return mixed|string
      */
-    public function getValidationMessage($fieldName)
+    public function getFieldValidationMessage($fieldName)
     {
         if(isset($this->validationStatus[$fieldName]))
         {
-            return $this->validationStatus[$fieldName];
+            return $this->validationStatus[$fieldName][ValidationDataAnnotation::validationMessageContent];
         }
-        else
+
+        return '';
+    }
+
+    /**
+     * @param string $fieldName
+     * @return mixed|string
+     */
+    public function getFieldValidationStatus($fieldName)
+    {
+        if(isset($this->validationStatus[$fieldName]))
         {
-            return '';
+            return $this->validationStatus[$fieldName][ValidationDataAnnotation::validationMessageType];
         }
+
+        return '';
     }
 
     public function isValid()
