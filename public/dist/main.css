@@ -1,3 +1,42 @@
+.text-align-left {
+  text-align: left; }
+
+.text-align-right {
+  text-align: right; }
+
+.text-align-center {
+  text-align: center; }
+
+.text-align-justify {
+  text-align: justify; }
+
+.text-bold {
+  font-weight: bold; }
+
+.text-thin {
+  font-weight: lighter; }
+
+.text-normal {
+  font-weight: normal; }
+
+.text-blue {
+  color: #2196f3; }
+
+.text-white {
+  color: #eceff1; }
+
+.text-cyan {
+  color: #00bcd4; }
+
+.text-error, .text-confirmation {
+  font-size: 1em; }
+
+.text-error {
+  color: #e57373; }
+
+.text-confirmation {
+  color: #66bb6a; }
+
 html, body {
   height: 100%;
   margin: 0; }

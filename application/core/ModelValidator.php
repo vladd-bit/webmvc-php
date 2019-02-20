@@ -99,6 +99,13 @@ class ModelValidator
 
     private function buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResult)
     {
+        echo '<br>'; echo '<br>'; echo '<br>'; echo '<br>'; echo '<br>';
+        echo $variableFieldName;
+        echo "<p>=====</p>";
+        print_r($inputAttribute,0);
+        echo '<br>';
+
+        print_r($validationResult, 0);
         $currentMessage = '';
         if(array_key_exists($variableFieldName, $this->fieldValidationMessage))
         {
@@ -188,13 +195,14 @@ class ModelValidator
                                 {
                                     $currentMessage = $variableFieldName . ' must contain lower characters';
                                 }
+
                             }
                             break;
 
                         case ValidationDataAnnotation::dataType:
                             if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::dataType]))
                             {
-                               # $currentMessage = $validationMessageContent;
+                                # $currentMessage = $validationMessageContent;
                             }
                             else if(key($inputAttribute) == $validationDataAnnotationAttribute)
                             {
@@ -220,6 +228,10 @@ class ModelValidator
             if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::success]]))
             {
                 $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::success]];
+            }
+            else
+            {
+                $currentMessage = 'Valid field';
             }
 
             $validationResult[key($inputAttribute)] = [ValidationDataAnnotation::success => $currentMessage];
@@ -409,10 +421,7 @@ class ModelValidator
                                     $validationStatus = false;
                             }
 
-                            if(isset($validityMessage))
-                            {
-                                $this->fieldValidationStatus[$variableName] = [ValidationDataAnnotation::validationMessageType => $validityStatus, ValidationDataAnnotation::validationMessageContent => $validityMessage];
-                            }
+                            $this->fieldValidationStatus[$variableName] = [ValidationDataAnnotation::validationMessageType => $validityStatus, ValidationDataAnnotation::validationMessageContent => $validityMessage];
                         }
                     }
                 }
