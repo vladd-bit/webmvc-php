@@ -24,7 +24,7 @@ class WebConfig
 
     const PROJECT_NAME = 'WebWay';
 
-    const HTTPS_ENABLED = false;
+    const HTTPS_ENABLED = true;
 
     /**
      * used for URL redirection ONLY
