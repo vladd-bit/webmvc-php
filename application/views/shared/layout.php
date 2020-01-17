@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="360000000000000">
+    <meta http-equiv="refresh" content="36000">
     <meta name="description" content="The WebWay">
     <meta name="keywords" content="VOID,WW">
-    <meta name="author" content="rs">
+    <meta name="author" content="ENCLAVE">
 
     <title>
         <?php
@@ -21,7 +21,7 @@
 <body class="mdc-typography">
 
     <?php
-        include_once('/shared/header.php');
+        include_once('header.php');
     ?>
 
     <main class="mdc-layout-grid">
@@ -29,7 +29,7 @@
     </main>
 
     <?php
-        include_once('/shared/footer.php');
+        include_once('footer.php');
     ?>
 
     <script type="text/javascript" src="<?php echo PUBLIC_FOLDER_URL; ?>/js/libraries/material-components-web/material-components-web.min.js"></script>

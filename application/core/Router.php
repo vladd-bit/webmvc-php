@@ -95,8 +95,7 @@ class Router
 
     protected static function cleanUrlPath($url)
     {
-        $newUrl = preg_replace('#/+#','/',$url);
-        return $newUrl;
+        return preg_replace('#/+#','/',$url);
     }
 
     protected static function removeQueryStringVariables($url)

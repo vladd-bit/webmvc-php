@@ -24,12 +24,13 @@ try
     if(file_exists(SESSION_FOLDER.\Application\Config\WebConfig::SESSION_NAME))
     {
         $file = fopen(SESSION_FOLDER.\Application\Config\WebConfig::SESSION_NAME, 'a');
+        fclose($file);
     }
     else
     {
-        $file = fopen(SESSION_FOLDER.\Application\Config\WebConfig::SESSION_NAME, 'w');
+        $file = fopen(SESSION_FOLDER . \Application\Config\WebConfig::SESSION_NAME, 'w');
+        fclose($file);
     }
-    fclose($file);
 
     if(\Application\Config\WebConfig::MODIFY_SESSION_STORAGE_PATH)
     {

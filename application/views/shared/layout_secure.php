@@ -14,8 +14,8 @@
         ?>
     </title>
 
-    <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/google-fonts.css">
     <link rel="icon" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/google-fonts.css">
     <link rel="stylesheet" type="text/css" href="<?php echo PUBLIC_FOLDER_URL; ?>/media/stylesheets/css/layouts/general-layout.css">
 </head>
 <body class="mdc-typography">
@@ -29,7 +29,7 @@
 </main>
 
 <?php
-    include_once(VIEWS_FOLDER.'/footer.php');
+    include_once('footer.php');
 ?>
 
 <script type="text/javascript" src="<?php echo PUBLIC_FOLDER_URL; ?>/js/libraries/material-components-web/material-components-web.min.js"></script>

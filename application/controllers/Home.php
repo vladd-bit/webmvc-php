@@ -41,15 +41,15 @@ class HomeController extends \Application\Core\Controller
 
         $userAccount = UserAccountModel::getUserByName($viewData['username']);
 
-        if($userAccount)
+        if(is_array($userAccount))
         {
             $userAccount = new UserAccount($userAccount);
 
             $sessionKey = HashGenerator::randomizedShaByteHash();
 
             $validPassword = HashGenerator::validateHash(base64_decode($userAccount->getPasswordSalt()),
-                                                         $viewData['password'],
-                                                         base64_decode($userAccount->getPasswordHash()));
+                $viewData['password'],
+                base64_decode($userAccount->getPasswordHash()));
 
             if($validPassword)
             {
@@ -58,7 +58,7 @@ class HomeController extends \Application\Core\Controller
 
                 $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
 
-                if($updateAccountSession == false)
+                if(!$updateAccountSession)
                 {
                     http_response_code(404);
                 }

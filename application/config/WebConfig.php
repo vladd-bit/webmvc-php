@@ -48,7 +48,6 @@ class WebConfig
 
     const DEFAULT_TIMEZONE = 'Europe/London';
 
-
     /**
      * Website folder paths
      */

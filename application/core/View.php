@@ -87,27 +87,23 @@ class View
                     $pageContent = str_replace('{renderBody}', $viewContents, $layoutContents);
 
                     echo $pageContent;
-
                 }
                 else
                 {
-                    Error::log(ErrorLogType::webError, new \Exception($templateComponents['layout'].' file not found.'));
+                    Error::log(ErrorLogType::webError, new \Exception('Layout file:' . $templateComponents['layout'] .' file not found or not readable in path ' . $layoutFile));
                 }
             }
             else
             {
-                if (!empty($this->viewFile))
+                if (!empty($this->viewFile) && is_readable($this->viewFile))
                 {
-                    if (is_readable($this->viewFile))
-                    {
-                        require($this->viewFile);
-                    }
+                    require($this->viewFile);
                 }
             }
         }
         else
         {
-            Error::log(ErrorLogType::webError, new \Exception($this->viewFile . ' not found'));
+            Error::log(ErrorLogType::webError, new \Exception('View file: ' . $this->viewFile . ' not found or not readable.'));
         }
     }
 

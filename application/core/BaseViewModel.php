@@ -47,8 +47,6 @@ class BaseViewModel
         $modelValidator->setFieldValidationMessage($this->validatorMessages);
         $modelValidator->setFieldsToValidate($this->fieldsToValidate);
 
-
-
         $isValid = $modelValidator->isValid();
         $this->validationStatus = $modelValidator->getFieldValidationStatus();
         return $isValid;
