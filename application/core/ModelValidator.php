@@ -7,12 +7,11 @@ use DateTime;
 
 class ModelValidator
 {
-    private $fieldsToValidate = array();
-    private $fieldValidationMapping = array();
-    private $fieldValidationMessage = array();
-
-    private $results = array();
-    private $fieldValidationStatus= array();
+    private array $fieldsToValidate = array();
+    private array $fieldValidationMapping = array();
+    private array $fieldValidationMessage = array();
+    private array $results = array();
+    private array $fieldValidationStatus= array();
 
     /**
      * @return array of the fields that are to be validated

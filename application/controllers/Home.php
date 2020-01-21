@@ -95,11 +95,12 @@ class HomeController extends \Application\Core\Controller
 
             if(isset($userAccount))
             {
-                $userAccountDashboardViewModel = new userAccountDashboardViewModel();
-                $userAccountDashboardViewModel->setUsername($userAccount->getUsername());
+                $userAccountDashboardViewModel = new UserAccountDashboardViewModel(['username' => 'test']);
+                echo $userAccountDashboardViewModel->getUsername();
 
 
-                print_r($userAccountDashboardViewModel->getModelFields());
+
+                #print_r($userAccountDashboardViewModel);
 
                 #print_r($userAccountDashboardViewModel->getModelFields());
 

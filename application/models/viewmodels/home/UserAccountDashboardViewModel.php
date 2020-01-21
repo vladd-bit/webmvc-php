@@ -6,13 +6,10 @@ use Application\Core\BaseViewModel;
 
 class UserAccountDashboardViewModel extends BaseViewModel
 {
-    private $username;
+    protected $username;
 
-    public function __constructor($properties)
-    {
-        if(isset($properties))
-            $this->setFieldData($properties);
-    }
+    public function __constructor()
+    {}
 
     /**
      * @return mixed
@@ -21,7 +18,6 @@ class UserAccountDashboardViewModel extends BaseViewModel
     {
         return $this->username;
     }
-
 
     /**
      * @param mixed $username
