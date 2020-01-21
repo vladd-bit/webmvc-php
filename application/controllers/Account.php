@@ -8,7 +8,7 @@ use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
-use Application\Models\ViewModels\Account\UserAccountViewModel;
+use Application\Models\ViewModels\UserAccountViewModel;
 use Application\Utils\HashGenerator;
 
 class AccountController extends \Application\Core\Controller

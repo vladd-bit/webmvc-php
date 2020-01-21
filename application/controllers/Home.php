@@ -7,7 +7,7 @@ use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
-use Application\Models\ViewModels\Account\UserAccountViewModel;
+use Application\Models\ViewModels\UserAccountDashboardViewModel;
 use Application\Utils\HashGenerator;
 
 class HomeController extends \Application\Core\Controller
@@ -70,7 +70,7 @@ class HomeController extends \Application\Core\Controller
                 $_SESSION['userSessionId'] = $sessionKey;
                 $_SESSION['userSessionExpiryTime'] = $expiryTime;
 
-                Router::redirect('/home/dashboard');
+                Router::redirect('/dashboard');
             }
         }
 
@@ -95,12 +95,20 @@ class HomeController extends \Application\Core\Controller
 
             if(isset($userAccount))
             {
-                $userAccountViewModel = new UserAccountViewModel();
-                $userAccountViewModel->setUsername($userAccount->getUsername());
-                $userAccountViewModel->setEmail($userAccount->getEmail());
+                $userAccountDashboardViewModel = new userAccountDashboardViewModel();
+                $userAccountDashboardViewModel->setUsername($userAccount->getUsername());
 
-                $view = new View();
-                $view->render('home/dashboard.php', $userAccountViewModel);
+
+                print_r($userAccountDashboardViewModel->getModelFields());
+
+                #print_r($userAccountDashboardViewModel->getModelFields());
+
+                echo '<br>';
+
+                #print_r($userAccountDashboardViewModel->getModelFields());
+
+               # $view = new View();
+               # $view->render('home/dashboard.php', $userAccountDashboardViewModel);
             }
         }
         else

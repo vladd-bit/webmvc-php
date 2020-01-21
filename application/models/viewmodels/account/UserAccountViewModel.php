@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Models\ViewModels\Account;
+namespace Application\Models\ViewModels;
 
 use Application\Core\BaseViewModel;
 
@@ -11,32 +11,18 @@ class UserAccountViewModel extends BaseViewModel
     private $email;
     private $confirmPassword;
 
-    private $validationProperties = array('username' => 'required|maxLength:20|minLength:4',
-                                          'password' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
-                                          'confirmPassword' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
-                                          'email' => 'required|dataType:email');
-
-    private $validationMessages   = array('username' => [],
-                                          'password' => []
-                                          );
-
-    /**
-     * UserAccountViewModel constructor.
-     * @param array $properties
-     */
-    function __construct($properties = array())
+    public function __construct($properties)
     {
-        foreach($properties as $key => $value)
-        {
-            if(property_exists($this, $key))
-            {
-                $this->{$key} = $value;
-            }
-        }
+        if(isset($properties))
+            $this->setFieldData($properties);
 
-        $this->fieldsToValidate = get_object_vars($this);
-        $this->validatorProperties = $this->validationProperties;
-        $this->validatorMessages = $this->validationMessages;
+        $this->setValidatorMessages(array('username' => 'required|maxLength:20|minLength:4',
+            'password' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
+            'confirmPassword' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
+            'email' => 'required|dataType:email'));
+
+        $this->setValidatorProperties(array('username' => [],
+                                           'password' => []));
     }
 
     /**

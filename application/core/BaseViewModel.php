@@ -2,15 +2,20 @@
 
 namespace Application\Core;
 
-class BaseViewModel
-{
-    protected $validatorProperties = array();
-    protected $validatorMessages   = array();
-    protected $fieldsToValidate = array();
-    public $validationStatus = array();
+use ReflectionClass;
+use ReflectionProperty;
 
+class BaseViewModel extends ValidationModelData
+{
     function __construct()
-    {}
+    {
+        $props  = (new ReflectionClass(get_class($this)))->getProperties(ReflectionProperty::IS_PRIVATE);
+
+        foreach ($props as $prop)
+        {
+            array_push($this->modelFields, $prop->getName());
+        }
+    }
 
     /**
      * @param string $fieldName
@@ -45,15 +50,25 @@ class BaseViewModel
         $modelValidator = new ModelValidator();
         $modelValidator->setFieldValidationMapping($this->validatorProperties);
         $modelValidator->setFieldValidationMessage($this->validatorMessages);
-        $modelValidator->setFieldsToValidate($this->fieldsToValidate);
+        $modelValidator->setFieldsToValidate($this->modelFields);
 
         $isValid = $modelValidator->isValid();
         $this->validationStatus = $modelValidator->getFieldValidationStatus();
+
         return $isValid;
     }
 
-    public function getModelFields()
+    /**
+     * @param array $properties
+     */
+    public function setFieldData($properties)
     {
-        return array_keys($this->fieldsToValidate);
+        foreach($properties as $key => $value)
+        {
+            if(property_exists($this, $key))
+            {
+                $this->{$key} = $value;
+            }
+        }
     }
 }

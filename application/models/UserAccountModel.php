@@ -17,9 +17,7 @@ class UserAccountModel extends \Application\Core\Model
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $query->execute(array(':username' => $username));
 
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-
-        return $result;
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 
     public static function getUserBySessionKey($sessionKey)
@@ -31,9 +29,7 @@ class UserAccountModel extends \Application\Core\Model
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $query->execute(array(':sessionKey' => $sessionKey));
 
-        $result = $query->fetch(PDO::FETCH_ASSOC);
-
-        return $result;
+        return $query->fetch(PDO::FETCH_ASSOC);
     }
 
     public static function updateUserSessionLastLogin(UserAccount $userAccount)

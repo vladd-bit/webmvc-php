@@ -1,5 +1,5 @@
 <?php
-    $layout = '/shared/layout.php';
+    $layout = 'shared/layout.php';
     $title = 'WebWay';
 ?>
 

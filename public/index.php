@@ -40,7 +40,6 @@ try
     ini_set('session.gc_probability', 1);
 
     session_start();
-    ////////////////////////////////////////
 
     date_default_timezone_set(\Application\Config\WebConfig::DEFAULT_TIMEZONE);
     setlocale(LC_ALL, \Application\Config\WebConfig::DEFAULT_LOCALE_CONFIGURATION);
@@ -51,5 +50,5 @@ try
 }
 catch(Exception $exception)
 {
-   \Application\Core\Error::log(0,$exception);
+   \Application\Core\Error::log(0, $exception);
 }

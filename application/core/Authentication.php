@@ -5,7 +5,7 @@ namespace Application\Controllers;
 use Application\Models\UserAccountModel;
 use Application\Models\UserAccount;
 
-class Authentication
+abstract class Authentication
 {
     public static function isAuthorized()
     {
@@ -17,7 +17,7 @@ class Authentication
                 $isLocked = $user->getLocked();
                 $sessionExpired = time() > $_SESSION['userSessionExpiryTime'];
 
-                if($sessionExpired == false && $isLocked == 0)
+                if(!$sessionExpired && $isLocked == 0)
                 {
                     return true;
                 }
