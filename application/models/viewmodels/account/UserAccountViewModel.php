@@ -6,22 +6,19 @@ use Application\Core\BaseViewModel;
 
 class UserAccountViewModel extends BaseViewModel
 {
-    private $username;
-    private $password;
-    private $email;
-    private $confirmPassword;
+    public $username;
+    public $password;
+    public $email;
+    public $confirmPassword;
 
-    public function __construct($properties)
+    public function __construct()
     {
-        if(isset($properties))
-            $this->setFieldData($properties);
-
-        $this->setValidatorMessages(array('username' => 'required|maxLength:20|minLength:4',
+        $this->setValidatorProperties(array('username' => 'required|maxLength:20|minLength:4',
             'password' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
             'confirmPassword' => 'required|maxLength:30|minLength:4|upperCharacters:0|lowerCharacters:4',
             'email' => 'required|dataType:email'));
 
-        $this->setValidatorProperties(array('username' => [],
+        $this->setValidatorMessages(array('username' => [],
                                            'password' => []));
     }
 

@@ -44,9 +44,8 @@ try
     date_default_timezone_set(\Application\Config\WebConfig::DEFAULT_TIMEZONE);
     setlocale(LC_ALL, \Application\Config\WebConfig::DEFAULT_LOCALE_CONFIGURATION);
 
-    $router = new \Application\Core\Router();
-    \Application\Utils\RouteNavigation::initializeRoutes($router);
-    $router->dispatch($_SERVER['QUERY_STRING']);
+    \Application\Utils\RouteNavigation::initializeRoutes(new \Application\Core\Router());
+    \Application\Utils\RouteNavigation::getRouterInstance()->dispatch($_SERVER['QUERY_STRING']);
 }
 catch(Exception $exception)
 {

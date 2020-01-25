@@ -33,12 +33,12 @@ class WebConfig
      * please note that you will need properly configured nginx REWRITE RULES for subfolders
      */
 
-    static $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
+    public static string $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
 
     const DEFAULT_SESSION_LIFETIME = 36000; // lifetime in seconds for user login sessions (12 h).
 
     /**
-     * GLOBAL DATETIME FORMAT
+     * GLOBAL DATETIME FORMAT and WEBSITE LOCALE
      * used for date conversion as a standard.
      * default Y-m-d G:i:s  (year-month-day hours:seconds:milliseconds)
      */
@@ -47,6 +47,8 @@ class WebConfig
     const DEFAULT_LOCALE_CONFIGURATION = array('en_GB.UTF8','en_GB@euro','en_GB','english');
 
     const DEFAULT_TIMEZONE = 'Europe/London';
+
+    const DEFAULT_WEBSITE_LOCALE = 'en';
 
     /**
      * Website folder paths

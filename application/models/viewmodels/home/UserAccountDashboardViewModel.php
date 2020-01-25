@@ -6,7 +6,7 @@ use Application\Core\BaseViewModel;
 
 class UserAccountDashboardViewModel extends BaseViewModel
 {
-    protected $username;
+    public $username;
 
     public function __constructor()
     {}

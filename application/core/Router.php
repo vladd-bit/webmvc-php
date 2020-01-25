@@ -82,13 +82,13 @@ class Router
         }
     }
 
-    public static function redirect($route)
+    public static function redirect($route, $routeParemeters = null)
     {
         $newUrl = "{$_SERVER['HTTP_HOST']}".WebConfig::WEBSITE_PATH.$route;
         $newUrl = self::cleanUrlPath($newUrl);
         $newUrl = WebConfig::$HTTP_URL_STRING.$newUrl;
 
-        //redirect to new route
+        // redirect to new route
         header("HTTP/1.1 302 Found");
         header('location: '.$newUrl);
     }

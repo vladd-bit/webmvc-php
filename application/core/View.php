@@ -4,8 +4,8 @@ namespace Application\Core;
 
 class View
 {
-    protected $viewFile;
-    protected $viewData = array();
+    protected string $viewFile;
+    protected $viewData;
 
     /**
      * @param $viewFileName    // the name of the view file (php, html etc)

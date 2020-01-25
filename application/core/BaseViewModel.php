@@ -2,14 +2,16 @@
 
 namespace Application\Core;
 
+use Application\models\viewmodels\home\UserAccountLoginViewModel;
 use ReflectionClass;
 use ReflectionProperty;
 
 class BaseViewModel extends ValidationModelData
 {
+
     /**
      * BaseViewModel constructor.
-     * @param array $field_data
+     * @param array $field_data OPTIONAL
      *
      * this should be an array of the field data,
      * used for initializing from an array of data,
@@ -17,24 +19,46 @@ class BaseViewModel extends ValidationModelData
      * the class extending the BaseViewModel class should have all of it's fields set as PROTECTED or PUBLIC,
      * not PRIVATE !.
      *
-     * @throws \ReflectionException
-     *
      * the fields of the Child class will be passed to the ValidationModelData  modelFields variable,
      * so that it will be used for validation or for setting the field/property values of the Child Class
      *
      */
-    function __construct(array $field_data)
-    {
-        $props  = (new ReflectionClass(get_class($this)))->getProperties(ReflectionProperty::IS_PRIVATE |
-            ReflectionProperty::IS_PROTECTED);
 
-        foreach ($props as $field)
-        {
-            array_push($this->modelFields, $field->getName());
-        }
+    function __construct(array $field_data = array())
+    {
+        self::buildPropertyList();
 
         if(isset($field_data))
             $this->setFieldData($field_data);
+    }
+
+    public static function getModelFields(): array
+    {
+        if(empty(self::$modelFields))
+        {
+            self::buildPropertyList();
+        }
+
+        return parent::getModelFields();
+    }
+
+    public static function buildPropertyList()
+    {
+        try
+        {
+            $props  = (new ReflectionClass(get_called_class()))->getProperties(
+                ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PUBLIC
+            );
+
+            foreach ($props as $field)
+            {
+                array_push(self::$modelFields, $field->getName());
+            }
+        }
+        catch (\ReflectionException $exception)
+        {
+            Error::log(ErrorLogType::webError, $exception);
+        }
     }
 
     /**
@@ -43,9 +67,9 @@ class BaseViewModel extends ValidationModelData
      */
     public function getFieldValidationMessage($fieldName)
     {
-        if(isset($this->validationStatus[$fieldName]))
+        if(isset($this->getValidationStatus()[$fieldName]))
         {
-            return $this->validationStatus[$fieldName][ValidationDataAnnotation::validationMessageContent];
+            return $this->getValidationStatus()[$fieldName][ValidationDataAnnotation::validationMessageContent];
         }
 
         return '';
@@ -57,9 +81,9 @@ class BaseViewModel extends ValidationModelData
      */
     public function getFieldValidationStatus($fieldName)
     {
-        if(isset($this->validationStatus[$fieldName]))
+        if(isset($this->getValidationStatus()[$fieldName]))
         {
-            return $this->validationStatus[$fieldName][ValidationDataAnnotation::validationMessageType];
+            return $this->getValidationStatus()[$fieldName][ValidationDataAnnotation::validationMessageType];
         }
 
         return '';
@@ -68,12 +92,12 @@ class BaseViewModel extends ValidationModelData
     public function isValid()
     {
         $modelValidator = new ModelValidator();
-        $modelValidator->setFieldValidationMapping($this->validatorProperties);
-        $modelValidator->setFieldValidationMessage($this->validatorMessages);
-        $modelValidator->setFieldsToValidate($this->modelFields);
+        $modelValidator->setFieldValidationMapping($this->getValidatorProperties());
+        $modelValidator->setFieldValidationMessage($this->getValidatorMessages());
+        $modelValidator->setFieldsToValidate(self::$modelFields);
 
         $isValid = $modelValidator->isValid();
-        $this->validationStatus = $modelValidator->getFieldValidationStatus();
+        $this->setValidationStatus($modelValidator->getFieldValidationStatus());
 
         return $isValid;
     }
@@ -81,11 +105,11 @@ class BaseViewModel extends ValidationModelData
     /**
      * @param array $properties
      */
-    public function setFieldData($properties)
+    public function setFieldData(array $properties)
     {
         foreach($properties as $key => $value)
         {
-            if(in_array($key, $this->modelFields))
+            if(in_array($key, self::$modelFields))
             {
                 $this->{$key} = $value;
             }

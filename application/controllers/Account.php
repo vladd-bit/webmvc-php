@@ -3,6 +3,7 @@
 namespace Application\Controllers;
 
 use Application\Config\WebConfig;
+use Application\Core\Controller;
 use Application\Core\DbError;
 use Application\Core\Router;
 use Application\Core\View;
@@ -11,12 +12,12 @@ use Application\Models\UserAccountModel;
 use Application\Models\ViewModels\UserAccountViewModel;
 use Application\Utils\HashGenerator;
 
-class AccountController extends \Application\Core\Controller
+class AccountController extends Controller
 {
     public function register()
     {
         $view = new View();
-        $view->set('userAccountViewModel', new UserAccountViewModel());
+        $view->set('userAccountViewModel', (array) new UserAccountViewModel());
         $view->render('account/register.php');
     }
 

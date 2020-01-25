@@ -3,27 +3,33 @@
 namespace Application\Controllers;
 
 use Application\Config\WebConfig;
+use Application\Core\Controller;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
+use Application\models\viewmodels\home\UserAccountLoginViewModel;
 use Application\Models\ViewModels\UserAccountDashboardViewModel;
 use Application\Utils\HashGenerator;
 
-class HomeController extends \Application\Core\Controller
+class HomeController extends Controller
 {
-    public function index()
+    public function index(array $parameters)
     {
         if(Authentication::isAuthorized())
         {
             Router::redirect('/home/dashboard');
         }
 
+        $userAccountLoginViewModel  = new UserAccountLoginViewModel();
+        $userAccountLoginViewModel->setFieldData($parameters);
+
         $view = new View();
+        $view->set("userAccountLoginViewModel", $userAccountLoginViewModel);
         $view->render('home/index.php');
     }
 
-    public function login($parameters)
+    public function login(array $parameters)
     {
         $viewData = array();
 
@@ -39,42 +45,42 @@ class HomeController extends \Application\Core\Controller
             }
         }
 
-        $userAccount = UserAccountModel::getUserByName($viewData['username']);
+       $userAccount = UserAccountModel::getUserByName($viewData['username']);
 
-        if(is_array($userAccount))
-        {
-            $userAccount = new UserAccount($userAccount);
+       if(is_array($userAccount))
+       {
+           $userAccount = new UserAccount($userAccount);
 
-            $sessionKey = HashGenerator::randomizedShaByteHash();
+           $sessionKey = HashGenerator::randomizedShaByteHash();
 
-            $validPassword = HashGenerator::validateHash(base64_decode($userAccount->getPasswordSalt()),
-                $viewData['password'],
-                base64_decode($userAccount->getPasswordHash()));
+           $validPassword = HashGenerator::validateHash(base64_decode($userAccount->getPasswordSalt()),
+               $viewData['password'],
+               base64_decode($userAccount->getPasswordHash()));
 
-            if($validPassword)
-            {
-                $userAccount->setSessionKey($sessionKey);
-                $userAccount->setLastLogin(date(WebConfig::DEFAULT_DATETIME_FORMAT));
+           if($validPassword)
+           {
+               $userAccount->setSessionKey($sessionKey);
+               $userAccount->setLastLogin(date(WebConfig::DEFAULT_DATETIME_FORMAT));
 
-                $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
+               $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
 
-                if(!$updateAccountSession)
-                {
-                    http_response_code(404);
-                }
+               if(!$updateAccountSession)
+               {
+                   http_response_code(404);
+               }
 
-                $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
+               $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
 
-                $_SESSION['identityUsername'] = $userAccount->getUsername();
-                $_SESSION['identityEmail'] = $userAccount->getEmail();
-                $_SESSION['userSessionId'] = $sessionKey;
-                $_SESSION['userSessionExpiryTime'] = $expiryTime;
+               $_SESSION['identityUsername'] = $userAccount->getUsername();
+               $_SESSION['identityEmail'] = $userAccount->getEmail();
+               $_SESSION['userSessionId'] = $sessionKey;
+               $_SESSION['userSessionExpiryTime'] = $expiryTime;
 
-                Router::redirect('/dashboard');
-            }
-        }
+               Router::redirect('/dashboard');
+           }
+       }
 
-        Router::redirect('/home/index');
+       $this->index($viewData);
     }
 
     public function logout()
@@ -95,21 +101,10 @@ class HomeController extends \Application\Core\Controller
 
             if(isset($userAccount))
             {
-                $userAccountDashboardViewModel = new UserAccountDashboardViewModel(['username' => 'test']);
-                echo $userAccountDashboardViewModel->getUsername();
-
-
-
-                #print_r($userAccountDashboardViewModel);
-
-                #print_r($userAccountDashboardViewModel->getModelFields());
-
-                echo '<br>';
-
-                #print_r($userAccountDashboardViewModel->getModelFields());
-
-               # $view = new View();
-               # $view->render('home/dashboard.php', $userAccountDashboardViewModel);
+                $userAccountDashboardViewModel = new UserAccountDashboardViewModel();
+                $userAccountDashboardViewModel->username = $userAccount->getUsername();
+                $view = new View();
+                $view->render('home/dashboard.php', $userAccountDashboardViewModel);
             }
         }
         else

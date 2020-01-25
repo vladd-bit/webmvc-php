@@ -4,17 +4,17 @@ namespace Application\Core;
 
 abstract class ValidationModelData
 {
-    protected array $modelFields = array();
-    protected array $validationStatus = array();
-    protected array $validatorProperties = array();
-    protected array $validatorMessages = array();
+    protected static array $modelFields = array();
+    private array $validationStatus = array();
+    private array $validatorProperties = array();
+    private array $validatorMessages = array();
 
     /**
      * @return array
      */
-    public function getModelFields(): array
+    protected static function getModelFields(): array
     {
-        return $this->modelFields;
+        return self::$modelFields;
     }
 
     /**
@@ -22,7 +22,7 @@ abstract class ValidationModelData
      */
     protected function setModelFields(array $modelFields): void
     {
-        $this->modelFields = $modelFields;
+        self::$modelFields = $modelFields;
     }
 
     /**
