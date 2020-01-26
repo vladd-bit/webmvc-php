@@ -8,8 +8,9 @@ class Router
 {
     private array $routes = [];
     private array $routeParameters = [];
+    private array $authenticationLevels = [];
 
-    public function add($route, $routeParameters = array ())
+    public function add($route, $routeParameters = array (), $authenticationLevels = array())
     {
         $this->routes[$route] = $routeParameters;
     }

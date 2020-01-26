@@ -13,7 +13,7 @@ abstract class RouteNavigation
     {
         self::$routerInstance = $router;
 
-        self::$routerInstance->add('/home/index', ['controller' => 'Home', 'action' => 'index', 'parameters' => UserAccountLoginViewModel::getModelFields() ]);
+        self::$routerInstance->add('/home/index', ['controller' => 'Home', 'action' => 'index']);
         self::$routerInstance->add('/home/logout', ['controller' => 'Home', 'action' => 'logout']);
         self::$routerInstance->add('/home/login', ['controller' => 'Home', 'action' => 'login', 'parameters' => UserAccountLoginViewModel::getModelFields() ]);
         self::$routerInstance->add('/home/dashboard', ['controller' => 'Home', 'action' => 'dashboard']);

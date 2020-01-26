@@ -14,7 +14,7 @@ use Application\Utils\HashGenerator;
 
 class HomeController extends Controller
 {
-    public function index(array $parameters)
+    public function index()
     {
         if(Authentication::isAuthorized())
         {
@@ -22,15 +22,24 @@ class HomeController extends Controller
         }
 
         $userAccountLoginViewModel  = new UserAccountLoginViewModel();
-        $userAccountLoginViewModel->setFieldData($parameters);
+
+        if(isset($_SESSION["userSessionDataLoginViewModel".session_id()]))
+        {
+            $userAccountLoginViewModel->setFieldData($_SESSION["userSessionDataLoginViewModel".session_id()]);
+        }
 
         $view = new View();
-        $view->set("userAccountLoginViewModel", $userAccountLoginViewModel);
+        $view->set('userAccountLoginViewModel', $userAccountLoginViewModel);
         $view->render('home/index.php');
     }
 
     public function login(array $parameters)
     {
+        if(Authentication::isAuthorized())
+        {
+            Router::redirect('/home/dashboard');
+        }
+
         $viewData = array();
 
         foreach($parameters as $parameter)
@@ -45,42 +54,46 @@ class HomeController extends Controller
             }
         }
 
-       $userAccount = UserAccountModel::getUserByName($viewData['username']);
+        $userAccount = UserAccountModel::getUserByName($viewData['username']);
 
-       if(is_array($userAccount))
-       {
-           $userAccount = new UserAccount($userAccount);
+        if(is_array($userAccount))
+        {
+            $userAccount = new UserAccount($userAccount);
 
-           $sessionKey = HashGenerator::randomizedShaByteHash();
+            $sessionKey = HashGenerator::randomizedShaByteHash();
 
-           $validPassword = HashGenerator::validateHash(base64_decode($userAccount->getPasswordSalt()),
-               $viewData['password'],
-               base64_decode($userAccount->getPasswordHash()));
+            $validPassword = HashGenerator::validateHash(base64_decode($userAccount->getPasswordSalt()),
+                $viewData['password'],
+                base64_decode($userAccount->getPasswordHash()));
 
-           if($validPassword)
-           {
-               $userAccount->setSessionKey($sessionKey);
-               $userAccount->setLastLogin(date(WebConfig::DEFAULT_DATETIME_FORMAT));
+            if($validPassword)
+            {
+                $userAccount->setSessionKey($sessionKey);
+                $userAccount->setLastLogin(date(WebConfig::DEFAULT_DATETIME_FORMAT));
 
-               $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
+                $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
 
-               if(!$updateAccountSession)
-               {
-                   http_response_code(404);
-               }
+                if(!$updateAccountSession)
+                {
+                    http_response_code(404);
+                }
 
-               $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
+                $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
 
-               $_SESSION['identityUsername'] = $userAccount->getUsername();
-               $_SESSION['identityEmail'] = $userAccount->getEmail();
-               $_SESSION['userSessionId'] = $sessionKey;
-               $_SESSION['userSessionExpiryTime'] = $expiryTime;
+                $_SESSION['identityUsername'] = $userAccount->getUsername();
+                $_SESSION['identityEmail'] = $userAccount->getEmail();
+                $_SESSION['userSessionId'] = $sessionKey;
+                $_SESSION['userSessionExpiryTime'] = $expiryTime;
 
-               Router::redirect('/dashboard');
-           }
-       }
+                Router::redirect('/dashboard');
+            }
+        }
+        else
+        {
+            $_SESSION['userSessionDataLoginViewModel'.session_id()] = $viewData;
+        }
 
-       $this->index($viewData);
+        Router::redirect('/home/index');
     }
 
     public function logout()

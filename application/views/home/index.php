@@ -4,6 +4,16 @@
     
     /* @var $viewData \Application\Models\ViewModels\Home\UserAccountLoginViewModel */
     $viewData = $this->viewData['userAccountViewModel'];
+
+
+?>
+
+
+
+<?php
+
+echo $viewData->username;
+
 ?>
 
 <div class="login-form mdc-elevation--z2">

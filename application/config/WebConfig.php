@@ -35,7 +35,7 @@ class WebConfig
 
     public static string $HTTP_URL_STRING = self::HTTPS_ENABLED ? 'https://' : 'http://';
 
-    const DEFAULT_SESSION_LIFETIME = 36000; // lifetime in seconds for user login sessions (12 h).
+    const DEFAULT_SESSION_LIFETIME = 18000; // lifetime in seconds for user login sessions (5h).
 
     /**
      * GLOBAL DATETIME FORMAT and WEBSITE LOCALE

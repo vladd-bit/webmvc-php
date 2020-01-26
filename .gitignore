@@ -58,3 +58,4 @@ fabric.properties
 # dist folder
 ./public/dist/*
 ./public/dist
+/vendor/
