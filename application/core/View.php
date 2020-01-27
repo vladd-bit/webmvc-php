@@ -5,7 +5,7 @@ namespace Application\Core;
 class View
 {
     protected string $viewFile;
-    protected $viewData;
+    protected $viewData = array();
 
     /**
      * @param $viewFileName    // the name of the view file (php, html etc)
@@ -14,12 +14,12 @@ class View
      */
     public function render($viewFileName, $args = array())
     {
+        $this->viewFile = dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY . $viewFileName;
+
         if(!empty($args))
         {
             $this->viewData = $args;
         }
-
-        $this->viewFile = dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY . $viewFileName;
 
         if (is_readable($this->viewFile))
         {

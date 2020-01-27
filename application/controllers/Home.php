@@ -21,16 +21,18 @@ class HomeController extends Controller
             Router::redirect('/home/dashboard');
         }
 
+        $view = new View();
+
         $userAccountLoginViewModel  = new UserAccountLoginViewModel();
 
         if(isset($_SESSION["userSessionDataLoginViewModel".session_id()]))
         {
             $userAccountLoginViewModel->setFieldData($_SESSION["userSessionDataLoginViewModel".session_id()]);
+            $view->set('error', true);
         }
 
-        $view = new View();
         $view->set('userAccountLoginViewModel', $userAccountLoginViewModel);
-        $view->render('home/index.php');
+        $view->render('/home/index.php');
     }
 
     public function login(array $parameters)
@@ -85,7 +87,7 @@ class HomeController extends Controller
                 $_SESSION['userSessionId'] = $sessionKey;
                 $_SESSION['userSessionExpiryTime'] = $expiryTime;
 
-                Router::redirect('/dashboard');
+                Router::redirect('/home/dashboard');
             }
         }
         else

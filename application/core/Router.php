@@ -83,7 +83,7 @@ class Router
         }
     }
 
-    public static function redirect($route, $routeParemeters = null)
+    public static function redirect($route)
     {
         $newUrl = "{$_SERVER['HTTP_HOST']}".WebConfig::WEBSITE_PATH.$route;
         $newUrl = self::cleanUrlPath($newUrl);
