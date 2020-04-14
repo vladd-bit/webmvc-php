@@ -21,10 +21,15 @@ abstract class Model
         {
             try
             {
-                $dsn = 'mysql:host=' . DatabaseConfig::DB_HOST . ';dbname=' . DatabaseConfig::DB_NAME . ';charset=utf8';
+                $dsn = DatabaseConfig::DB_ENGINE . ':host=' . DatabaseConfig::DB_HOST . ';dbname=' . DatabaseConfig::DB_NAME . ';charset=utf8';
                 $db = new PDO($dsn, DatabaseConfig::DB_USER, DatabaseConfig::DB_PASSWORD);
 
-                // Throw an Exception when an error occurs
+                if(DatabaseConfig::DB_ENGINE == 'sqlite')
+                {
+                    $dsn = DatabaseConfig::DB_ENGINE . ":" . DatabaseConfig::DB_SQLITE_PATH;
+                    $db = new PDO($dsn);
+                }
+
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
             catch(PDOException $exception)
