@@ -58,8 +58,11 @@ fabric.properties
 # dist folder
 ./public/dist/*
 ./public/dist
-/vendor/
 
-#private things
+# composer folders
+/vendor/
+./vendor
+
+# private things
 application/DatabaseConfig.php
 /application/DatabaseConfig.php
