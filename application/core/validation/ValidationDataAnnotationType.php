@@ -2,8 +2,10 @@
 
 namespace Application\Core;
 
-abstract class ValidationDataAnnotation
+abstract class ValidationDataAnnotationType extends \SplEnum
 {
+    const __default = 'none';
+
     const maxLength = 'maxLength';
     const minLength = 'minLength';
     const required = 'required';

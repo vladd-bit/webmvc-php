@@ -2,7 +2,7 @@
 
 namespace Application\Models;
 
-use Application\Core\DbError;
+use Application\Core\ErrorDatabaseQueryType;
 use PDO;
 
 class UserAccountModel extends \Application\Core\Model
@@ -69,7 +69,7 @@ class UserAccountModel extends \Application\Core\Model
         {
             if($exception->getCode() == 23000)
             {
-                $query = DbError::DuplicateEntry;
+                $query = ErrorDatabaseQueryType::DuplicateEntry;
             }
         }
 

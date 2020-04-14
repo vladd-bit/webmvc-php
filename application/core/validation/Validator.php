@@ -5,7 +5,7 @@ namespace Application\Core;
 use Application\Config\WebConfig;
 use DateTime;
 
-class ModelValidator
+class Validator
 {
     private array $fieldsToValidate = array();
     private array $fieldValidationMapping = array();
@@ -110,12 +110,12 @@ class ModelValidator
         {
             foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
             {
-                foreach(ValidationDataAnnotation::validationAttributes as $validationDataAnnotationAttribute)
+                foreach(ValidationDataAnnotationType::validationAttributes as $validationDataAnnotationAttribute)
                 {
                     switch ($validationDataAnnotationAttribute)
                     {
-                        case ValidationDataAnnotation::maxLength:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::maxLength]))
+                        case ValidationDataAnnotationType::maxLength:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::maxLength]))
                             {
                                 $currentMessage = $validationMessageContent;
                             }
@@ -125,8 +125,8 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::minLength:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::minLength]))
+                        case ValidationDataAnnotationType::minLength:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::minLength]))
                             {
                                 $currentMessage = $validationMessageContent;
                             }
@@ -136,8 +136,8 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::required:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::required]))
+                        case ValidationDataAnnotationType::required:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::required]))
                             {
                                 $currentMessage = $validationMessageContent;
                             }
@@ -147,8 +147,8 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::upperCharacters:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::upperCharacters]))
+                        case ValidationDataAnnotationType::upperCharacters:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::upperCharacters]))
                             {
                                 $currentMessage = $validationMessageContent;
                             }
@@ -172,8 +172,8 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::lowerCharacters:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::lowerCharacters]))
+                        case ValidationDataAnnotationType::lowerCharacters:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::lowerCharacters]))
                             {
                                 $currentMessage = $validationMessageContent;
                             }
@@ -198,8 +198,8 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::dataType:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::dataType]))
+                        case ValidationDataAnnotationType::dataType:
+                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::dataType]))
                             {
                                 # $currentMessage = $validationMessageContent;
                             }
@@ -215,25 +215,25 @@ class ModelValidator
 
         if ($validationResult[key($inputAttribute)] == 0)
         {
-            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::error]]))
+            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::error]]))
             {
-                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::error]];
+                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::error]];
             }
 
-            $validationResult[key($inputAttribute)] = [ValidationDataAnnotation::error => $currentMessage];
+            $validationResult[key($inputAttribute)] = [ValidationDataAnnotationType::error => $currentMessage];
         }
         else if ($validationResult[key($inputAttribute)] == 1)
         {
-            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::success]]))
+            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::success]]))
             {
-                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotation::validationMessageStatus[ValidationDataAnnotation::success]];
+                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::success]];
             }
             else
             {
                 $currentMessage = 'Valid field';
             }
 
-            $validationResult[key($inputAttribute)] = [ValidationDataAnnotation::success => $currentMessage];
+            $validationResult[key($inputAttribute)] = [ValidationDataAnnotationType::success => $currentMessage];
         }
 
         return $validationResult;
@@ -245,13 +245,13 @@ class ModelValidator
 
         foreach($inputAttributes as $inputAttribute)
         {
-            foreach (ValidationDataAnnotation::validationAttributes as $validationAttribute)
+            foreach (ValidationDataAnnotationType::validationAttributes as $validationAttribute)
             {
                 if (key($inputAttribute) == $validationAttribute)
                 {
                     switch (key($inputAttribute))
                     {
-                        case ValidationDataAnnotation::maxLength:
+                        case ValidationDataAnnotationType::maxLength:
                             if (strlen($variableFieldValue) < reset($inputAttribute))
                             {
                                 array_push($validationResults, [key($inputAttribute) => 1]);
@@ -262,7 +262,7 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::minLength:
+                        case ValidationDataAnnotationType::minLength:
                             if (strlen($variableFieldValue) > reset($inputAttribute))
                             {
                                 array_push($validationResults, [key($inputAttribute) => 1]);
@@ -273,10 +273,10 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::optional:
+                        case ValidationDataAnnotationType::optional:
                             break;
 
-                        case ValidationDataAnnotation::required:
+                        case ValidationDataAnnotationType::required:
                             if (isset($variableFieldValue) && trim($variableFieldValue) !== '')
                             {
                                 array_push($validationResults, [key($inputAttribute) => 1]);
@@ -287,14 +287,14 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::upperCharacters:
+                        case ValidationDataAnnotationType::upperCharacters:
                             if (isset($variableFieldValue))
                             {
                                 $inputVar = trim($variableFieldValue);
                                 preg_match_all("/[A-Z]/", $inputVar, $capitalCaseCount);
                                 $capsCount = count($capitalCaseCount [0]);
 
-                                if($capsCount >= $inputAttribute[ValidationDataAnnotation::upperCharacters])
+                                if($capsCount >= $inputAttribute[ValidationDataAnnotationType::upperCharacters])
                                 {
                                     array_push($validationResults, [key($inputAttribute) => 1]);
                                 }
@@ -309,13 +309,13 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::lowerCharacters:
+                        case ValidationDataAnnotationType::lowerCharacters:
                             if (isset($variableFieldValue))
                             {
                                 $inputVar = trim($variableFieldValue);
                                 preg_match_all("/[a-z]/", $inputVar, $lowerCaseCount);
                                 $lowCaseCount = count($lowerCaseCount[0]);
-                                if($lowCaseCount >= $inputAttribute[ValidationDataAnnotation::lowerCharacters])
+                                if($lowCaseCount >= $inputAttribute[ValidationDataAnnotationType::lowerCharacters])
                                 {
                                     array_push($validationResults, [key($inputAttribute) => 1]);
                                 }
@@ -330,7 +330,7 @@ class ModelValidator
                             }
                             break;
 
-                        case ValidationDataAnnotation::dataType:
+                        case ValidationDataAnnotationType::dataType:
                             {
                                 switch (reset($inputAttribute))
                                 {
@@ -414,13 +414,13 @@ class ModelValidator
 
                         foreach($k as $validityStatus => $validityMessage)
                         {
-                            if($validityStatus == ValidationDataAnnotation::error)
+                            if($validityStatus == ValidationDataAnnotationType::error)
                             {
                                 if($validationStatus == true)
                                     $validationStatus = false;
                             }
 
-                            $this->fieldValidationStatus[$variableName] = [ValidationDataAnnotation::validationMessageType => $validityStatus, ValidationDataAnnotation::validationMessageContent => $validityMessage];
+                            $this->fieldValidationStatus[$variableName] = [ValidationDataAnnotationType::validationMessageType => $validityStatus, ValidationDataAnnotationType::validationMessageContent => $validityMessage];
                         }
                     }
                 }

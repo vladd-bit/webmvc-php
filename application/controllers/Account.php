@@ -4,7 +4,7 @@ namespace Application\Controllers;
 
 use Application\Config\WebConfig;
 use Application\Core\Controller;
-use Application\Core\DbError;
+use Application\Core\ErrorDatabaseQueryType;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
@@ -58,15 +58,15 @@ class AccountController extends Controller
 
             $createAccount = UserAccountModel::create($userAccount);
 
-            if($createAccount == DbError::SuccessfulExecution)
+            if($createAccount == ErrorDatabaseQueryType::SuccessfulExecution)
             {
                 Router::redirect('/home/index');
             }
-            else if($createAccount == DbError::DuplicateEntry)
+            else if($createAccount == ErrorDatabaseQueryType::DuplicateEntry)
             {
                 $view = new View();
                 $view->set('userAccountViewModel', $userAccountViewModel);
-                $view->set('accountExistsError', DbError::DuplicateEntry);
+                $view->set('accountExistsError', ErrorDatabaseQueryType::DuplicateEntry);
                 $view->render('account/register.php');
             }
         }

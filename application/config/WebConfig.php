@@ -2,7 +2,7 @@
 
 namespace Application\Config;
 
-class WebConfig
+abstract class WebConfig
 {
     /**
      * Show or hide error messages on screen

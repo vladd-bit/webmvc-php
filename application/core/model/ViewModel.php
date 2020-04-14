@@ -2,11 +2,10 @@
 
 namespace Application\Core;
 
-use Application\models\viewmodels\home\UserAccountLoginViewModel;
 use ReflectionClass;
 use ReflectionProperty;
 
-class BaseViewModel extends ValidationModelData
+class ViewModel extends ValidationModelData
 {
 
     /**
@@ -69,7 +68,7 @@ class BaseViewModel extends ValidationModelData
     {
         if(isset($this->getValidationStatus()[$fieldName]))
         {
-            return $this->getValidationStatus()[$fieldName][ValidationDataAnnotation::validationMessageContent];
+            return $this->getValidationStatus()[$fieldName][ValidationDataAnnotationType::validationMessageContent];
         }
 
         return '';
@@ -83,7 +82,7 @@ class BaseViewModel extends ValidationModelData
     {
         if(isset($this->getValidationStatus()[$fieldName]))
         {
-            return $this->getValidationStatus()[$fieldName][ValidationDataAnnotation::validationMessageType];
+            return $this->getValidationStatus()[$fieldName][ValidationDataAnnotationType::validationMessageType];
         }
 
         return '';
@@ -91,7 +90,7 @@ class BaseViewModel extends ValidationModelData
 
     public function isValid()
     {
-        $modelValidator = new ModelValidator();
+        $modelValidator = new Validator();
         $modelValidator->setFieldValidationMapping($this->getValidatorProperties());
         $modelValidator->setFieldValidationMessage($this->getValidatorMessages());
         $modelValidator->setFieldsToValidate(self::$modelFields);
