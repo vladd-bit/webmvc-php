@@ -21,8 +21,8 @@ abstract class Model
         {
             try
             {
-                $dsn = DatabaseConfig::DB_ENGINE . ':host=' . DatabaseConfig::DB_HOST . ';dbname=' . DatabaseConfig::DB_NAME . ';charset=utf8';
-                $db = new PDO($dsn, DatabaseConfig::DB_USER, DatabaseConfig::DB_PASSWORD);
+                $dsn = DatabaseConfig::DB_ENGINE . ':host=' . DatabaseConfig::DB_HOST . ';port=' . DatabaseConfig::DB_PORT . ';dbname=' . DatabaseConfig::DB_NAME . ';';
+                $db = new PDO($dsn,DatabaseConfig::DB_USER, DatabaseConfig::DB_PASSWORD);
 
                 if(DatabaseConfig::DB_ENGINE == 'sqlite')
                 {
