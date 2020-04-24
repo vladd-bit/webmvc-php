@@ -1,18 +1,20 @@
 <?php
     $layout = '/shared/layout.php';
     $title = 'Sign &nbsp; Up';
-    $userAccountViewModel = new \Application\Models\ViewModels\UserAccountViewModel();
+
+    /* @var $userAccountLoginViewModel Application\Models\ViewModels\UserAccountViewModel */
+    $userAccountViewModel = new  \Application\Models\ViewModels\UserAccountViewModel();
 ?>
 
 <div class="account-creation-form mdc-elevation--z2">
     <div class="mdc-layout-grid">
         <h2>Create an account</h2>
-        <form id="ww-user-sign-up-form" method="POST" class="" action="<?php echo WEBSITE_PATH; ?>/account/create">
+        <form id="ww-user-sign-up-form" method="POST" class="" action="<?php echo WEBSITE_PATH."/account/create";?>">
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell--span-12">
                     <div class="text-field-container">
                         <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" name="email" value="<?php echo htmlspecialchars($userAccountViewModel->getEmail(), ENT_QUOTES); ?>" required>
+                            <input class="mdc-text-field__input" type="text" name="email" value="<?php echo htmlspecialchars($userAccountViewModel->email, ENT_QUOTES); ?>" required>
                             <label for="username" class="mdc-floating-label">Email</label>
                              <div class="mdc-line-ripple"></div>
                         </div>
@@ -27,7 +29,7 @@
                     <br>
                     <div class="text-field-container">
                         <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" name="username" value="<?php echo htmlspecialchars($userAccountViewModel->getUsername(), ENT_QUOTES) ?>" required>
+                            <input class="mdc-text-field__input" type="text" name="username" value="<?php echo htmlspecialchars($userAccountViewModel->username, ENT_QUOTES) ?>" required>
                             <label for="username" class="mdc-floating-label">Username</label>
                             <div class="mdc-line-ripple"></div>
                         </div>
@@ -42,7 +44,7 @@
                     <br>
                     <div class="text-field-container">
                         <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="password" name="password" value="<?php echo htmlspecialchars($userAccountViewModel->getPassword(), ENT_QUOTES) ?>" required>
+                            <input class="mdc-text-field__input" type="password" name="password" value="<?php echo htmlspecialchars($userAccountViewModel->password, ENT_QUOTES) ?>" required>
                             <label for="username" class="mdc-floating-label">Password</label>
                             <div class="mdc-line-ripple"></div>
                         </div>
@@ -57,7 +59,7 @@
                     <br>
                     <div class="text-field-container">
                         <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="password" name="confirmPassword" value="<?php echo htmlspecialchars($userAccountViewModel->getConfirmPassword(), ENT_QUOTES) ?>" required>
+                            <input class="mdc-text-field__input" type="password" name="confirmPassword" value="<?php echo htmlspecialchars($userAccountViewModel->confirmPassword, ENT_QUOTES) ?>" required>
                             <label for="username" class="mdc-floating-label">Repeat Password</label>
                             <div class="mdc-line-ripple"></div>
                         </div>

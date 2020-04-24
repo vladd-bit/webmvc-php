@@ -1,8 +1,8 @@
 <?php
     $layout = 'shared/layout.php';
-    $title = 'WebWay';
+    $title = 'Login';
     
-    /* @var $userAccountLoginViewModel \Application\Models\ViewModels\Home\UserAccountLoginViewModel */
+    /* @var $userAccountLoginViewModel Application\Models\ViewModels\UserAccountLoginViewModel */
     $userAccountLoginViewModel = $this->viewData['userAccountLoginViewModel'];
 ?>
 
@@ -15,7 +15,7 @@
                     <br>
                     <div class="text-field-container">
                         <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" name="username" value="<?php echo htmlspecialchars($userAccountLoginViewModel->username, ENT_QUOTES) ?>" required>
+                            <input class="mdc-text-field__input" type="text" name="username" value="<?php echo htmlspecialchars($userAccountLoginViewModel->username, ENT_QUOTES) ?>" aria-label="Username" required>
                             <label for="username" class="mdc-floating-label">Username</label>
                             <div class="mdc-line-ripple"></div>
                         </div>
@@ -40,7 +40,7 @@
         </form>
         <br>
         <?php
-            if($this->viewData['error'])
+            if(isset($this->viewData['error']))
             {
                 echo '<p class="mdc-typography--body2 subtitle1 full-width text-error"><i class="material-icons">error</i> Incorrect account details, please try again.</p>';
             }
