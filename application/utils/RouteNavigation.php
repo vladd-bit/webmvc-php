@@ -3,7 +3,8 @@
 namespace Application\Utils;
 
 use Application\Core\Router;
-use Application\models\viewmodels\home\UserAccountLoginViewModel;
+use Application\Models\ViewModels\UserAccountLoginViewModel;
+use Application\Models\ViewModels\UserAccountViewModel;
 
 abstract class RouteNavigation
 {
@@ -18,7 +19,7 @@ abstract class RouteNavigation
         self::$routerInstance->add('/home/login', ['controller' => 'Home', 'action' => 'login', 'parameters' => UserAccountLoginViewModel::getModelFields() ]);
         self::$routerInstance->add('/home/dashboard', ['controller' => 'Home', 'action' => 'dashboard']);
         self::$routerInstance->add('/account/register', ['controller' => 'Account', 'action' => 'register', 'parameters' => []]);
-        self::$routerInstance->add('/account/createAccount', ['controller' => 'Account', 'action' => 'create', 'parameters' => []]);
+        self::$routerInstance->add('/account/create', ['controller' => 'Account', 'action' => 'create', 'parameters' => UserAccountViewModel::getModelFields() ]);
     }
 
     /**

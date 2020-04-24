@@ -42,7 +42,7 @@ class Router
     public function dispatch($url)
     {
         $formattedUrl = $url != '' ? $this->removeQueryStringVariables($url) : '/';
-        $formattedUrl = self::cleanUrlPath($formattedUrl);
+        $formattedUrl = Util::cleanUrlPath($formattedUrl);
 
         $isUrlMatching = $this->match($formattedUrl);
         if ($isUrlMatching)
@@ -86,17 +86,12 @@ class Router
     public static function redirect($route)
     {
         $newUrl = "{$_SERVER['HTTP_HOST']}".WebConfig::WEBSITE_PATH.$route;
-        $newUrl = self::cleanUrlPath($newUrl);
+        $newUrl = Util::cleanUrlPath($newUrl);
         $newUrl = WebConfig::$HTTP_URL_STRING.$newUrl;
 
         // redirect to new route
         header("HTTP/1.1 302 Found");
         header('location: '.$newUrl);
-    }
-
-    protected static function cleanUrlPath($url)
-    {
-        return preg_replace('#/+#','/',$url);
     }
 
     protected static function removeQueryStringVariables($url)

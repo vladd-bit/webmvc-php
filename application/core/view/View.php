@@ -10,11 +10,11 @@ class View
     /**
      * @param $viewFileName    // the name of the view file (php, html etc)
      * @param array $args  // OPTIONAL : the data of the view , a model, a list, variable etc, the VIEW DATA.
-     * @throws \Exception
+     * @throws \Exception // Exception is thrown if view file is not found, returns 404 automatically and logs errors.
      */
     public function render($viewFileName, $args = array())
     {
-        $this->viewFile = dirname(__DIR__) . \Application\Config\WebConfig::VIEWS_DIRECTORY . $viewFileName;
+        $this->viewFile = Util::cleanUrlPath(VIEWS_FOLDER.$viewFileName);
 
         if(!empty($args))
         {
@@ -70,7 +70,7 @@ class View
 
             if(array_key_exists('layout', $templateComponents))
             {
-                $layoutFile = dirname(__DIR__). \Application\Config\WebConfig::VIEWS_DIRECTORY.$templateComponents['layout'];
+                $layoutFile = Util::cleanUrlPath(VIEWS_FOLDER.$templateComponents['layout']);
 
                 if(is_readable($layoutFile))
                 {

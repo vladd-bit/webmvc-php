@@ -37,7 +37,6 @@ try
         ini_set('session.save_path', dirname($_SERVER['DOCUMENT_ROOT']).\Application\Config\WebConfig::SESSION_STORAGE_PATH);
     }
 
-
     /* GARBAGE COLLECTION SETTINGS */
 
     ini_set('session.gc_maxlifetime', 3600);
@@ -49,10 +48,10 @@ try
     date_default_timezone_set(\Application\Config\WebConfig::DEFAULT_TIMEZONE);
     setlocale(LC_ALL, \Application\Config\WebConfig::DEFAULT_LOCALE_CONFIGURATION);
 
-    \Application\Utils\RouteNavigation::initializeRoutes(new \Application\Core\Router());
-    \Application\Utils\RouteNavigation::getRouterInstance()->dispatch($_SERVER['QUERY_STRING']);
+    Application\Utils\RouteNavigation::initializeRoutes(new \Application\Core\Router());
+    Application\Utils\RouteNavigation::getRouterInstance()->dispatch($_SERVER['QUERY_STRING']);
 }
 catch(Exception $exception)
 {
-   \Application\Core\Error::log(0, $exception);
+   Application\Core\Error::log(0, $exception);
 }
