@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Core;
+namespace Application\Core\Handlers\Error;
 
 abstract class ErrorLogLocationType extends \SplEnum
 {
