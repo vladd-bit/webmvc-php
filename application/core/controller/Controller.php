@@ -2,13 +2,16 @@
 
 namespace Application\Core;
 
+use Application\Core\Handlers\Error\Error;
+use Application\Core\Handlers\Error\ErrorLogType;
+
 abstract class Controller
 {
-    protected array $route_params = [];
+    protected array $routeParameters = [];
 
-    public function __construct($route_params)
+    public function __construct($routeParameters)
     {
-        $this->route_params = $route_params;
+        $this->routeParameters = $routeParameters;
     }
 
     public function __call($name, $arguments)
@@ -26,6 +29,14 @@ abstract class Controller
         {
             Error::log(ErrorLogType::webError, new \Exception("Method $methodToCall not found in controller " . get_class($this)));
         }
+    }
+
+    public function getRequestParameters():array
+    {
+        if(isset($this->routeParameters['parameters']))
+            return $this->routeParameters['parameters'];
+
+        return array();
     }
 
     public function precall()
