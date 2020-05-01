@@ -2,10 +2,13 @@
 
 namespace Application\Core;
 
+use Application\Core\Handlers\Error\Error;
+use Application\Core\Handlers\Error\ErrorLogType;
+
 class View
 {
     protected string $viewFile;
-    protected $viewData = array();
+    protected $viewData;
 
     /**
      * @param $viewFileName    // the name of the view file (php, html etc)
@@ -41,7 +44,6 @@ class View
 
             foreach($directiveMatches[0] as $directive)
             {
-                // $tempDirective = preg_replace('/{|}|\s/', '', $directive);
                 $tempDirective = preg_replace('/{|}|\s|\$|;/', '', $directive);
 
                 /**

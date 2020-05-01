@@ -3,6 +3,8 @@
 namespace Application\Core;
 
 use Application\Config\DatabaseConfig;
+use Application\Core\Handlers\Error\Error;
+use Application\Core\Handlers\Error\ErrorLogType;
 use PDO;
 use PDOException;
 

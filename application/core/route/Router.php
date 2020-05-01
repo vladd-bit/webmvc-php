@@ -3,8 +3,10 @@
 namespace Application\Core;
 
 use Application\Config\WebConfig;
+use Application\Core\Handlers\Error\Error;
+use Application\Core\Handlers\Error\ErrorLogType;
 
-class Router
+final class Router
 {
     private array $routes = [];
     private array $routeParameters = [];
