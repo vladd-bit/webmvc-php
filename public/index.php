@@ -53,5 +53,5 @@ try
 }
 catch(Exception $exception)
 {
-   Application\Core\Error::log(0, $exception);
+   \Application\Core\Handlers\Error\Error::log(0, $exception);
 }
