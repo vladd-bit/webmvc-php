@@ -1,13 +1,13 @@
 <?php
 
-namespace Application\Controllers;
+namespace Application\Core\Authentication;
 
 use Application\Models\UserAccountModel;
 use Application\Models\UserAccount;
 
-abstract class Authentication
+abstract class Authentication implements IAuthentication
 {
-    public static function isAuthorized()
+    public static function isAuthorized(): bool
     {
         if(isset($_SESSION['userSessionId']) && isset($_SESSION['userSessionExpiryTime']))
         {

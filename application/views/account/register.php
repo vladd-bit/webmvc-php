@@ -2,8 +2,9 @@
     $layout = '/shared/layout.php';
     $title = 'Sign &nbsp; Up';
 
-    /* @var $userAccountLoginViewModel Application\Models\ViewModels\UserAccountViewModel */
-    $userAccountViewModel = new  \Application\Models\ViewModels\UserAccountViewModel();
+    /* @var $userAccountViewModel Application\Models\ViewModels\UserAccountViewModel */
+    $userAccountViewModel = $this->viewData['userAccountViewModel'];
+
 ?>
 
 <div class="account-creation-form mdc-elevation--z2">
@@ -14,9 +15,9 @@
                 <div class="mdc-layout-grid__cell--span-12">
                     <div class="text-field-container">
                         <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" name="email" value="<?php echo htmlspecialchars($userAccountViewModel->email, ENT_QUOTES); ?>" required>
+                            <input class="mdc-text-field__input" type="text" name="email" aria-label="email" value="<?php echo htmlspecialchars($userAccountViewModel->email, ENT_QUOTES); ?>" required>
                             <label for="username" class="mdc-floating-label">Email</label>
-                             <div class="mdc-line-ripple"></div>
+                            <div class="mdc-line-ripple"></div>
                         </div>
                         <br>
                         <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
@@ -29,7 +30,7 @@
                     <br>
                     <div class="text-field-container">
                         <div class="mdc-text-field text-field mdc-ripple-upgraded full-width" data-mdc-auto-init="MDCTextField">
-                            <input class="mdc-text-field__input" type="text" name="username" value="<?php echo htmlspecialchars($userAccountViewModel->username, ENT_QUOTES) ?>" required>
+                            <input class="mdc-text-field__input" type="text" name="username" aria-label="username" value="<?php echo htmlspecialchars($userAccountViewModel->username, ENT_QUOTES) ?>" required>
                             <label for="username" class="mdc-floating-label">Username</label>
                             <div class="mdc-line-ripple"></div>
                         </div>
@@ -72,8 +73,8 @@
                     </div>
 
                     <?php
-                        if(isset($this->viewData['accountExistsError']))
-                            echo '<p class="text-error"> Cannot create account. The provided email or username is already registered</p>';
+                    if(isset($this->viewData['accountExistsError']))
+                        echo '<p class="text-error"> Cannot create account. The provided email or username is already registered</p>';
                     ?>
 
                 </div>

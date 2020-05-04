@@ -2,28 +2,12 @@
 
 namespace Application\Models\ViewModels;
 
-use Application\Core\BaseViewModel;
+use Application\Core\ViewModel;
 
-class UserAccountDashboardViewModel extends BaseViewModel
+class UserAccountDashboardViewModel extends ViewModel
 {
-    public $username;
+    public ?string $username;
 
     public function __constructor()
     {}
-
-    /**
-     * @return mixed
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username): void
-    {
-        $this->username = $username;
-    }
 }

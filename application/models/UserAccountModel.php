@@ -3,17 +3,16 @@
 namespace Application\Models;
 
 use Application\Core\ErrorDatabaseQueryType;
+use Application\Core\Model;
 use PDO;
 
-class UserAccountModel extends \Application\Core\Model
+class UserAccountModel extends Model
 {
-
     public static function getUserByName($username)
     {
         $db = static::getDB();
 
-        $sql  = 'SELECT * FROM UserAccount WHERE username = :username';
-
+        $sql = 'SELECT getUserAccountByName(:username)';
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $query->execute(array(':username' => $username));
 
@@ -24,7 +23,7 @@ class UserAccountModel extends \Application\Core\Model
     {
         $db = static::getDB();
 
-        $sql  = 'SELECT * FROM UserAccount WHERE sessionKey = :sessionKey';
+        $sql  = 'SELECT * FROM user_account WHERE "sessionKey" = :sessionKey';
 
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $query->execute(array(':sessionKey' => $sessionKey));
@@ -36,7 +35,7 @@ class UserAccountModel extends \Application\Core\Model
     {
         $db = static::getDB();
 
-        $sql = 'UPDATE UserAccount SET  sessionKey = :sessionKey, lastLogin = :lastLogin';
+        $sql = 'UPDATE user_account SET  "sessionKey" = :sessionKey, "lastLogin" = :lastLogin';
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
         $query->execute(array(
@@ -51,7 +50,7 @@ class UserAccountModel extends \Application\Core\Model
     {
         $db = static::getDB();
 
-        $sql = 'INSERT INTO UserAccount (username, passwordSalt, passwordHash, email, dateCreated) VALUES(:username, :passwordSalt, :passwordHash, :email, :dateCreated)';
+        $sql = 'INSERT INTO user_account (username, "passwordSalt", "passwordHash", email, "dateCreated") VALUES(:username, :passwordSalt, :passwordHash, :email, :dateCreated)';
 
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
