@@ -64,4 +64,4 @@ fabric.properties
 ./vendor
 
 # private things
-./application/config/DatabaseConfig.php
+/application/config/DatabaseConfig.php
