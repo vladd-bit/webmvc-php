@@ -21,8 +21,8 @@
                         </div>
                         <br>
                         <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
-                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('email') == 'error' ? 'text-error' : 'text-confirmation' ;  ?>" >
-                                <?php echo $userAccountViewModel->getFieldValidationMessage('email') ?>
+                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('email')->status == 'error' ? 'text-error' : 'text-confirmation' ; ?>" >
+                                <?php echo $userAccountViewModel->getFieldValidationStatus('email')->validationMessage ?>
                             </span>
                         </p>
                     </div>
@@ -36,8 +36,8 @@
                         </div>
                         <br>
                         <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
-                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('username') == 'error' ? 'text-error' : 'text-confirmation' ;  ?>" >
-                                <?php echo $userAccountViewModel->getFieldValidationMessage('username')?>
+                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('username')->status == 'error' ? 'text-error' : 'text-confirmation' ; ?>" >
+                                <?php echo $userAccountViewModel->getFieldValidationStatus('username')->validationMessage ?>
                             </span>
                         </p>
                     </div>
@@ -51,8 +51,8 @@
                         </div>
                         <br>
                         <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
-                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('password') == 'error' ? 'text-error' : 'text-confirmation' ; ?>" >
-                                <?php echo $userAccountViewModel->getFieldValidationMessage('password') ?>
+                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('password')->status == 'error' ? 'text-error' : 'text-confirmation' ; ?>" >
+                                <?php echo $userAccountViewModel->getFieldValidationStatus('password')->validationMessage ?>
                             </span>
                         </p>
                     </div>
@@ -66,8 +66,8 @@
                         </div>
                         <br>
                         <p class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg mdc-text-field-helper-text--persistent">
-                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('confirmPassword') == 'error' ? 'text-error' : 'text-confirmation' ; ?>" >
-                                <?php echo $userAccountViewModel->getFieldValidationMessage('confirmPassword') ?>
+                            <span class="<?php echo $userAccountViewModel->getFieldValidationStatus('confirmPassword')->status == 'error' ? 'text-error' : 'text-confirmation' ; ?>" >
+                                <?php echo $userAccountViewModel->getFieldValidationStatus('confirmPassword')->validationMessage ?>
                             </span>
                         </p>
                     </div>

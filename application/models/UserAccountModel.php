@@ -2,7 +2,7 @@
 
 namespace Application\Models;
 
-use Application\Core\ErrorDatabaseQueryType;
+use Application\Core\Handlers\Error\ErrorDatabaseQueryType;
 use Application\Core\Model;
 use PDO;
 

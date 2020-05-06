@@ -3,12 +3,13 @@
 namespace Application\Controllers;
 
 use Application\Config\WebConfig;
+use Application\Core\Authentication\Authentication;
 use Application\Core\Controller;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
-use Application\models\viewmodels\home\UserAccountLoginViewModel;
+use Application\models\viewmodels\UserAccountLoginViewModel;
 use Application\Models\ViewModels\UserAccountDashboardViewModel;
 use Application\Utils\HashGenerator;
 
@@ -25,17 +26,11 @@ class HomeController extends Controller
 
         $userAccountLoginViewModel  = new UserAccountLoginViewModel();
 
-        if(isset($_SESSION["userSessionDataLoginViewModel".session_id()]))
-        {
-            $userAccountLoginViewModel->setFieldData($_SESSION["userSessionDataLoginViewModel".session_id()]);
-            $view->set('error', true);
-        }
-
         $view->set('userAccountLoginViewModel', $userAccountLoginViewModel);
         $view->render('/home/index.php');
     }
 
-    public function login(array $parameters)
+    public function login($parameters)
     {
         if(Authentication::isAuthorized())
         {
@@ -52,7 +47,7 @@ class HomeController extends Controller
             }
             else
             {
-                Router::redirect('/home/index');
+               Router::redirect('/home/index');
             }
         }
 

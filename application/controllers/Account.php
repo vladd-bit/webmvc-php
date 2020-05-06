@@ -4,11 +4,13 @@ namespace Application\Controllers;
 
 use Application\Config\WebConfig;
 use Application\Core\Controller;
-use Application\Core\ErrorDatabaseQueryType;
+use Application\Core\Handlers\Error\ErrorDatabaseQueryType;
+use Application\Core\Handlers\Request\Request;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
+use Application\Models\ViewModels\UserAccountLoginViewModel;
 use Application\Models\ViewModels\UserAccountViewModel;
 use Application\Utils\HashGenerator;
 
@@ -17,42 +19,30 @@ class AccountController extends Controller
     public function register()
     {
         $view = new View();
-        $view->set('userAccountViewModel', (array) new UserAccountViewModel());
-        $view->render('account/register.php');
+
+        $userAccountViewModel = new UserAccountViewModel();
+
+        $view->set('userAccountViewModel', $userAccountViewModel);
+        $view->render('/account/register.php');
     }
 
-    public function create($parameters)
+    public function create()
     {
-        $viewData = array();
+        $viewData = Request::getData($this->getRequestParameters());
 
-        foreach($parameters['userAccountViewModel'] as $parameter)
-        {
-            if(isset($_POST[$parameter]))
-            {
-                $viewData[$parameter] = $_POST[$parameter];
-            }
-        }
-
-        $userAccountViewModel = new UserAccountViewModel($viewData);
-
-        if($userAccountViewModel->getPassword() == $userAccountViewModel->getConfirmPassword())
-        {
-           # $view = new View();
-            #$view->set('userAccountViewModel', $userAccountViewModel);
-           # $view->set('confirmPasswordError', DbError::DuplicateEntry);
-           # $view->render('account/register.php');
-        }
+        $userAccountViewModel = new UserAccountViewModel();
+        $userAccountViewModel->setFieldData($viewData);
 
         if($userAccountViewModel->isValid())
         {
             $currentTime = date(WebConfig::DEFAULT_DATETIME_FORMAT);
 
-            $passwordSaltAndHash = HashGenerator::hashString($userAccountViewModel->getPassword());
+            $passwordSaltAndHash = HashGenerator::hashString($userAccountViewModel->password);
 
             $userAccount = new UserAccount();
             $userAccount->setDateCreated($currentTime);
-            $userAccount->setUsername($userAccountViewModel->getUsername());
-            $userAccount->setEmail($userAccountViewModel->getEmail());
+            $userAccount->setUsername($userAccountViewModel->username);
+            $userAccount->setEmail($userAccountViewModel->email);
             $userAccount->setPasswordSalt($passwordSaltAndHash['salt']);
             $userAccount->setPasswordHash($passwordSaltAndHash['hash']);
 
@@ -66,7 +56,7 @@ class AccountController extends Controller
             {
                 $view = new View();
                 $view->set('userAccountViewModel', $userAccountViewModel);
-                $view->set('accountExistsError', ErrorDatabaseQueryType::DuplicateEntry);
+                $view->set('accountExistsError','An account with the same email/username exists.');
                 $view->render('account/register.php');
             }
         }
@@ -76,11 +66,5 @@ class AccountController extends Controller
             $view->set('userAccountViewModel', $userAccountViewModel);
             $view->render('account/register.php');
         }
-
-    }
-
-    public function test($name)
-    {
-
     }
 }

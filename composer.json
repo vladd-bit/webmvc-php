@@ -1,5 +1,5 @@
 {
-  "name": "web-php-mvc",
+  "name": "web/php-mvc",
   "description": "web php MVC project",
   "version": "1.0.0",
   "minimum-stability": "stable",

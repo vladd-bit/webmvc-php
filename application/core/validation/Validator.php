@@ -3,430 +3,783 @@
 namespace Application\Core;
 
 use Application\Config\WebConfig;
+use Application\Core\Handlers\Error\Error;
+use Application\Core\Handlers\Error\ErrorLogType;
+use Application\Core\Validation\IValidator;
+use Application\Core\Validation\ValidationModelData;
+use Application\Core\Validation\ValidationStatus;
 use DateTime;
 
-class Validator
+class Validator implements IValidator
 {
-    private array $fieldsToValidate = array();
-    private array $fieldValidationMapping = array();
-    private array $fieldValidationMessage = array();
-    private array $results = array();
-    private array $fieldValidationStatus= array();
-
     /**
-     * @return array of the fields that are to be validated
-     */
-    public function getFieldsToBeValidated(): array
-    {
-        return array(array_keys($this->fieldsToValidate));
-    }
-
-    /**
-     * @param array $fieldsToValidate
-     */
-    public function setFieldsToValidate(array $fieldsToValidate): void
-    {
-        $this->fieldsToValidate = $fieldsToValidate;
-    }
-
-    /**
+     * @param $conditions
      * @return array
+     *
+     * Extracts the validation conditions for a field as in the following example:
+     *  'username' => 'required|maxLength:20',
+     *  'date' => 'dataType:dateTime[mm-dd-yy]',
+     *  -------------------------------------------------------------
+     *  step 1:
+     *  username : $conditions = 'required|maxLength:20
+     *  date : $conditions = 'dataType:dateTime'
+     *  step 2:
+     *  username: $formattedConditions = ['required', 'maxLength:20']
+     *            $validationAttributeList = ['required' => 1, 'maxLength' => 20]
+     *  date: $formattedConditions = ['dataType:dateTime]
+     *        $subconditions = ['dateTime' => 1]
+     *        $validationAttributeList = ['dataType' => dateTime ]
      */
-    public function getFieldValidationMapping(): array
+    public function extractValidationConditions($conditions): array
     {
-        return $this->fieldValidationMapping;
-    }
-
-    /**
-     * @param array $fieldValidationMapping
-     */
-    public function setFieldValidationMapping(array $fieldValidationMapping): void
-    {
-        $this->fieldValidationMapping = $fieldValidationMapping;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFieldValidationMessage(): array
-    {
-        return $this->fieldValidationMessage;
-    }
-
-    /**
-     * @return array
-     */
-    public function getValidationResults(): array
-    {
-        return $this->results;
-    }
-
-    public function getFieldValidationStatus() : array
-    {
-        return $this->fieldValidationStatus;
-    }
-
-    /**
-     * @param array $fieldValidationMessage
-     */
-    public function setFieldValidationMessage(array $fieldValidationMessage): void
-    {
-        $this->fieldValidationMessage = $fieldValidationMessage;
-    }
-
-    private function extractValidationConditions($conditions)
-    {
-        $formattedConditions = explode('|', $conditions);
+        $formattedConditions = explode('|', trim($conditions));
 
         $validationAttributesList = array();
 
-        foreach($formattedConditions as $condition)
+        foreach ($formattedConditions as $condition)
         {
             $attribute = explode(':', $condition);
-            if(is_array($attribute) && count($attribute) > 1 )
+            if (is_array($attribute) && count($attribute) > 1)
             {
-               array_push($validationAttributesList, [ $attribute[0] => $attribute[1] ]);
+                $validationAttributesList[$attribute[0]] = $attribute[1];
             }
             else
             {
-               array_push($validationAttributesList, [ $attribute[0] => 1 ]);
+                $validationAttributesList[$attribute[0]] = 1;
             }
         }
 
         return $validationAttributesList;
     }
 
-    private function buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResult)
+    /**
+     * @param $fieldName
+     * @param $validationPropertyConditions
+     * @param $validationPropertyResults
+     * @param $validationMessages
+     * @param $modelFieldsAndValues
+     * @return array
+     */
+    public function buildErrorMessageForField($fieldName, $validationPropertyConditions,
+                                               $validationPropertyResults, $validationMessages,
+                                              $modelFieldsAndValues): array
     {
-        echo '<br>'; echo '<br>'; echo '<br>'; echo '<br>'; echo '<br>';
-        echo $variableFieldName;
-        echo "<p>=====</p>";
-        print_r($inputAttribute,0);
-        echo '<br>';
+        $validationMessagesResults = array();
 
-        print_r($validationResult, 0);
-        $currentMessage = '';
-        if(array_key_exists($variableFieldName, $this->fieldValidationMessage))
-        {
-            foreach($this->fieldValidationMessage[$variableFieldName] as $validationMessageAttribute => $validationMessageContent)
-            {
-                foreach(ValidationDataAnnotationType::validationAttributes as $validationDataAnnotationAttribute)
-                {
-                    switch ($validationDataAnnotationAttribute)
-                    {
-                        case ValidationDataAnnotationType::maxLength:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::maxLength]))
-                            {
-                                $currentMessage = $validationMessageContent;
-                            }
-                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                            {
-                                $currentMessage = $variableFieldName . ' can be maximum ' . current($inputAttribute).  ' characters';
-                            }
-                            break;
-
-                        case ValidationDataAnnotationType::minLength:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::minLength]))
-                            {
-                                $currentMessage = $validationMessageContent;
-                            }
-                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                            {
-                                $currentMessage = $variableFieldName . ' must be minimum ' . current($inputAttribute). ' characters';
-                            }
-                            break;
-
-                        case ValidationDataAnnotationType::required:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::required]))
-                            {
-                                $currentMessage = $validationMessageContent;
-                            }
-                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                            {
-                                $currentMessage = $variableFieldName . ' is required';
-                            }
-                            break;
-
-                        case ValidationDataAnnotationType::upperCharacters:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::upperCharacters]))
-                            {
-                                $currentMessage = $validationMessageContent;
-                            }
-                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                            {
-                                if(isset($inputAttribute[key($inputAttribute)]))
-                                {
-                                    if(current($inputAttribute) == 1)
-                                    {
-                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper character';
-                                    }
-                                    else
-                                    {
-                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' upper characters';
-                                    }
-                                }
-                                else
-                                {
-                                    $currentMessage = $variableFieldName . ' must contain upper characters';
-                                }
-                            }
-                            break;
-
-                        case ValidationDataAnnotationType::lowerCharacters:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::lowerCharacters]))
-                            {
-                                $currentMessage = $validationMessageContent;
-                            }
-                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                            {
-                                if(isset($inputAttribute[key($inputAttribute)]))
-                                {
-                                    if(current($inputAttribute) == 1)
-                                    {
-                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower character';
-                                    }
-                                    else
-                                    {
-                                        $currentMessage = $variableFieldName . ' must contain at least ' . current($inputAttribute) . ' lower characters';
-                                    }
-                                }
-                                else
-                                {
-                                    $currentMessage = $variableFieldName . ' must contain lower characters';
-                                }
-
-                            }
-                            break;
-
-                        case ValidationDataAnnotationType::dataType:
-                            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::dataType]))
-                            {
-                                # $currentMessage = $validationMessageContent;
-                            }
-                            else if(key($inputAttribute) == $validationDataAnnotationAttribute)
-                            {
-
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-
-        if ($validationResult[key($inputAttribute)] == 0)
-        {
-            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::error]]))
-            {
-                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::error]];
-            }
-
-            $validationResult[key($inputAttribute)] = [ValidationDataAnnotationType::error => $currentMessage];
-        }
-        else if ($validationResult[key($inputAttribute)] == 1)
-        {
-            if(isset($this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::success]]))
-            {
-                $currentMessage = $this->fieldValidationMessage[$variableFieldName][ValidationDataAnnotationType::validationMessageStatus[ValidationDataAnnotationType::success]];
-            }
-            else
-            {
-                $currentMessage = 'Valid field';
-            }
-
-            $validationResult[key($inputAttribute)] = [ValidationDataAnnotationType::success => $currentMessage];
-        }
-
-        return $validationResult;
-    }
-
-    private function checkInputValidity($variableFieldName, $variableFieldValue, $inputAttributes)
-    {
-        $validationResults = array();
-
-        foreach($inputAttributes as $inputAttribute)
+        foreach ($validationPropertyResults as $propertyName => $isValid)
         {
             foreach (ValidationDataAnnotationType::validationAttributes as $validationAttribute)
             {
-                if (key($inputAttribute) == $validationAttribute)
+                if($propertyName == $validationAttribute)
                 {
-                    switch (key($inputAttribute))
+                    switch($validationAttribute)
                     {
                         case ValidationDataAnnotationType::maxLength:
-                            if (strlen($variableFieldValue) < reset($inputAttribute))
                             {
-                                array_push($validationResults, [key($inputAttribute) => 1]);
-                            }
-                            else
-                            {
-                                array_push($validationResults, [key($inputAttribute) => 0]);
+                                if($isValid)
+                                {
+                                    $validationMessagesResults[$propertyName] =
+                                        'contains no more than ' .
+                                        $validationPropertyConditions[$propertyName] .  ' character(s)';
+                                }
+                                else
+                                {
+                                    $validationMessagesResults[$propertyName] =
+                                        ' can contain a maximum of '
+                                        . $validationPropertyConditions[$propertyName] .  ' character(s)';
+                                }
                             }
                             break;
 
                         case ValidationDataAnnotationType::minLength:
-                            if (strlen($variableFieldValue) > reset($inputAttribute))
                             {
-                                array_push($validationResults, [key($inputAttribute) => 1]);
+                                if($isValid)
+                                {
+                                    $validationMessagesResults[$propertyName] =
+                                        'contains at least ' .
+                                        $validationPropertyConditions[$propertyName] .  ' character(s)';
+                                }
+                                else
+                                {
+                                    $validationMessagesResults[$propertyName] =
+                                        ' must be at least '
+                                        . $validationPropertyConditions[$propertyName] .  ' character(s) long';
+                                }
                             }
-                            else
-                            {
-                                array_push($validationResults, [key($inputAttribute) => 0]);
-                            }
-                            break;
-
-                        case ValidationDataAnnotationType::optional:
                             break;
 
                         case ValidationDataAnnotationType::required:
-                            if (isset($variableFieldValue) && trim($variableFieldValue) !== '')
+                            if(!$isValid)
                             {
-                                array_push($validationResults, [key($inputAttribute) => 1]);
-                            }
-                            else
-                            {
-                                array_push($validationResults, [key($inputAttribute) => 0]);
+                                $validationMessagesResults[$propertyName] = 'field required';
                             }
                             break;
 
                         case ValidationDataAnnotationType::upperCharacters:
-                            if (isset($variableFieldValue))
+                            if($isValid)
                             {
-                                $inputVar = trim($variableFieldValue);
-                                preg_match_all("/[A-Z]/", $inputVar, $capitalCaseCount);
-                                $capsCount = count($capitalCaseCount [0]);
-
-                                if($capsCount >= $inputAttribute[ValidationDataAnnotationType::upperCharacters])
-                                {
-                                    array_push($validationResults, [key($inputAttribute) => 1]);
-                                }
-                                else
-                                {
-                                    array_push($validationResults, [key($inputAttribute) => 0]);
-                                }
+                                $validationMessagesResults[$propertyName] =' contains at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' upper character(s)';
                             }
                             else
                             {
-                                array_push($validationResults, [key($inputAttribute) => 0]);
+                                $validationMessagesResults[$propertyName] = ' must contain at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' upper character(s)';
                             }
                             break;
 
                         case ValidationDataAnnotationType::lowerCharacters:
-                            if (isset($variableFieldValue))
+                            if($isValid)
                             {
-                                $inputVar = trim($variableFieldValue);
-                                preg_match_all("/[a-z]/", $inputVar, $lowerCaseCount);
-                                $lowCaseCount = count($lowerCaseCount[0]);
-                                if($lowCaseCount >= $inputAttribute[ValidationDataAnnotationType::lowerCharacters])
-                                {
-                                    array_push($validationResults, [key($inputAttribute) => 1]);
-                                }
-                                else
-                                {
-                                    array_push($validationResults, [key($inputAttribute) => 0]);
-                                }
+                                $validationMessagesResults[$propertyName] = ' contains at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' lower character(s)';
                             }
                             else
                             {
-                                array_push($validationResults, [key($inputAttribute) => 0]);
+                                $validationMessagesResults[$propertyName] = ' must contain at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' lower character(s)';
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::symbols:
+                            if($isValid)
+                            {
+                                $validationMessagesResults[$propertyName] =  ' contains at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' special character(s)';
+                            }
+                            else
+                            {
+                                $validationMessagesResults[$propertyName] = ' must contain at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' special character(s)';
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::numerals:
+                            if($isValid)
+                            {
+                                $validationMessagesResults[$propertyName] = ' contains at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' number(s)';
+                            }
+                            else
+                            {
+                                $validationMessagesResults[$propertyName] = ' must contain at least ' .
+                                    $validationPropertyConditions[$propertyName] . ' number(s)';
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::dateFormat:
+                            if($isValid)
+                            {
+                                $validationMessagesResults[$propertyName] = 'date is valid';
+                            }
+                            else
+                            {
+                                $validationMessagesResults[$propertyName] = 'invalid date';
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::dateAfter:
+                            if($isValid)
+                            {
+                                $validationMessagesResults[$propertyName] = ''  ;
+                            }
+                            else
+                            {
+                                $validationMessagesResults[$propertyName] = 'date must not exceed ' . $validationPropertyConditions[$propertyName];
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::dateBefore:
+                            if($isValid)
+                            {
+                                $validationMessagesResults[$propertyName] = '';
+                            }
+                            else
+                            {
+                                $validationMessagesResults[$propertyName] = 'date must be before ' . $validationPropertyConditions[$propertyName];
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::equalTo:
+                            {
+                                if(array_key_exists($propertyName, $validationPropertyConditions[$fieldName]))
+                                {
+                                    if($isValid)
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'matches ' . $fieldName;
+                                    }
+                                    else
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'field does not match ' . $fieldName;
+                                    }
+                                }
+                                else if($isValid)
+                                {
+                                    $validationMessagesResults[$propertyName] =
+                                        'is equal to ' . $validationPropertyConditions[$propertyName];
+                                }
+                                else
+                                {
+                                    $validationMessagesResults[$propertyName] =
+                                        'field must be equal to '. $validationPropertyConditions[$propertyName];
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::greaterThanEqual:
+                            {
+                                if(array_key_exists($propertyName, $validationPropertyConditions[$fieldName]))
+                                {
+                                    if($isValid)
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'is greater or equal than ' . $fieldName;
+                                    }
+                                    else
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'must be greater or equal than' . $fieldName;
+                                    }
+                                }
+                                else if($isValid)
+                                {
+                                    $validationMessagesResults[$propertyName] = 'is greater or equal than' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
+                                else
+                                {
+                                    $validationMessagesResults[$propertyName] = 'must be greater or equal than' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::lowerThanEqual:
+                            {
+                                if(array_key_exists($propertyName, $validationPropertyConditions[$fieldName]))
+                                {
+                                    if($isValid)
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'is lower or equal than ' . $fieldName;
+                                    }
+                                    else
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'must be lower or equal than' . $fieldName;
+                                    }
+                                }
+                                else if($isValid)
+                                {
+                                    $validationMessagesResults[$propertyName] = 'is lower or equal than' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
+                                else
+                                {
+                                    $validationMessagesResults[$propertyName] = 'must be lower or equal than' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::greaterThan:
+                            {
+                                if(array_key_exists($propertyName, $validationPropertyConditions[$fieldName]))
+                                {
+                                    if($isValid)
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'is greater than ' . $fieldName;
+                                    }
+                                    else
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'must be grater than' . $fieldName;
+                                    }
+                                }
+                                else if($isValid)
+                                {
+                                    $validationMessagesResults[$propertyName] = 'is greater than ' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
+                                else
+                                {
+                                    $validationMessagesResults[$propertyName] = 'must be greater than ' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::lowerThan:
+                            {
+                                if(array_key_exists($propertyName, $validationPropertyConditions[$fieldName]))
+                                {
+                                    if($isValid)
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'is lower than ' . $fieldName;
+                                    }
+                                    else
+                                    {
+                                        $validationMessagesResults[$propertyName] = 'must be lower than' . $fieldName;
+                                    }
+                                }
+                                else if($isValid)
+                                {
+                                    $validationMessagesResults[$propertyName] = 'is lower than ' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
+                                else
+                                {
+                                    $validationMessagesResults[$propertyName] = 'must be lower than ' .
+                                        $validationPropertyConditions[$propertyName];
+                                }
                             }
                             break;
 
                         case ValidationDataAnnotationType::dataType:
                             {
-                                switch (reset($inputAttribute))
+                                switch ($validationPropertyConditions[$propertyName])
                                 {
-                                    case ValidationDataType::datetime:
-                                        if (DateTime::createFromFormat(WebConfig::DEFAULT_DATETIME_FORMAT, $variableFieldValue) !== false)
-                                        {
-                                            array_push($validationResults, [key($inputAttribute) => 1]);
-                                        }
-                                        else
-                                        {
-                                            array_push($validationResults, [key($inputAttribute) => 0]);
-                                        }
-
-                                        break;
 
                                     case ValidationDataType::email:
-                                        if (filter_var($variableFieldValue, FILTER_VALIDATE_EMAIL))
+                                        if($isValid)
                                         {
-                                            array_push($validationResults, [key($inputAttribute) => 1]);
+                                            $validationMessagesResults[$propertyName] = 'valid email';
                                         }
                                         else
                                         {
-                                            array_push($validationResults, [key($inputAttribute) => 0]);
+                                            $validationMessagesResults[$propertyName] = 'invalid email format';
                                         }
-
-                                        break;
-
-                                    case ValidationDataType::password:
                                         break;
                                 }
                             }
                             break;
+
+                        default:
+                            break;
                     }
-                    $validationResults[count($validationResults) - 1] = $this->buildErrorMessageForField($variableFieldName, $inputAttribute, $validationResults[count($validationResults) - 1]);
-                }
-            }
+
+                    if($isValid)
+                    {
+                        if(isset($validationMessages[$propertyName][ValidationDataAnnotationType::success]))
+                        {
+                            $validationMessagesResults[$propertyName] =
+                                $validationMessages[$propertyName][ValidationDataAnnotationType::success];
+                        }
+                        else if(isset($validationMessages[ValidationDataAnnotationType::success]))
+                        {
+                            $validationMessagesResults[$propertyName] =
+                                $validationMessages[ValidationDataAnnotationType::success];
+                        }
+                    }
+                    else if(isset($validationMessages[$propertyName][ValidationDataAnnotationType::error]))
+                    {
+                        $validationMessagesResults[$propertyName] =
+                            $validationMessages[$propertyName][ValidationDataAnnotationType::error];
+                    }
+                    else if(isset($validationMessages[ValidationDataAnnotationType::error]))
+                    {
+                        $validationMessagesResults[$propertyName] =
+                            $validationMessages[ValidationDataAnnotationType::error];
+                    }
 
 
-        }
-
-        $validationResults = [$variableFieldName => $validationResults];
-
-        return $validationResults;
-    }
-
-    /**
-     * @return mixed contains validation logic for the model's fields.
-     */
-    public function isValid()
-    {
-        $validationStatus = true;
-
-        foreach($this->fieldsToValidate as $fieldName => $fieldValue)
-        {
-            foreach($this->fieldValidationMapping as $validationFieldName => $conditions)
-            {
-                if($fieldName == $validationFieldName)
-                {
-                    $extractedConditionsList = $this->extractValidationConditions($conditions);
-                    $this->results[$validationFieldName] = $this->checkInputValidity($fieldName, $fieldValue, $extractedConditionsList);
                     break;
                 }
             }
         }
 
-        foreach($this->results as $key => $value)
+        return $validationMessagesResults;
+    }
+
+    /**
+     * @param $variableFieldValue
+     * @param $validationAttributeConditions
+     * @param $modelFieldsAndValues
+     * @return array
+     *
+     * Checks if the value of a model's field is valid according to the validation properties/conditions set in the
+     * viewModel constructor.
+     */
+    public function checkInputValidity($variableFieldValue, $validationAttributeConditions,
+                                       $modelFieldsAndValues): array
+    {
+        $validationResults = array();
+
+        if(!isset($variableFieldValue) || $variableFieldValue == '')
+            return $validationResults;
+
+        foreach($validationAttributeConditions as $attributeName => $attributeCondition)
         {
-            $value  = is_array($value) ? $value  : array($value);
-
-            foreach($value as $variableName => $attribute)
+            foreach (ValidationDataAnnotationType::validationAttributes as $validationAttribute)
             {
-                $attribute  = is_array($attribute) ? $attribute  : array($attribute);
-
-                foreach($attribute as $index => $attributeValue)
+                if ($attributeName == $validationAttribute)
                 {
-                    $attributeValue  = is_array($attributeValue) ? $attributeValue  : array($attributeValue);
-
-                    foreach($attributeValue as $v => $k)
+                    switch ($attributeName)
                     {
-                        $k  = is_array($k) ? $k  : array($k);
-
-                        foreach($k as $validityStatus => $validityMessage)
-                        {
-                            if($validityStatus == ValidationDataAnnotationType::error)
+                        case ValidationDataAnnotationType::maxLength:
                             {
-                                if($validationStatus == true)
-                                    $validationStatus = false;
+                                if (strlen($variableFieldValue) < $attributeCondition)
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                {
+                                    $validationResults[$attributeName] = 0;
+                                }
                             }
+                            break;
 
-                            $this->fieldValidationStatus[$variableName] = [ValidationDataAnnotationType::validationMessageType => $validityStatus, ValidationDataAnnotationType::validationMessageContent => $validityMessage];
-                        }
+                        case ValidationDataAnnotationType::minLength:
+                            {
+                                if (strlen($variableFieldValue) > $attributeCondition)
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                {
+                                    $validationResults[$attributeName] = 0;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::symbols:
+                            {
+                                preg_match_all('/[$-/:-?{-~!"^_`\[\]]/', $variableFieldValue, $symbolCount);
+                                if (count($symbolCount[0]) >= $attributeCondition)
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                {
+                                    $validationResults[$attributeName] = 0;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::required:
+                            {
+                                if (isset($variableFieldValue) && $variableFieldValue !== '')
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                {
+                                    $validationResults[$attributeName] = 0;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::equalTo:
+                            {
+                                $validationResults[$attributeName] = 0;
+
+                                switch ($attributeCondition)
+                                {
+                                    case array_key_exists($attributeCondition, $modelFieldsAndValues):
+                                            if($modelFieldsAndValues[$attributeCondition] === $variableFieldValue)
+                                                $validationResults[$attributeName] = 1;
+                                        break;
+
+                                    default:
+                                        if($attributeCondition === $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::greaterThan:
+                            {
+                                $validationResults[$attributeName] = 0;
+
+                                switch ($attributeCondition)
+                                {
+                                    case array_key_exists($attributeCondition, $modelFieldsAndValues):
+                                        if($modelFieldsAndValues[$attributeCondition] > $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+
+                                    default:
+                                        if($attributeCondition > $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::greaterThanEqual:
+                            {
+                                $validationResults[$attributeName] = 0;
+
+                                switch ($attributeCondition)
+                                {
+                                    case array_key_exists($attributeCondition, $modelFieldsAndValues):
+                                        if($modelFieldsAndValues[$attributeCondition] >= $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+
+                                    default:
+                                        if($attributeCondition >= $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::lowerThanEqual:
+                            {
+                                $validationResults[$attributeName] = 0;
+
+                                switch ($attributeCondition)
+                                {
+                                    case array_key_exists($attributeCondition, $modelFieldsAndValues):
+                                        if($modelFieldsAndValues[$attributeCondition] <= $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+
+                                    default:
+                                        if($attributeCondition <= $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::lowerThan:
+                            {
+                                $validationResults[$attributeName] = 0;
+
+                                switch ($attributeCondition)
+                                {
+                                    case array_key_exists($attributeCondition, $modelFieldsAndValues):
+                                        if($modelFieldsAndValues[$attributeCondition] < $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+
+                                    default:
+                                        if($attributeCondition < $variableFieldValue)
+                                            $validationResults[$attributeName] = 1;
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::numerals:
+                            {
+                                preg_match_all('/[0-9]/', $variableFieldValue, $numeralCount);
+                                if (count($numeralCount[0]) >= $attributeCondition)
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                    {
+                                    $validationResults[$attributeName] = 0;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::upperCharacters:
+                            {
+                                preg_match_all('/[A-Z]/', $variableFieldValue, $capitalCaseCount);
+
+                                if (count($capitalCaseCount[0]) >= $attributeCondition)
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                {
+                                    $validationResults[$attributeName] = 0;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::lowerCharacters:
+                            {
+                                preg_match_all('/[a-z]/', $variableFieldValue, $lowerCaseCount);
+
+                                if (count($lowerCaseCount[0]) >= $attributeCondition)
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                {
+                                    $validationResults[$attributeName] = 0;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::dateFormat:
+                            {
+                                if (DateTime::createFromFormat($attributeCondition,
+                                                               $variableFieldValue) !== false)
+                                {
+                                    $validationResults[$attributeName] = 1;
+                                }
+                                else
+                                {
+                                    $validationResults[$attributeName] = 0;
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::dateAfter:
+                            {
+                                $validationResults[$attributeName] = 0;
+
+                                if (strtotime($variableFieldValue))
+                                {
+                                    try
+                                    {
+                                        if(isset($validationAttributeConditions[ValidationDataAnnotationType::dateFormat]))
+                                        {
+                                            if (date_format(new DateTime($variableFieldValue),
+                                                            $validationAttributeConditions[ValidationDataAnnotationType::dateFormat]) >
+                                                date_format(new DateTime($attributeCondition),
+                                                            $validationAttributeConditions[ValidationDataAnnotationType::dateFormat]))
+                                            {
+                                                $validationResults[$attributeName] = 1;
+                                            }
+                                        }
+                                        else if (date_format(new DateTime($variableFieldValue),
+                                                             WebConfig::DEFAULT_DATETIME_FORMAT) >
+                                            date_format(new DateTime($attributeCondition),
+                                                        WebConfig::DEFAULT_DATETIME_FORMAT))
+                                        {
+                                            $validationResults[$attributeName] = 1;
+                                        }
+                                    }
+                                    catch (\Exception $exception)
+                                    {
+                                        Error::log(ErrorLogType::webError, $exception);
+                                    }
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::dateBefore;
+                            {
+                                $validationResults[$attributeName] = 0;
+
+                                if (strtotime($variableFieldValue))
+                                {
+                                    try
+                                    {
+                                        if(isset($validationAttributeConditions[ValidationDataAnnotationType::dateFormat]))
+                                        {
+                                            if (date_format(new DateTime($variableFieldValue),
+                                                            $validationAttributeConditions[ValidationDataAnnotationType::dateFormat]) <
+                                                date_format(new DateTime($attributeCondition),
+                                                            $validationAttributeConditions[ValidationDataAnnotationType::dateFormat]))
+                                            {
+                                                $validationResults[$attributeName] = 1;
+                                            }
+                                        }
+                                        else if (date_format(new DateTime($variableFieldValue),
+                                                        WebConfig::DEFAULT_DATETIME_FORMAT) <
+                                            date_format(new DateTime($attributeCondition),
+                                                        WebConfig::DEFAULT_DATETIME_FORMAT))
+                                        {
+                                            $validationResults[$attributeName] = 1;
+                                        }
+                                    }
+                                    catch (\Exception $exception)
+                                    {
+                                        Error::log(ErrorLogType::webError, $exception);
+                                    }
+                                }
+                            }
+                            break;
+
+                        case ValidationDataAnnotationType::dataType:
+                            {
+                                switch ($attributeCondition)
+                                {
+                                    case ValidationDataType::email:
+                                        if (filter_var($variableFieldValue, FILTER_VALIDATE_EMAIL))
+                                        {
+                                            $validationResults[$attributeName] = 1;
+                                        }
+                                        else
+                                        {
+                                            $validationResults[$attributeName] = 0;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+
+                        default:
+                            break;
                     }
+                    break;
                 }
             }
         }
 
-        return $validationStatus;
+        return $validationResults;
+    }
+
+    /**
+     * @param ValidationModelData $validationModelData
+     * @return bool
+     * Determines the validity of the ViewModel based on the conditions set for its fields.
+     * @throws \Exception
+     */
+    public function isValid(ValidationModelData $validationModelData): bool
+    {
+        $isValid = true;
+
+        $propertiesValidationResults = array();
+        $messageValidationResults = array();
+
+        $validationStatusResults = array();
+
+        foreach ($validationModelData->getValidationFields() as $fieldName => $fieldValue)
+        {
+            $properties = $validationModelData->getValidationFieldProperties($fieldName);
+            $extractedPropertyConditions = $this->extractValidationConditions($properties);
+
+            if (!empty($properties))
+            {
+                /**
+                 * validate the field against its conditions, creates a list of bools
+                 */
+                $propertiesValidationResults[$fieldName] =
+                    $this->checkInputValidity($fieldValue, $extractedPropertyConditions,
+                                              $validationModelData->getValidationFields());
+
+                $messages = $validationModelData->getValidationFieldMessage($fieldName);
+
+                $messageValidationResults[$fieldName] =
+                    $this->buildErrorMessageForField($fieldName,
+                                                     $extractedPropertyConditions,
+                                                     $propertiesValidationResults[$fieldName],
+                                                     $messages,
+                                                     $validationModelData->getValidationFields()
+                    );
+            }
+
+            foreach ($propertiesValidationResults[$fieldName] as $property => $isPropertyValid)
+            {
+                if ($isPropertyValid)
+                {
+
+                    $validationStatusResults[$fieldName] = new ValidationStatus(ValidationDataAnnotationType::success,
+                        $messageValidationResults[$fieldName][$property]);
+                }
+                else
+                {
+                    /**
+                     * if there is an invalid field then we stop as we have the error message
+                     */
+                    $validationStatusResults[$fieldName] = new ValidationStatus(ValidationDataAnnotationType::error,
+                                                                                $messageValidationResults[$fieldName][$property]);
+
+                    $isValid = false;
+
+                    break;
+                }
+            }
+        }
+
+        $validationModelData->setValidationFieldStatus($validationStatusResults);
+
+
+        return $isValid;
     }
 }

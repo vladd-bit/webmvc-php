@@ -11,11 +11,6 @@ class UserAccountLoginViewModel extends ViewModel
 
     public function __constructor()
     {
-        $this->setValidatorProperties(array('username' => 'required',
-                                            'password' => 'required'
-        ));
 
-        $this->setValidatorMessages(array('username' => [''],
-            'password' => []));
     }
 }

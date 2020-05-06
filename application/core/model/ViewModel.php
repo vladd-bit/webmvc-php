@@ -4,6 +4,7 @@ namespace Application\Core;
 
 use Application\Core\Handlers\Error\Error;
 use Application\Core\Handlers\Error\ErrorLogType;
+use Application\Core\Validation\ValidationModelData;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -48,44 +49,12 @@ abstract class ViewModel extends ValidationModelData
     }
 
     /**
-     * @param string $fieldName
-     * @return string
-     *
-     * Returns the validation message for the field, otherwise it will return '' if field has no validation message set.
-     */
-     public function getFieldValidationMessage($fieldName)
-     {
-         #if(isset($this->getValidationStatus()[$fieldName]))
-         #{
-         #    return $this->getValidationStatus()[$fieldName][ValidationDataAnnotationType::validationMessageContent];
-         #}
-
-         return '';
-     }
-
-    /**
-     * @param string $fieldName
-     * @return string
-     *
-     * Returns the correct validation data type for the field if set,
-     * otherwise it will return '' if field has not validation message type set.
-     */
-     public function getFieldValidationStatus($fieldName)
-     {
-        #if(isset($this->getFieldValidationStatus()[$fieldName]))
-        #{
-        #    return $this->getValidationStatus()[$fieldName][ValidationDataAnnotationType::validationMessageType];
-        #}
-
-         return '';
-     }
-
-    /**
      * @param array $viewModelFieldData
      * @return bool
      *
      * Verifies if the model's data fields are valid according to the properties set. Returns true if valid and false
      * if there are no field values set.
+     * @throws \Exception
      */
     public function isValid(array $viewModelFieldData = array()): bool
     {

@@ -15,15 +15,14 @@ class UserAccountViewModel extends ViewModel
     {
         $this->setValidationFieldProperties(array(
             'username' => 'required|maxLength:20|minLength:4',
-            'password' => 'required|maxLength:30|minLength:4|numerals:2|lowerCharacters:4',
-            'confirmPassword' => 'required|maxLength:30|minLength:4|numerals:2|lowerCharacters:4',
+            'password' => 'required|maxLength:30|minLength:4|numerals:2|lowerCharacters:4|equalTo:confirmPassword',
+            'confirmPassword' => 'required|maxLength:30|minLength:4|numerals:2|lowerCharacters:4|equalTo:password',
             'email' => 'required|dataType:email'));
 
-        $this->setValidationFieldMessages(array('username' => ['success' => 'checks out'],
-                                                'password' => ['error' => 'passwords do not match'],
+        $this->setValidationFieldMessages(array('password' => ['error' => 'passwords do not match'],
+                                                'confirmPassword' => ['error' => 'passwords do not match'],
                                                 'email' => ['error' => 'invalid email format',
-                                                'maxLength' => ['success' => 'maxLengthSuccess',
-                                                'error' => 'MAX length custom error message']]
+                                                'maxLength' => ['success' => 'maxLengthSuccess',  'error' => 'MAX length custom error message']]
                                           ));
     }
 }
