@@ -2,6 +2,9 @@
 
 namespace Application\Utils;
 
+use Application\Core\Handlers\Error\Error;
+use Application\Core\Handlers\Error\ErrorLogType;
+
 class HashGenerator
 {
     /**
@@ -27,14 +30,23 @@ class HashGenerator
      */
     protected static function generateRandomByteAlphaNumericCharacter()
     {
-        $byte = random_bytes(1);
-        $byteToDecimal = ord($byte);
-        if(($byteToDecimal >= 48 && $byteToDecimal <= 57)  ||
-           ($byteToDecimal >= 65 && $byteToDecimal <= 90)  ||
-           ($byteToDecimal >= 97 && $byteToDecimal <= 122))
-            return chr($byteToDecimal);
-        else
-            return self::generateRandomByteAlphaNumericCharacter();
+        try
+        {
+            $byte = random_bytes(1);
+            $byteToDecimal = ord($byte);
+
+            if(($byteToDecimal >= 48 && $byteToDecimal <= 57)  ||
+                ($byteToDecimal >= 65 && $byteToDecimal <= 90)  ||
+                ($byteToDecimal >= 97 && $byteToDecimal <= 122))
+                return chr($byteToDecimal);
+            else
+                return self::generateRandomByteAlphaNumericCharacter();
+        }
+        catch (\Exception $exception)
+        {
+            Error::log(ErrorLogType::webError, $exception);
+            return '';
+        }
     }
 
     private const PBKDF2_HASH_ALGORITHM = "sha256";
@@ -61,6 +73,8 @@ class HashGenerator
     public static function validateHash($originalSalt, $initialString, $originalHash)
     {
         $hash = hash_pbkdf2(self::PBKDF2_HASH_ALGORITHM, $initialString, $originalSalt, self::PBKDF2_ITERATIONS, self::PBKDF2_HASH_LENGTH);
+
+        $hash = base64_encode($hash);
 
         if(hash_equals($hash,$originalHash))
             return true;

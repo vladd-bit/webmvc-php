@@ -17,7 +17,7 @@ class UserAccount
     private $dateCreated;
     private $dateUpdated;
 
-    public function __construct(array $properties = array())
+    public function __construct($properties = array())
     {
         foreach($properties as $key => $value)
         {

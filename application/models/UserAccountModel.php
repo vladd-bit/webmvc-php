@@ -12,7 +12,7 @@ class UserAccountModel extends Model
     {
         $db = static::getDB();
 
-        $sql = 'SELECT getUserAccountByName(:username)';
+        $sql = 'select * from "getUserAccountByName"(:username)';
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $query->execute(array(':username' => $username));
 
@@ -50,7 +50,8 @@ class UserAccountModel extends Model
     {
         $db = static::getDB();
 
-        $sql = 'INSERT INTO user_account (username, "passwordSalt", "passwordHash", email, "dateCreated") VALUES(:username, :passwordSalt, :passwordHash, :email, :dateCreated)';
+        $sql = 'INSERT INTO user_account (username, "passwordSalt", "passwordHash", email, "dateCreated") 
+                VALUES(:username, :passwordSalt, :passwordHash, :email, :dateCreated)';
 
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 

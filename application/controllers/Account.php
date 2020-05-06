@@ -10,7 +10,6 @@ use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
 use Application\Models\UserAccountModel;
-use Application\Models\ViewModels\UserAccountLoginViewModel;
 use Application\Models\ViewModels\UserAccountViewModel;
 use Application\Utils\HashGenerator;
 
@@ -56,7 +55,7 @@ class AccountController extends Controller
             {
                 $view = new View();
                 $view->set('userAccountViewModel', $userAccountViewModel);
-                $view->set('accountExistsError','An account with the same email/username exists.');
+                $view->set('accountExistsError', ErrorDatabaseQueryType::DuplicateEntry);
                 $view->render('account/register.php');
             }
         }

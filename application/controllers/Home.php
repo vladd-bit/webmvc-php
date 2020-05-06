@@ -5,6 +5,7 @@ namespace Application\Controllers;
 use Application\Config\WebConfig;
 use Application\Core\Authentication\Authentication;
 use Application\Core\Controller;
+use Application\Core\Handlers\Request\Request;
 use Application\Core\Router;
 use Application\Core\View;
 use Application\Models\UserAccount;
@@ -30,67 +31,48 @@ class HomeController extends Controller
         $view->render('/home/index.php');
     }
 
-    public function login($parameters)
+    public function login()
     {
-        if(Authentication::isAuthorized())
+        if (Authentication::isAuthorized())
         {
             Router::redirect('/home/dashboard');
         }
 
-        $viewData = array();
+        $viewData = Request::getData($this->getRequestParameters());
 
-        foreach($parameters as $parameter)
+        $userAccount = new UserAccount(UserAccountModel::getUserByName($viewData['username']));
+
+        if($userAccount->getId())
         {
-            if(isset($_POST[$parameter]))
-            {
-                $viewData[$parameter] = $_POST[$parameter];
-            }
-            else
-            {
-               Router::redirect('/home/index');
-            }
-        }
-
-        $userAccount = UserAccountModel::getUserByName($viewData['username']);
-
-        if(is_array($userAccount))
-        {
-            $userAccount = new UserAccount($userAccount);
-
-            $sessionKey = HashGenerator::randomizedShaByteHash();
-
             $validPassword = HashGenerator::validateHash(base64_decode($userAccount->getPasswordSalt()),
                 $viewData['password'],
-                base64_decode($userAccount->getPasswordHash()));
+                $userAccount->getPasswordHash());
 
-            if($validPassword)
-            {
-                $userAccount->setSessionKey($sessionKey);
-                $userAccount->setLastLogin(date(WebConfig::DEFAULT_DATETIME_FORMAT));
+             if($validPassword)
+             {
+                 $sessionKey = HashGenerator::randomizedShaByteHash();
+                 $userAccount->setSessionKey($sessionKey);
+                 $userAccount->setLastLogin(date(WebConfig::DEFAULT_DATETIME_FORMAT));
 
-                $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
+                 $updateAccountSession = UserAccountModel::updateUserSessionLastLogin($userAccount);
 
-                if(!$updateAccountSession)
-                {
-                    http_response_code(404);
-                }
+                 if(!$updateAccountSession)
+                 {
+                     http_response_code(404);
+                 }
 
-                $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
+                 $expiryTime = time() + WebConfig::DEFAULT_SESSION_LIFETIME;
 
-                $_SESSION['identityUsername'] = $userAccount->getUsername();
-                $_SESSION['identityEmail'] = $userAccount->getEmail();
-                $_SESSION['userSessionId'] = $sessionKey;
-                $_SESSION['userSessionExpiryTime'] = $expiryTime;
+                 $_SESSION['identityUsername'] = $userAccount->getUsername();
+                 $_SESSION['identityEmail'] = $userAccount->getEmail();
+                 $_SESSION['userSessionId'] = $sessionKey;
+                 $_SESSION['userSessionExpiryTime'] = $expiryTime;
 
-                Router::redirect('/home/dashboard');
-            }
-        }
-        else
-        {
-            $_SESSION['userSessionDataLoginViewModel'.session_id()] = $viewData;
-        }
+                 Router::redirect('/home/dashboard');
+             }
+         }
 
-        Router::redirect('/home/index');
+         Router::redirect('/home/index');
     }
 
     public function logout()
@@ -114,7 +96,8 @@ class HomeController extends Controller
                 $userAccountDashboardViewModel = new UserAccountDashboardViewModel();
                 $userAccountDashboardViewModel->username = $userAccount->getUsername();
                 $view = new View();
-                $view->render('home/dashboard.php', $userAccountDashboardViewModel);
+                $view->set('userAccountDashboardViewModel', $userAccountDashboardViewModel);
+                $view->render('home/dashboard.php');
             }
         }
         else
