@@ -30,10 +30,5 @@ abstract class ValidationDataAnnotationType extends \SplEnum
                                   'lowerCharacters','upperCharacters','dataType', 'dateFormat',
                                   'dateAfter', 'dateBefore','equalTo', 'greaterThan', 'lowerThan', 'greaterThanEqual',
                                   'lowerThanEqual'];
-    const validationDataTypes = [ 'email', 'password'];
-    const validationMessageType = 'messageType';
-    const validationMessageStatus = ['error' => 'error', 'success' => 'success'];
-    const validationMessage = ['error' => 'error', 'success' => 'success'];
-    const validationMessageContent = 'content';
 }
 

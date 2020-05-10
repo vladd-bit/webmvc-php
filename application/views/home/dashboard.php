@@ -9,12 +9,6 @@
 
 <?php
 
-
-echo '<br>';echo '<br>';echo '<br>';echo '<br>';echo '<br>';echo '<br>';
-echo '<br>';
-echo '<br>';echo '<br>';echo '<br>';
-
-
 print_r($_SESSION, 0 );
 
 ?>

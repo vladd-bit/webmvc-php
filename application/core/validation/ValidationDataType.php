@@ -15,4 +15,6 @@ abstract class ValidationDataType extends \SplEnum
      *
      */
     const password = 'password';
+
+    const phoneNumber = 'phoneNumber';
 }

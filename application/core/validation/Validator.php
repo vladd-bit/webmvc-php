@@ -334,7 +334,6 @@ class Validator implements IValidator
                             {
                                 switch ($validationPropertyConditions[$propertyName])
                                 {
-
                                     case ValidationDataType::email:
                                         if($isValid)
                                         {
@@ -343,6 +342,28 @@ class Validator implements IValidator
                                         else
                                         {
                                             $validationMessagesResults[$propertyName] = 'invalid email format';
+                                        }
+                                        break;
+
+                                    case ValidationDataType::phoneNumber:
+                                        if($isValid)
+                                        {
+                                            $validationMessagesResults[$propertyName] = 'valid phone number';
+                                        }
+                                        else
+                                        {
+                                            $validationMessagesResults[$propertyName] = 'invalid phone number';
+                                        }
+                                        break;
+
+                                    case ValidationDataType::password:
+                                        if($isValid)
+                                        {
+                                            $validationMessagesResults[$propertyName] = 'valid password';
+                                        }
+                                        else
+                                        {
+                                            $validationMessagesResults[$propertyName] = 'invalid password';
                                         }
                                         break;
                                 }
@@ -691,6 +712,17 @@ class Validator implements IValidator
                                 {
                                     case ValidationDataType::email:
                                         if (filter_var($variableFieldValue, FILTER_VALIDATE_EMAIL))
+                                        {
+                                            $validationResults[$attributeName] = 1;
+                                        }
+                                        else
+                                        {
+                                            $validationResults[$attributeName] = 0;
+                                        }
+                                        break;
+
+                                    case ValidationDataType::phoneNumber:
+                                        if (preg_match('/^[0-9]{10}+$/', $variableFieldValue))
                                         {
                                             $validationResults[$attributeName] = 1;
                                         }
