@@ -6,7 +6,7 @@ use Application\Config\WebConfig;
 
 class Error
 {
-    public static function log($errorType, \Exception $exception)
+    public static function log($errorType, \Throwable $exception)
     {
         $dbLogFilePath = LOGS_FOLDER;
 

@@ -37,6 +37,9 @@ try
         ini_set('session.save_path', dirname($_SERVER['DOCUMENT_ROOT']).\Application\Config\WebConfig::SESSION_STORAGE_PATH);
     }
 
+    /* Exception handling */
+    set_exception_handler(array('\Application\Core\Handlers\Error\ErrorExceptionHandler', "handleException"));
+
     /* GARBAGE COLLECTION SETTINGS */
 
     ini_set('session.gc_maxlifetime', 3600);
