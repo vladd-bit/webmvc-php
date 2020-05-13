@@ -1,5 +1,8 @@
 <?php
-    $layout = '/shared/layout.php';
+
+use Application\Core\Handlers\Request\Request;
+
+$layout = '/shared/layout.php';
     $title = 'Sign &nbsp; Up';
 
     /* @var $userAccountViewModel Application\Models\ViewModels\UserAccountViewModel */
@@ -11,6 +14,7 @@
     <div class="mdc-layout-grid">
         <h2>Create an account</h2>
         <form id="ww-user-sign-up-form" method="POST" class="" action="<?php echo WEBSITE_PATH."/account/create";?>">
+            <?php echo Request::getAntiForgeryTokenHtml(); ?>
             <div class="mdc-layout-grid__inner">
                 <div class="mdc-layout-grid__cell--span-12">
                     <div class="text-field-container">

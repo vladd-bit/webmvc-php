@@ -2,7 +2,9 @@
 
 namespace Application\Models;
 
+use Application\Core\Handlers\Error\Error;
 use Application\Core\Handlers\Error\ErrorDatabaseQueryType;
+use Application\Core\Handlers\Error\ErrorLogType;
 use Application\Core\Model;
 use PDO;
 
@@ -50,8 +52,7 @@ class UserAccountModel extends Model
     {
         $db = static::getDB();
 
-        $sql = 'INSERT INTO user_account (username, "passwordSalt", "passwordHash", email, "dateCreated") 
-                VALUES(:username, :passwordSalt, :passwordHash, :email, :dateCreated)';
+        $sql = 'call "registerAccount"(:username, :passwordSalt, :passwordHash, :sessionKey, :email, :dateCreated)';
 
         $query = $db->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
@@ -61,18 +62,18 @@ class UserAccountModel extends Model
                 ':username' => $userAccount->getUsername(),
                 ':passwordSalt' => $userAccount->getPasswordSalt(),
                 ':passwordHash' => $userAccount->getPasswordHash(),
+                ':sessionKey' => $userAccount->getSessionKey(),
                 ':email' => $userAccount->getEmail(),
                 ':dateCreated' => $userAccount->getDateCreated(),
             ));
         }
         catch(\PDOException $exception)
         {
-            if($exception->getCode() == 23000)
-            {
-                $query = ErrorDatabaseQueryType::DuplicateEntry;
-            }
+            $query = ErrorDatabaseQueryType::DuplicateEntry;
         }
-
-        return $query;
+        finally
+        {
+            return $query;
+        }
     }
 }

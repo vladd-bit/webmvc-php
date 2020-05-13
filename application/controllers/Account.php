@@ -32,7 +32,7 @@ class AccountController extends Controller
         $userAccountViewModel = new UserAccountViewModel();
         $userAccountViewModel->setFieldData($viewData);
 
-        if($userAccountViewModel->isValid())
+        if(Request::validateAntiForgeryToken() && $userAccountViewModel->isValid())
         {
             $currentTime = date(WebConfig::DEFAULT_DATETIME_FORMAT);
 
@@ -44,19 +44,20 @@ class AccountController extends Controller
             $userAccount->setEmail($userAccountViewModel->email);
             $userAccount->setPasswordSalt($passwordSaltAndHash['salt']);
             $userAccount->setPasswordHash($passwordSaltAndHash['hash']);
+            $userAccount->setSessionKey($_SESSION[WebConfig::SESSION_NAME]);
 
             $createAccount = UserAccountModel::create($userAccount);
 
-            if($createAccount == ErrorDatabaseQueryType::SuccessfulExecution)
+            if($createAccount)
             {
                 Router::redirect('/home/index');
             }
             else if($createAccount == ErrorDatabaseQueryType::DuplicateEntry)
             {
-                $view = new View();
-                $view->set('userAccountViewModel', $userAccountViewModel);
-                $view->set('accountExistsError', ErrorDatabaseQueryType::DuplicateEntry);
-                $view->render('account/register.php');
+               $view = new View();
+               $view->set('userAccountViewModel', $userAccountViewModel);
+               $view->set('accountExistsError', ErrorDatabaseQueryType::DuplicateEntry);
+               $view->render('account/register.php');
             }
         }
         else
