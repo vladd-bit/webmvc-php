@@ -1,12 +1,12 @@
 {
-  "name": "webwayphp",
-  "description": "webway php project",
+  "name": "webmvc-php",
+  "description": "WebWay php MVC framework, mainly mimicking the .NET asp & mvc framework .",
   "version": "1.0.0",
-  "license": "proprietary",
+  "license": "GPL-3.0 License",
   "authors": [
     {
-      "name": "azrs",
-      "email": "azrsdev@gmail.com"
+      "name": "vlad_dinu",
+      "website": "https://github.com/vladd-bit/"
     }
   ],
   "private": true,
@@ -28,7 +28,7 @@
     "@angular/platform-browser-dynamic": "^6.0.0",
     "@angular/router": "^6.0.0",
     "material-components-web": "^0.39.3",
-    "typescript": "^3.0.3"
+    "typescript": "^3.6.4"
   },
   "devDependencies": {
     "css-loader": "^1.0.0",
