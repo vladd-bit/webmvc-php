@@ -4,7 +4,7 @@ WebWay php MVC framework, mainly mimicking the .NET asp & mvc framework .
 
 ## Getting Started
 
-### Prerequisites (PHP only)
+### Prerequisites
 ```
     PHP version >= 7.4 (This is mainly if you want support for all the new and neat, mainly required for using typed propertyes and/or type hinting for view objects).
     Composer 
@@ -303,7 +303,7 @@ class HomeController extends Controller
 ```
 
 
-####Routing
+### Routing
 Routes are declared as their respective /controller/action paths, found in:
 
 ```
